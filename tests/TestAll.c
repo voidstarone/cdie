@@ -21,7 +21,6 @@ int main (int argc, char const *argv[]) {
 	// Other choices are: CU_BRM_SILENT and CU_BRM_NORMAL
 	CU_basic_set_mode(CU_BRM_VERBOSE);
 	
-	
 	// Run the tests and show the run summary
 	CU_basic_run_tests();
 	return CU_get_error();

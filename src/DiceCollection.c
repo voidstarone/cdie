@@ -5,6 +5,8 @@
 #include "DieFactory.h"
 #include "DiceCollection.h"
 
+#define DICE_COLLECTION_NOTATION_SEPARATOR "d"
+
 
 int num_digits(int start) {
 	int count = 0;
@@ -17,13 +19,29 @@ int num_digits(int start) {
 }
 
 
-
 DiceCollection * dice_collection_init(int faces, size_t count) {
 	DiceCollection *dc = malloc(sizeof(DiceCollection));
 	dc->_die_array = diefactory_make_die_array(faces, count);
 	dc->_size = count;
 	dc->num_faces = faces;
 	return dc;
+}
+
+// Take something like "2d6" and turn it into a dice collection
+DiceCollection * dice_collection_init_notation(char *notation) {
+	// We assume only one dice notation here; nothing surrounding it
+	char *separator = DICE_COLLECTION_NOTATION_SEPARATOR;
+
+	char *mutable_notation = malloc(sizeof(char) * strlen(notation));
+	strcpy(mutable_notation, notation);
+
+	char *str_faces;
+	char *str_count;
+
+	str_count = strtok(mutable_notation, separator);
+	str_faces = strtok(NULL, separator);
+	
+	return dice_collection_init(atoi(str_faces), atoi(str_count));
 }
 
 size_t dice_collection_count(DiceCollection *dc) {
@@ -35,7 +53,7 @@ int dice_collection_faces(DiceCollection *dc) {
 }
 
 
-Die * dice_collection_die_at(DiceCollection *dc, size_t index) {
+inline Die * dice_collection_die_at(DiceCollection *dc, size_t index) {
 	return &(dc->_die_array[index]);
 }
 
@@ -48,7 +66,7 @@ void dice_collection_roll_silent(DiceCollection *dc) {
 	}
 }
 
-int dice_collection_roll(DiceCollection *dc, int results[]) {
+int dice_collection_roll(DiceCollection *dc, int *results) {
 	size_t count = dice_collection_count(dc);
 	Die *d;
 	for(size_t i = 0; i < count; ++i) {
@@ -57,6 +75,12 @@ int dice_collection_roll(DiceCollection *dc, int results[]) {
 	}
 	
 	return 1;
+}
+
+void dice_collection_clean(DiceCollection *dc) {
+	free(dc->_die_array);
+	dc->_size = 0;
+	dc->num_faces = 0;
 }
 
 char * dice_collection_desc(DiceCollection *dc) {

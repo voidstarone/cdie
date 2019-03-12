@@ -21,7 +21,7 @@ void test_die_saves_result() {
 
 void test_die_roll_returns_random_results() {
 	int num_dice = 50;
-	int results[6] = { 0, 0, 0, 0, 0, 0 };
+	int results[6] = { 0 };
 	bool have_rolled_every_number_at_least_once = true;
 	
 	for (size_t i = 0; i < num_dice; ++i) {
