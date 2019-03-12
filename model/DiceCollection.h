@@ -21,6 +21,7 @@ void dice_collection_roll_silent(DiceCollection *dc);
 
 char * dice_collection_desc(DiceCollection *dc);
 
+void dice_collection_clean(DiceCollection *dc);
 
 #endif /* end of include guard: DIE_COLLECTION_H_FA033981 */
 

@@ -5,7 +5,6 @@
 #include "DieFactory.h"
 #include "DiceCollection.h"
 
-
 int num_digits(int start) {
 	int count = 0;
 	int n = start;
@@ -15,8 +14,6 @@ int num_digits(int start) {
 	}
 	return count + (start < 0 ? 1 : 0);
 }
-
-
 
 DiceCollection * dice_collection_init(int faces, size_t count) {
 	DiceCollection *dc = malloc(sizeof(DiceCollection));
@@ -34,8 +31,7 @@ int dice_collection_faces(DiceCollection *dc) {
 	return dc->num_faces;
 }
 
-
-Die * dice_collection_die_at(DiceCollection *dc, size_t index) {
+inline Die * dice_collection_die_at(DiceCollection *dc, size_t index) {
 	return &(dc->_die_array[index]);
 }
 
@@ -48,7 +44,7 @@ void dice_collection_roll_silent(DiceCollection *dc) {
 	}
 }
 
-int dice_collection_roll(DiceCollection *dc, int results[]) {
+int dice_collection_roll(DiceCollection *dc, int *results) {
 	size_t count = dice_collection_count(dc);
 	Die *d;
 	for(size_t i = 0; i < count; ++i) {
@@ -57,6 +53,12 @@ int dice_collection_roll(DiceCollection *dc, int results[]) {
 	}
 	
 	return 1;
+}
+
+void dice_collection_clean(DiceCollection *dc) {
+	free(dc->_die_array);
+	dc->_size = 0;
+	dc->num_faces = 0;
 }
 
 char * dice_collection_desc(DiceCollection *dc) {

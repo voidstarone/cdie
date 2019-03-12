@@ -13,7 +13,7 @@ int die_faces(Die *d) {
 Die die_init(int numFaces) {
 	Die d;
 	d.num_faces = numFaces;
-	d.last_result = -1;
+	die_roll(&d);
 	return d;
 }
 

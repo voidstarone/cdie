@@ -1,45 +1,62 @@
-SDIR=src
+MDIR=model
+UDIR=cli
 BDIR=bin
 ODIR=obj
-TDIR=tests
+MTDIR=mtests
 
 CC=clang
-CFLAGS=-Wall -I$(SDIR)
+CFLAGS=-Wall -I$(MDIR)/
 CCF=$(CC) $(CFLAGS)
 
-
-DEPS = Die.h
-
-test: $(BDIR)/testdie
-	$(BDIR)/testdie
+MOFILES= $(ODIR)/Die.o \
+	$(ODIR)/DieFactory.o \
+	$(ODIR)/DiceCollection.o \
+	$(ODIR)/DiceNotation.o
 	
-$(BDIR)/testdie: $(ODIR)/TestSuiteDie.o \
-				 $(ODIR)/TestSuiteDieFactory.o \
-				 $(ODIR)/TestSuiteDiceCollection.o
-	$(CCF) -o $(BDIR)/testdie -lcunit $(TDIR)/TestAll.c $(ODIR)/TestSuiteDie.o \
-	 $(ODIR)/TestSuiteDieFactory.o $(ODIR)/TestSuiteDiceCollection.o \
-	 $(ODIR)/Die.o $(ODIR)/DieFactory.o $(ODIR)/DiceCollection.o;
+TOFILES=$(ODIR)/TestSuiteDie.o \
+	$(ODIR)/TestSuiteDieFactory.o \
+	$(ODIR)/TestSuiteDiceCollection.o \
+	$(ODIR)/TestSuiteDiceNotation.o 
+	
+
+test: $(BDIR)/testdie $(MOFILES) $(TOFILES)
+	bin/testdie
+
+# Model Tests
+	
+$(BDIR)/testdie: $(MOFILES) $(TOFILES)
+	$(CCF) -o $(BDIR)/testdie -lcunit $(MTDIR)/TestAll.c $(MOFILES) $(TOFILES)
+				
+
+$(ODIR)/TestSuiteDiceNotation.o: $(ODIR)/TestSuiteDiceCollection.o
+	$(CCF) -c -o $(ODIR)/TestSuiteDiceNotation.o $(MTDIR)/TestSuiteDiceNotation.c;
 
 $(ODIR)/TestSuiteDiceCollection.o: $(ODIR)/DiceCollection.o
-	$(CCF) -c -o $(ODIR)/TestSuiteDiceCollection.o $(TDIR)/TestSuiteDiceCollection.c;
+	$(CCF) -c -o $(ODIR)/TestSuiteDiceCollection.o $(MTDIR)/TestSuiteDiceCollection.c;
 
 $(ODIR)/TestSuiteDieFactory.o: $(ODIR)/DieFactory.o
-	$(CCF) -c -o $(ODIR)/TestSuiteDieFactory.o $(TDIR)/TestSuiteDieFactory.c;
+	$(CCF) -c -o $(ODIR)/TestSuiteDieFactory.o $(MTDIR)/TestSuiteDieFactory.c;
 
 $(ODIR)/TestSuiteDie.o: $(ODIR)/Die.o
-	$(CCF) -c -o $(ODIR)/TestSuiteDie.o $(TDIR)/TestSuiteDie.c;
+	$(CCF) -c -o $(ODIR)/TestSuiteDie.o $(MTDIR)/TestSuiteDie.c;
+
+# CLI
+build: $(MOFILES)
+	$(CCF) -o $(BDIR)/roll -largp $(UDIR)/main.c $(MOFILES)
 
 
 # Models
+$(ODIR)/DiceNotation.o: $(ODIR)/DiceCollection.o
+	$(CCF) -c -o $(ODIR)/DiceNotation.o $(MDIR)/DiceNotation.c;
 
 $(ODIR)/DiceCollection.o: $(ODIR)/DieFactory.o
-	$(CCF) -c -o $(ODIR)/DiceCollection.o $(SDIR)/DiceCollection.c;
+	$(CCF) -c -o $(ODIR)/DiceCollection.o $(MDIR)/DiceCollection.c;
 
 $(ODIR)/DieFactory.o: $(ODIR)/Die.o
-	$(CCF) -c -o $(ODIR)/DieFactory.o $(SDIR)/DieFactory.c;
+	$(CCF) -c -o $(ODIR)/DieFactory.o $(MDIR)/DieFactory.c;
 
-$(ODIR)/Die.o: $(SDIR)/Die.c
-	$(CCF) -c -o $(ODIR)/Die.o $(SDIR)/Die.c;
+$(ODIR)/Die.o: $(MDIR)/Die.c
+	$(CCF) -c -o $(ODIR)/Die.o $(MDIR)/Die.c;
 
 
 clean:
