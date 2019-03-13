@@ -10,8 +10,6 @@ typedef struct {
 } DiceCollection;
 
 DiceCollection * dice_collection_init(int faces, size_t count);
-DiceCollection * dice_collection_init_notation(char *notation);
-
 
 size_t dice_collection_count(DiceCollection *dc);
 int dice_collection_faces(DiceCollection *dc);

@@ -5,9 +5,6 @@
 #include "DieFactory.h"
 #include "DiceCollection.h"
 
-#define DICE_COLLECTION_NOTATION_SEPARATOR "d"
-
-
 int num_digits(int start) {
 	int count = 0;
 	int n = start;
@@ -25,23 +22,6 @@ DiceCollection * dice_collection_init(int faces, size_t count) {
 	dc->_size = count;
 	dc->num_faces = faces;
 	return dc;
-}
-
-// Take something like "2d6" and turn it into a dice collection
-DiceCollection * dice_collection_init_notation(char *notation) {
-	// We assume only one dice notation here; nothing surrounding it
-	char *separator = DICE_COLLECTION_NOTATION_SEPARATOR;
-
-	char *mutable_notation = malloc(sizeof(char) * strlen(notation));
-	strcpy(mutable_notation, notation);
-
-	char *str_faces;
-	char *str_count;
-
-	str_count = strtok(mutable_notation, separator);
-	str_faces = strtok(NULL, separator);
-	
-	return dice_collection_init(atoi(str_faces), atoi(str_count));
 }
 
 size_t dice_collection_count(DiceCollection *dc) {

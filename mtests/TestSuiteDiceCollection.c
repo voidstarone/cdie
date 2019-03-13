@@ -2,32 +2,13 @@
 #include <stdlib.h>
 
 #include "CUnit/Basic.h"
-#include "Die.h"
-#include "DiceCollection.h"
+
 #include "TestSuiteDiceCollection.h"
 
 void test_dice_collection_init_faces() {
 	DiceCollection *dc = dice_collection_init(10, 20);
 	
 	CU_ASSERT(dice_collection_faces(dc) == 10);
-	
-	dice_collection_clean(dc);
-}
-
-void test_dice_collection_init_notation_faces() {
-	DiceCollection *dc = dice_collection_init_notation("2d6");
-
-	int faces = dice_collection_faces(dc);
-	CU_ASSERT_EQUAL(faces, 6);
-	
-	dice_collection_clean(dc);
-}
-
-void test_dice_collection_init_notation_count() {
-	DiceCollection *dc = dice_collection_init_notation("2d6");
-
-	int count = dice_collection_count(dc);
-	CU_ASSERT_EQUAL(count, 2);
 	
 	dice_collection_clean(dc);
 }
@@ -98,12 +79,6 @@ int test_suite_dice_collection (int(*init_suite)(void), int(*clean_suite)(void) 
 
 	if (NULL == CU_add_test(pSuite, "test_dice_collection_roll",
 		test_dice_collection_roll)) {
-		CU_cleanup_registry();
-		return CU_get_error();
-	}
-
-	if (NULL == CU_add_test(pSuite, "test_dice_collection_init_notation_faces",
-		test_dice_collection_init_notation_faces)) {
 		CU_cleanup_registry();
 		return CU_get_error();
 	}
