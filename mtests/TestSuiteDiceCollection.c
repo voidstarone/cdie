@@ -25,8 +25,8 @@ void test_dice_collection_die_at() {
 
 	Die *d = dice_collection_die_at(dc, 2);
 
-	int last_result = die_last_result(d);
-	CU_ASSERT(last_result == -1);
+	
+	CU_ASSERT_PTR_NOT_NULL(d);
 	dice_collection_clean(dc);
 }
 
@@ -53,7 +53,8 @@ void test_dice_collection_roll() {
 
 int test_suite_dice_collection (int(*init_suite)(void), int(*clean_suite)(void) ) {
 	
-	CU_pSuite pSuite = CU_add_suite("test_suite_dice_collection", init_suite, clean_suite);
+	CU_pSuite pSuite = CU_add_suite("test_suite_dice_collection", 
+		init_suite, clean_suite);
 	if (NULL == pSuite) {
 		CU_cleanup_registry();
 		return CU_get_error();

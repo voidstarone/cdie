@@ -14,8 +14,7 @@ void test_die_factory_create_dice() {
 	Die *dice = diefactory_make_die_array(die_sides, num_dice);
 	
 	// Make sure they are valid dice
-	for(size_t i = 0; i < num_dice; ++i)
-	{
+	for(size_t i = 0; i < num_dice; ++i) {
 		result = die_roll(&dice[i]);
 		max_result =  result > max_result ? result : max_result;
 	}

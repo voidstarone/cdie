@@ -1,4 +1,5 @@
 MDIR=model
+UDIR=cli
 BDIR=bin
 ODIR=obj
 MTDIR=mtests
@@ -7,21 +8,24 @@ CC=clang
 CFLAGS=-Wall -I$(MDIR)/
 CCF=$(CC) $(CFLAGS)
 
-OFILES= $(ODIR)/Die.o \
+MOFILES= $(ODIR)/Die.o \
 	$(ODIR)/DieFactory.o \
 	$(ODIR)/DiceCollection.o \
 	$(ODIR)/DiceNotation.o
 	
-TFILES=$(ODIR)/TestSuiteDie.o \
+TOFILES=$(ODIR)/TestSuiteDie.o \
 	$(ODIR)/TestSuiteDieFactory.o \
 	$(ODIR)/TestSuiteDiceCollection.o \
 	$(ODIR)/TestSuiteDiceNotation.o 
-
-test: $(BDIR)/testdie
-	$(BDIR)/testdie
 	
-$(BDIR)/testdie: $(OFILES) $(TFILES)
-	$(CCF) -o $(BDIR)/testdie -lcunit $(MTDIR)/TestAll.c $(OFILES) $(TFILES)
+
+test: $(BDIR)/testdie $(MOFILES) $(TOFILES)
+	bin/testdie
+
+# Model Tests
+	
+$(BDIR)/testdie: $(MOFILES) $(TOFILES)
+	$(CCF) -o $(BDIR)/testdie -lcunit $(MTDIR)/TestAll.c $(MOFILES) $(TOFILES)
 				
 
 $(ODIR)/TestSuiteDiceNotation.o: $(ODIR)/TestSuiteDiceCollection.o
@@ -35,6 +39,10 @@ $(ODIR)/TestSuiteDieFactory.o: $(ODIR)/DieFactory.o
 
 $(ODIR)/TestSuiteDie.o: $(ODIR)/Die.o
 	$(CCF) -c -o $(ODIR)/TestSuiteDie.o $(MTDIR)/TestSuiteDie.c;
+
+# CLI
+build: $(MOFILES)
+	$(CCF) -o $(BDIR)/roll -largp $(UDIR)/main.c $(MOFILES)
 
 
 # Models

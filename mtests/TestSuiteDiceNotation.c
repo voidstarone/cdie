@@ -20,6 +20,17 @@ void test_dice_collection_from_core_notation() {
 	dice_collection_clean(dc);
 }
 
+void test_dice_collection_from_simple_percentile_notation() {
+	DiceCollection *dc = dice_collection_from_percentile_notation("4%");
+
+	int count = dice_collection_count(dc);
+	int faces = dice_collection_faces(dc);
+	CU_ASSERT_EQUAL(faces, 100);
+	CU_ASSERT_EQUAL(count, 4);
+	
+	dice_collection_clean(dc);
+}
+
 
 int test_suite_dice_notation(int(*init_suite)(void), int(*clean_suite)(void) ) {
 	
@@ -32,6 +43,12 @@ int test_suite_dice_notation(int(*init_suite)(void), int(*clean_suite)(void) ) {
 
 	if (NULL == CU_add_test(pSuite, "test_dice_collection_from_core_notation",
 		test_dice_collection_from_core_notation)) {
+		CU_cleanup_registry();
+		return CU_get_error();
+	}
+	
+	if (NULL == CU_add_test(pSuite, "test_dice_collection_from_simple_percentile_notation",
+		test_dice_collection_from_simple_percentile_notation)) {
 		CU_cleanup_registry();
 		return CU_get_error();
 	}

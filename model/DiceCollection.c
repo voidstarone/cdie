@@ -15,7 +15,6 @@ int num_digits(int start) {
 	return count + (start < 0 ? 1 : 0);
 }
 
-
 DiceCollection * dice_collection_init(int faces, size_t count) {
 	DiceCollection *dc = malloc(sizeof(DiceCollection));
 	dc->_die_array = diefactory_make_die_array(faces, count);
@@ -31,7 +30,6 @@ size_t dice_collection_count(DiceCollection *dc) {
 int dice_collection_faces(DiceCollection *dc) {
 	return dc->num_faces;
 }
-
 
 inline Die * dice_collection_die_at(DiceCollection *dc, size_t index) {
 	return &(dc->_die_array[index]);
