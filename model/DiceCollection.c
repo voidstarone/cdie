@@ -20,6 +20,7 @@ DiceCollection * dice_collection_init(int faces, size_t count) {
 	dc->_die_array = diefactory_make_die_array(faces, count);
 	dc->_size = count;
 	dc->num_faces = faces;
+	dc->explosion_lower_bound = 0;
 	return dc;
 }
 
@@ -33,6 +34,19 @@ int dice_collection_faces(DiceCollection *dc) {
 
 inline Die * dice_collection_die_at(DiceCollection *dc, size_t index) {
 	return &(dc->_die_array[index]);
+}
+
+void dice_collection_init_results(DiceCollection *dc) {
+	size_t results_array_size = dice_collection_count(dc);
+	if (dc->explosion_lower_bound) {
+		size_t num_exploding_results = dc->num_faces - dc->explosion_lower_bound;
+		size_t probable_num_results = dice_collection_count(dc) *  dc->num_faces/(dc->num_faces-num_exploding_results);
+		
+		// Bad maths; just to be safe
+		size_t safety_net = probable_num_results * 0.25; 
+		results_array_size = probable_num_results + safety_net;
+	}
+	dc->last_results = (int *) malloc(sizeof(int) * results_array_size);
 }
 
 void dice_collection_roll_silent(DiceCollection *dc) {
@@ -55,10 +69,19 @@ int dice_collection_roll(DiceCollection *dc, int *results) {
 	return 1;
 }
 
+int dice_collection_get_explosion_lower_bound(DiceCollection *dc) {
+	return dc->explosion_lower_bound;
+}
+
+void dice_collection_set_explosion_lower_bound(DiceCollection *dc, int lower_bound) {
+	dc->explosion_lower_bound = lower_bound;
+}
+
 void dice_collection_clean(DiceCollection *dc) {
 	free(dc->_die_array);
 	dc->_size = 0;
 	dc->num_faces = 0;
+	dc->explosion_lower_bound = 0;
 }
 
 char * dice_collection_desc(DiceCollection *dc) {

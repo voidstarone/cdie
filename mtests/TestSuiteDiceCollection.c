@@ -50,8 +50,22 @@ void test_dice_collection_roll() {
 	dice_collection_clean(dc);
 }
 
+void test_dice_collection_roll_explode() {
+	DiceCollection *dc = dice_collection_init(2, 1);
+	 
+	dice_collection_set_explosion_lower_bound(dc, 2);
+	
+	CU_ASSERT_EQUAL(dice_collection_get_explosion_lower_bound(dc), 2);
+	
+	//int & 
+	
+	//dice_collection_roll(dc, );
+	
+}
 
-int test_suite_dice_collection (int(*init_suite)(void), int(*clean_suite)(void) ) {
+
+int test_suite_dice_collection (int(*init_suite)(void),
+                                int(*clean_suite)(void) ) {
 	
 	CU_pSuite pSuite = CU_add_suite("test_suite_dice_collection", 
 		init_suite, clean_suite);
@@ -80,6 +94,13 @@ int test_suite_dice_collection (int(*init_suite)(void), int(*clean_suite)(void) 
 
 	if (NULL == CU_add_test(pSuite, "test_dice_collection_roll",
 		test_dice_collection_roll)) {
+		CU_cleanup_registry();
+		return CU_get_error();
+	}
+	
+
+	if (NULL == CU_add_test(pSuite, "test_dice_collection_roll_explode",
+		test_dice_collection_roll_explode)) {
 		CU_cleanup_registry();
 		return CU_get_error();
 	}
