@@ -2,18 +2,12 @@
 #include <string.h>
 #include <stdio.h>
 
+#import "numutils.h"
+
 #include "DieFactory.h"
 #include "DiceCollection.h"
+#include "DiceCollectionResults.h"
 
-int num_digits(int start) {
-	int count = 0;
-	int n = start;
-	while(n != 0) {
-		n /= 10;
-		++count;
-	}
-	return count + (start < 0 ? 1 : 0);
-}
 
 DiceCollection * dice_collection_init(int faces, size_t count) {
 	DiceCollection *dc = malloc(sizeof(DiceCollection));
@@ -21,6 +15,7 @@ DiceCollection * dice_collection_init(int faces, size_t count) {
 	dc->_size = count;
 	dc->num_faces = faces;
 	dc->explosion_lower_bound = 0;
+	dc->last_results = NULL;
 	return dc;
 }
 
@@ -33,40 +28,38 @@ int dice_collection_faces(DiceCollection *dc) {
 }
 
 inline Die * dice_collection_die_at(DiceCollection *dc, size_t index) {
-	return &(dc->_die_array[index]);
-}
-
-void dice_collection_init_results(DiceCollection *dc) {
-	size_t results_array_size = dice_collection_count(dc);
-	if (dc->explosion_lower_bound) {
-		size_t num_exploding_results = dc->num_faces - dc->explosion_lower_bound;
-		size_t probable_num_results = dice_collection_count(dc) *  dc->num_faces/(dc->num_faces-num_exploding_results);
-		
-		// Bad maths; just to be safe
-		size_t safety_net = probable_num_results * 0.25; 
-		results_array_size = probable_num_results + safety_net;
-	}
-	dc->last_results = (int *) malloc(sizeof(int) * results_array_size);
+	return dc->_die_array[index];
 }
 
 void dice_collection_roll_silent(DiceCollection *dc) {
+	DiceCollectionResults *dcr = dice_collection_results_init_for_dice_collection(dc);
+	
+	size_t count = dice_collection_count(dc);
+	Die *d;
+	int die_result;
+	for(size_t i = 0; i < count; ++i) {
+		d = dice_collection_die_at(dc, i);
+		die_result = die_roll(d);
+		dice_collection_results_add(dcr, die_result);
+	}
+	
+	if (dc->last_results) {
+		dice_collection_results_free(dc->last_results);
+	}
+	dc->last_results = dcr;
+}
+
+void dice_collection_roll(DiceCollection *dc, DiceCollectionResults *dcr) {
 	size_t count = dice_collection_count(dc);
 	Die *d;
 	for(size_t i = 0; i < count; ++i) {
 		d = dice_collection_die_at(dc, i);
-		die_roll(d);
+		dice_collection_results_add(dcr, die_roll(d));
 	}
 }
 
-int dice_collection_roll(DiceCollection *dc, int *results) {
-	size_t count = dice_collection_count(dc);
-	Die *d;
-	for(size_t i = 0; i < count; ++i) {
-		d = dice_collection_die_at(dc, i);
-		results[i] = die_roll(d);
-	}
-	
-	return 1;
+DiceCollectionResults * dice_collection_last_results(DiceCollection *dc) {
+	return dice_collection_results_clone(dc->last_results);
 }
 
 int dice_collection_get_explosion_lower_bound(DiceCollection *dc) {
@@ -77,19 +70,30 @@ void dice_collection_set_explosion_lower_bound(DiceCollection *dc, int lower_bou
 	dc->explosion_lower_bound = lower_bound;
 }
 
-void dice_collection_clean(DiceCollection *dc) {
+void dice_collection_free(DiceCollection *dc) {
+	
+	for(size_t i = 0; i < dc->_size; ++i) {
+		die_free(dc->_die_array[i]);
+	}
+	
 	free(dc->_die_array);
 	dc->_size = 0;
 	dc->num_faces = 0;
 	dc->explosion_lower_bound = 0;
+	
+	if (dc->last_results) {
+		dice_collection_results_free(dc->last_results);
+	}
+	
+	free(dc);
 }
 
 char * dice_collection_desc(DiceCollection *dc) {
-	int die_count = dc->_size;
+	size_t die_count = dc->_size;
 	int die_faces = dc->num_faces;
 	char *out_str;
 	char out_str_start[30];
-	sprintf(out_str_start, "DiceCollection(%d, %d){ ", die_faces, die_count);
+	sprintf(out_str_start, "DiceCollection(%d, %d){ ", die_faces, (int) die_count);
 	size_t die_index;
 	Die *current_die;
 	int last_result;
@@ -108,7 +112,7 @@ char * dice_collection_desc(DiceCollection *dc) {
 		current_die = dice_collection_die_at(dc, die_index);
 		last_result = die_last_result(current_die);
 		
-		if (die_index == die_count-1) {
+		if (die_index == (size_t) die_count-1) {
 			sprintf(out_str+result_str_index, "%d }", last_result);
 		} else {
 			sprintf(out_str+result_str_index, "%d, ", last_result);
@@ -124,3 +128,18 @@ char * dice_collection_desc(DiceCollection *dc) {
 	return final_str;
 }
 
+DiceCollectionResults * dice_collection_results_init_for_dice_collection(DiceCollection *dc) {
+	int num_faces = dice_collection_faces(dc);
+	int explosion_lower_bound = dice_collection_get_explosion_lower_bound(dc);
+	size_t results_array_size = dice_collection_count(dc);
+	if (explosion_lower_bound) {
+		size_t num_exploding_results = num_faces - explosion_lower_bound;
+		size_t probable_num_results = dice_collection_count(dc) *  num_faces/(num_faces-num_exploding_results);
+		
+		// Bad maths; just to be safe
+		size_t safety_net = probable_num_results * 0.25; 
+		results_array_size = probable_num_results + safety_net;
+	}
+	
+	return dice_collection_results_init(results_array_size);
+}

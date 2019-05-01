@@ -6,7 +6,9 @@ typedef struct {
 	int last_result;
 } Die;
 
-Die die_init(int faces);
+Die * die_init(int faces);
+
+void die_free(Die *d);
 
 int die_roll(Die *d);
 

@@ -3,30 +3,32 @@
 #include "Die.h"
 
 void test_roll_returns_reasonable_result() {
-	Die d = die_init(6);
+	Die *d = die_init(6);
 	
-	int result = die_roll(&d);
+	int result = die_roll(d);
 
 	CU_ASSERT(result >= 1);
 	CU_ASSERT(result <= 6);
+	die_free(d);
 }
 
 void test_die_saves_result() {
-	Die d = die_init(6);
+	Die *d = die_init(6);
 	
-	int result = die_roll(&d);
+	int result = die_roll(d);
 	
-	CU_ASSERT(result == d.last_result);
+	CU_ASSERT(result == die_last_result(d));
 }
 
 void test_die_roll_returns_random_results() {
-	int num_dice = 50;
+	size_t num_dice = 50;
 	int results[6] = { 0 };
 	bool have_rolled_every_number_at_least_once = true;
 	
 	for (size_t i = 0; i < num_dice; ++i) {
-		Die d = die_init(6);
-		results[die_roll(&d)-1]++;
+		Die *d = die_init(6);
+		results[die_roll(d)-1]++;
+		die_free(d);
 	}
 	
 	for (size_t i = 0; i < 6; ++i) {
@@ -35,7 +37,8 @@ void test_die_roll_returns_random_results() {
 			break;
 		}
 	}
-	CU_ASSERT(have_rolled_every_number_at_least_once)
+	CU_ASSERT(have_rolled_every_number_at_least_once);
+	
 }
 
 int test_suite_die( int(*init_suite)(void), int(*clean_suite)(void)  ) {

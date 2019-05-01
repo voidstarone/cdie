@@ -1,0 +1,83 @@
+#include <stdbool.h>
+#include <stdlib.h>
+
+#include "CUnit/Basic.h"
+#include "Die.h"
+#include "DiceCollectionResults.h"
+
+#include "TestSuiteDiceCollectionResults.h"
+
+
+void test_dice_collection_results_init() {
+	DiceCollectionResults *dcr = dice_collection_results_init(10);
+	
+	size_t count = dice_collection_results_count(dcr);
+	
+	CU_ASSERT_EQUAL(count, 0);
+	
+	dice_collection_results_free(dcr);
+}
+
+
+void test_dice_collection_results_add_count() {
+	DiceCollectionResults *dcr = dice_collection_results_init(10);
+	size_t count = dice_collection_results_count(dcr);
+	
+	CU_ASSERT_EQUAL(count, 0);
+	dice_collection_results_add(dcr, 4);
+	
+	count = dice_collection_results_count(dcr);
+	CU_ASSERT_EQUAL(count, 1);
+	
+	dice_collection_results_free(dcr);
+}
+
+void test_dice_collection_results_get_array() {
+	DiceCollectionResults *dcr = dice_collection_results_init(10);
+	dice_collection_results_add(dcr, 4);
+	dice_collection_results_add(dcr, 10);
+	dice_collection_results_add(dcr, 20);
+	
+	int results_array[10] = {0};
+	dice_collection_results_as_array(dcr, results_array);
+	
+	size_t count = dice_collection_results_count(dcr);
+	CU_ASSERT_EQUAL(count, 3);
+	
+	CU_ASSERT_EQUAL(results_array[0], 4);
+	CU_ASSERT_EQUAL(results_array[1], 10);
+	CU_ASSERT_EQUAL(results_array[2], 20);
+	
+	dice_collection_results_free(dcr);
+}
+
+int test_suite_dice_collection_results(int(*init_suite)(void),                                                         int(*clean_suite)(void) ) {
+	
+	CU_pSuite pSuite = CU_add_suite("test_suite_dice_collection_results", init_suite, clean_suite);
+	if (NULL == pSuite) {
+		CU_cleanup_registry();
+		return CU_get_error();
+	}
+
+	if (NULL == CU_add_test(pSuite, "test_dice_collection_results_init",
+		test_dice_collection_results_init)) {
+		CU_cleanup_registry();
+		return CU_get_error();
+	}
+	
+	if (NULL == CU_add_test(pSuite, "test_dice_collection_results_add_count",
+		test_dice_collection_results_add_count)) {
+		CU_cleanup_registry();
+		return CU_get_error();
+	}
+	
+	if (NULL == CU_add_test(pSuite, "test_dice_collection_results_get_array",
+		test_dice_collection_results_get_array)) {
+		CU_cleanup_registry();
+		return CU_get_error();
+	}
+
+	// Run the tests and show the run summary
+	CU_basic_run_tests();
+	return CU_get_error();
+}

@@ -7,18 +7,22 @@
 #include "TestSuiteDieFactory.h"
 
 void test_die_factory_create_dice() {
-	int num_dice = 50;
+	size_t num_dice = 50;
 	int result = 0;
 	int max_result = 0;
 	int die_sides = 6;
-	Die *dice = diefactory_make_die_array(die_sides, num_dice);
+	Die **dice = diefactory_make_die_array(die_sides, num_dice);
 	
 	// Make sure they are valid dice
 	for(size_t i = 0; i < num_dice; ++i) {
-		result = die_roll(&dice[i]);
+		result = die_roll(dice[i]);
 		max_result =  result > max_result ? result : max_result;
 	}
 	CU_ASSERT(result <= 6);
+	for(size_t i = 0; i < num_dice; ++i)
+	{
+		die_free(dice[i]);
+	}
 }
 
 int test_suite_die_factory (int(*init_suite)(void), int(*clean_suite)(void) ) {

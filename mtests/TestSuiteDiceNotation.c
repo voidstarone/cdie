@@ -17,7 +17,7 @@ void test_dice_collection_from_core_notation() {
 	CU_ASSERT_EQUAL(faces, 6);
 	CU_ASSERT_EQUAL(count, 2);
 	
-	dice_collection_clean(dc);
+	dice_collection_free(dc);
 }
 
 void test_dice_collection_from_simple_percentile_notation() {
@@ -28,7 +28,7 @@ void test_dice_collection_from_simple_percentile_notation() {
 	CU_ASSERT_EQUAL(faces, 100);
 	CU_ASSERT_EQUAL(count, 4);
 	
-	dice_collection_clean(dc);
+	dice_collection_free(dc);
 }
 
 

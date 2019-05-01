@@ -5,16 +5,21 @@ ODIR=obj
 MTDIR=mtests
 
 CC=clang
-CFLAGS=-Wall -I$(MDIR)/
+CFLAGS=-W -Wall -I$(MDIR)/
 CCF=$(CC) $(CFLAGS)
 
-MOFILES= $(ODIR)/Die.o \
+CLIFILES= $(ODIR)/DiceRollingSession.o 
+
+MOFILES= $(ODIR)/numutils.o \
+	$(ODIR)/Die.o \
 	$(ODIR)/DieFactory.o \
+	$(ODIR)/DiceCollectionResults.o \
 	$(ODIR)/DiceCollection.o \
 	$(ODIR)/DiceNotation.o
 	
 TOFILES=$(ODIR)/TestSuiteDie.o \
 	$(ODIR)/TestSuiteDieFactory.o \
+	$(ODIR)/TestSuiteDiceCollectionResults.o \
 	$(ODIR)/TestSuiteDiceCollection.o \
 	$(ODIR)/TestSuiteDiceNotation.o 
 	
@@ -33,6 +38,9 @@ $(ODIR)/TestSuiteDiceNotation.o: $(ODIR)/TestSuiteDiceCollection.o
 
 $(ODIR)/TestSuiteDiceCollection.o: $(ODIR)/DiceCollection.o
 	$(CCF) -c -o $(ODIR)/TestSuiteDiceCollection.o $(MTDIR)/TestSuiteDiceCollection.c;
+	
+$(ODIR)/TestSuiteDiceCollectionResults.o: $(ODIR)/DiceCollectionResults.o
+	$(CCF) -c -o $(ODIR)/TestSuiteDiceCollectionResults.o $(MTDIR)/TestSuiteDiceCollectionResults.c;
 
 $(ODIR)/TestSuiteDieFactory.o: $(ODIR)/DieFactory.o
 	$(CCF) -c -o $(ODIR)/TestSuiteDieFactory.o $(MTDIR)/TestSuiteDieFactory.c;
@@ -41,9 +49,13 @@ $(ODIR)/TestSuiteDie.o: $(ODIR)/Die.o
 	$(CCF) -c -o $(ODIR)/TestSuiteDie.o $(MTDIR)/TestSuiteDie.c;
 
 # CLI
-build: $(MOFILES)
-	$(CCF) -o $(BDIR)/roll -largp $(UDIR)/main.c $(MOFILES)
+build: $(MOFILES) $(CLIFILES) 
+	$(CCF) -o $(BDIR)/roll $(UDIR)/main.c $(MOFILES) $(CLIFILES) 
+	
+# will need  -largp 
 
+$(ODIR)/DiceRollingSession.o:
+	$(CCF) -c -o $(ODIR)/DiceRollingSession.o $(UDIR)/DiceRollingSession.c;
 
 # Models
 $(ODIR)/DiceNotation.o: $(ODIR)/DiceCollection.o
@@ -52,11 +64,17 @@ $(ODIR)/DiceNotation.o: $(ODIR)/DiceCollection.o
 $(ODIR)/DiceCollection.o: $(ODIR)/DieFactory.o
 	$(CCF) -c -o $(ODIR)/DiceCollection.o $(MDIR)/DiceCollection.c;
 
+$(ODIR)/DiceCollectionResults.o:
+	$(CCF) -c -o $(ODIR)/DiceCollectionResults.o $(MDIR)/DiceCollectionResults.c;
+
 $(ODIR)/DieFactory.o: $(ODIR)/Die.o
 	$(CCF) -c -o $(ODIR)/DieFactory.o $(MDIR)/DieFactory.c;
 
 $(ODIR)/Die.o: $(MDIR)/Die.c
 	$(CCF) -c -o $(ODIR)/Die.o $(MDIR)/Die.c;
+
+$(ODIR)/numutils.o: $(MDIR)/numutils.c
+	$(CCF) -c -o $(ODIR)/numutils.o $(MDIR)/numutils.c;
 
 
 clean:
