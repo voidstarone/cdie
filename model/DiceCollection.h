@@ -1,4 +1,5 @@
 #import "Die.h"
+#import "DiceCollectionResults.h"
 #import <stdbool.h>
 
 #ifndef DIE_COLLECTION_H_FA033981
@@ -7,11 +8,14 @@
 typedef struct {
 	int num_faces;
 	size_t _size;
-	Die *_die_array;
-	int *last_results;
+	Die **_die_array;
+	DiceCollectionResults *last_results;
 	int explosion_lower_bound;
 	bool do_explosions_stack;
 } DiceCollection;
+
+DiceCollectionResults * dice_collection_results_init_for_dice_collection(DiceCollection *dc);
+
 
 DiceCollection * dice_collection_init(int faces, size_t count);
 
@@ -31,7 +35,7 @@ void dice_collection_set_explosion_lower_bound(DiceCollection *dc, int lower_bou
 
 char * dice_collection_desc(DiceCollection *dc);
 
-void dice_collection_clean(DiceCollection *dc);
+void dice_collection_free(DiceCollection *dc);
 
 #endif /* end of include guard: DIE_COLLECTION_H_FA033981 */
 

@@ -2,6 +2,7 @@
 #include "CUnit/Basic.h"
 #include "TestSuiteDie.h"
 #include "TestSuiteDieFactory.h"
+#include "TestSuiteDiceCollectionResults.h"
 #include "TestSuiteDiceCollection.h"
 #include "TestSuiteDiceNotation.h"
 
@@ -11,12 +12,13 @@ int init_suite(void)  { return 0; }
 int clean_suite(void) { return 0; }
 
 
-int main (int argc, char const *argv[]) {
+int main (/*int argc, char const *argv[]*/) {
 	if (CUE_SUCCESS != CU_initialize_registry()) {
 		return CU_get_error();
 	}
 	test_suite_die(&init_suite, &clean_suite);
 	test_suite_die_factory(&init_suite, &clean_suite);
+	test_suite_dice_collection_results(&init_suite, &clean_suite);
 	test_suite_dice_collection(&init_suite, &clean_suite);
 	test_suite_dice_notation(&init_suite, &clean_suite);
 	// Sets the basic run mode, CU_BRM_VERBOSE will show maximum output of run details

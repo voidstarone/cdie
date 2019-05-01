@@ -5,16 +5,18 @@ ODIR=obj
 MTDIR=mtests
 
 CC=clang
-CFLAGS=-Wall -I$(MDIR)/
+CFLAGS=-W -Wall -I$(MDIR)/
 CCF=$(CC) $(CFLAGS)
 
 MOFILES= $(ODIR)/Die.o \
 	$(ODIR)/DieFactory.o \
+	$(ODIR)/DiceCollectionResults.o \
 	$(ODIR)/DiceCollection.o \
 	$(ODIR)/DiceNotation.o
 	
 TOFILES=$(ODIR)/TestSuiteDie.o \
 	$(ODIR)/TestSuiteDieFactory.o \
+	$(ODIR)/TestSuiteDiceCollectionResults.o \
 	$(ODIR)/TestSuiteDiceCollection.o \
 	$(ODIR)/TestSuiteDiceNotation.o 
 	
@@ -33,6 +35,9 @@ $(ODIR)/TestSuiteDiceNotation.o: $(ODIR)/TestSuiteDiceCollection.o
 
 $(ODIR)/TestSuiteDiceCollection.o: $(ODIR)/DiceCollection.o
 	$(CCF) -c -o $(ODIR)/TestSuiteDiceCollection.o $(MTDIR)/TestSuiteDiceCollection.c;
+	
+$(ODIR)/TestSuiteDiceCollectionResults.o: $(ODIR)/DiceCollectionResults.o
+	$(CCF) -c -o $(ODIR)/TestSuiteDiceCollectionResults.o $(MTDIR)/TestSuiteDiceCollectionResults.c;
 
 $(ODIR)/TestSuiteDieFactory.o: $(ODIR)/DieFactory.o
 	$(CCF) -c -o $(ODIR)/TestSuiteDieFactory.o $(MTDIR)/TestSuiteDieFactory.c;
@@ -51,6 +56,9 @@ $(ODIR)/DiceNotation.o: $(ODIR)/DiceCollection.o
 
 $(ODIR)/DiceCollection.o: $(ODIR)/DieFactory.o
 	$(CCF) -c -o $(ODIR)/DiceCollection.o $(MDIR)/DiceCollection.c;
+
+$(ODIR)/DiceCollectionResults.o:
+	$(CCF) -c -o $(ODIR)/DiceCollectionResults.o $(MDIR)/DiceCollectionResults.c;
 
 $(ODIR)/DieFactory.o: $(ODIR)/Die.o
 	$(CCF) -c -o $(ODIR)/DieFactory.o $(MDIR)/DieFactory.c;
