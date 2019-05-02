@@ -2,19 +2,12 @@
 #include <string.h>
 #include <stdio.h>
 
+#import "numutils.h"
+
 #include "DieFactory.h"
 #include "DiceCollection.h"
 #include "DiceCollectionResults.h"
 
-int num_digits(int start) {
-	int count = 0;
-	int n = start;
-	while(n != 0) {
-		n /= 10;
-		++count;
-	}
-	return count + (start < 0 ? 1 : 0);
-}
 
 DiceCollection * dice_collection_init(int faces, size_t count) {
 	DiceCollection *dc = malloc(sizeof(DiceCollection));
@@ -22,6 +15,7 @@ DiceCollection * dice_collection_init(int faces, size_t count) {
 	dc->_size = count;
 	dc->num_faces = faces;
 	dc->explosion_lower_bound = 0;
+	dc->last_results = NULL;
 	return dc;
 }
 
@@ -37,8 +31,6 @@ inline Die * dice_collection_die_at(DiceCollection *dc, size_t index) {
 	return dc->_die_array[index];
 }
 
-
-
 void dice_collection_roll_silent(DiceCollection *dc) {
 	DiceCollectionResults *dcr = dice_collection_results_init_for_dice_collection(dc);
 	
@@ -50,17 +42,24 @@ void dice_collection_roll_silent(DiceCollection *dc) {
 		die_result = die_roll(d);
 		dice_collection_results_add(dcr, die_result);
 	}
+	
+	if (dc->last_results) {
+		dice_collection_results_free(dc->last_results);
+	}
+	dc->last_results = dcr;
 }
 
-int dice_collection_roll(DiceCollection *dc, int *results) {
+void dice_collection_roll(DiceCollection *dc, DiceCollectionResults *dcr) {
 	size_t count = dice_collection_count(dc);
 	Die *d;
 	for(size_t i = 0; i < count; ++i) {
 		d = dice_collection_die_at(dc, i);
-		results[i] = die_roll(d);
+		dice_collection_results_add(dcr, die_roll(d));
 	}
-	
-	return 1;
+}
+
+DiceCollectionResults * dice_collection_last_results(DiceCollection *dc) {
+	return dice_collection_results_clone(dc->last_results);
 }
 
 int dice_collection_get_explosion_lower_bound(DiceCollection *dc) {
@@ -73,8 +72,7 @@ void dice_collection_set_explosion_lower_bound(DiceCollection *dc, int lower_bou
 
 void dice_collection_free(DiceCollection *dc) {
 	
-	for(size_t i = 0; i < dc->_size; ++i)
-	{
+	for(size_t i = 0; i < dc->_size; ++i) {
 		die_free(dc->_die_array[i]);
 	}
 	
@@ -82,6 +80,11 @@ void dice_collection_free(DiceCollection *dc) {
 	dc->_size = 0;
 	dc->num_faces = 0;
 	dc->explosion_lower_bound = 0;
+	
+	if (dc->last_results) {
+		dice_collection_results_free(dc->last_results);
+	}
+	
 	free(dc);
 }
 

@@ -8,7 +8,10 @@ CC=clang
 CFLAGS=-W -Wall -I$(MDIR)/
 CCF=$(CC) $(CFLAGS)
 
-MOFILES= $(ODIR)/Die.o \
+CLIFILES= $(ODIR)/DiceRollingSession.o 
+
+MOFILES= $(ODIR)/numutils.o \
+	$(ODIR)/Die.o \
 	$(ODIR)/DieFactory.o \
 	$(ODIR)/DiceCollectionResults.o \
 	$(ODIR)/DiceCollection.o \
@@ -46,9 +49,13 @@ $(ODIR)/TestSuiteDie.o: $(ODIR)/Die.o
 	$(CCF) -c -o $(ODIR)/TestSuiteDie.o $(MTDIR)/TestSuiteDie.c;
 
 # CLI
-build: $(MOFILES)
-	$(CCF) -o $(BDIR)/roll -largp $(UDIR)/main.c $(MOFILES)
+build: $(MOFILES) $(CLIFILES) 
+	$(CCF) -o $(BDIR)/roll $(UDIR)/main.c $(MOFILES) $(CLIFILES) 
+	
+# will need  -largp 
 
+$(ODIR)/DiceRollingSession.o:
+	$(CCF) -c -o $(ODIR)/DiceRollingSession.o $(UDIR)/DiceRollingSession.c;
 
 # Models
 $(ODIR)/DiceNotation.o: $(ODIR)/DiceCollection.o
@@ -65,6 +72,9 @@ $(ODIR)/DieFactory.o: $(ODIR)/Die.o
 
 $(ODIR)/Die.o: $(MDIR)/Die.c
 	$(CCF) -c -o $(ODIR)/Die.o $(MDIR)/Die.c;
+
+$(ODIR)/numutils.o: $(MDIR)/numutils.c
+	$(CCF) -c -o $(ODIR)/numutils.o $(MDIR)/numutils.c;
 
 
 clean:

@@ -38,7 +38,8 @@ void test_dice_collection_results_get_array() {
 	dice_collection_results_add(dcr, 10);
 	dice_collection_results_add(dcr, 20);
 	
-	int *results_array = dice_collection_results_as_array(dcr);
+	int results_array[10] = {0};
+	dice_collection_results_as_array(dcr, results_array);
 	
 	size_t count = dice_collection_results_count(dcr);
 	CU_ASSERT_EQUAL(count, 3);

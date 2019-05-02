@@ -1,5 +1,9 @@
 #import <stdlib.h>
-#import <stdio.h> // Debugging; shouldn't be here
+#import <string.h>
+#import <stdio.h>
+
+
+#include "numutils.h"
 
 #include <stdarg.h>
 #import "DiceCollectionResults.h"
@@ -17,12 +21,12 @@ DiceCollectionResults * dice_collection_results_init(size_t capacity) {
 }
 
 void dice_collection_results_add(DiceCollectionResults *dcr, int result) {
-	if (dcr->count+2 >= dcr->size) {
-		// extend
-		printf("ERROR: dice_collection_results needs extending");
+	if (dcr->count+1 >= dcr->size) {
+		size_t new_size = dcr->size * 1.25;
+		dcr->results_array = realloc(dcr->results_array, new_size * sizeof(int));
+		dcr->size = new_size;
 	}
 	dcr->results_array[dcr->count++] = result;
-	dcr->results_array[dcr->count] = 0;
 }
 
 void dice_collection_results_update_count(DiceCollectionResults *dcr) {
@@ -36,6 +40,15 @@ void dice_collection_results_update_count(DiceCollectionResults *dcr) {
 	dcr->count = new_count;
 }
 
+DiceCollectionResults * dice_collection_results_clone(DiceCollectionResults *dcr) {
+	DiceCollectionResults *clone_dcr = dice_collection_results_init(dcr->count);
+	clone_dcr->count = dcr->count;
+	for(size_t i = 0; i < dcr->count; ++i) {
+		clone_dcr->results_array[i] = dcr->results_array[i];
+	}
+	return clone_dcr;
+}
+
 void dice_collection_results_free(DiceCollectionResults *dcr) {
 	free(dcr->results_array);
 	dcr->size = 0;
@@ -47,8 +60,29 @@ size_t dice_collection_results_count(DiceCollectionResults *dcr) {
 	return dcr->count;
 }
 
-int * dice_collection_results_as_array(DiceCollectionResults *dcr) {
-	return dcr->results_array; // BAD needs trimming
+void dice_collection_results_as_array(DiceCollectionResults *dcr, int *results) {
+	for(size_t i = 0; i < dcr->count; ++i) {
+		results[i] = dcr->results_array[i];
+	}
+}
+
+char * dice_collection_results_string(DiceCollectionResults *dcr) {
+	int total_characters = dcr->count - (dcr->count == 1 ? 0 : 1);
+	
+	for(size_t i = 0; i < dcr->count; ++i) {
+		total_characters += num_digits(dcr->results_array[i]);
+	}
+	char *results_string = malloc(sizeof(char) * total_characters);
+	size_t char_index = 0;
+	for(size_t i = 0; i < dcr->count; ++i) {
+		sprintf(results_string+char_index, "%d", dcr->results_array[i]);
+		char_index += num_digits(dcr->results_array[i]);
+		if (i != dcr->count-1) {
+			sprintf(results_string+char_index, " ");
+			char_index++;
+		}
+	}
+	return results_string;
 }
 
 char * dice_collection_results_desc(DiceCollectionResults *dcr) {

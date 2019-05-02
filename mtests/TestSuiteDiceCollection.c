@@ -25,20 +25,22 @@ void test_dice_collection_die_at() {
 
 	Die *d = dice_collection_die_at(dc, 2);
 
-	
 	CU_ASSERT_PTR_NOT_NULL(d);
 	dice_collection_free(dc);
 }
 
 void test_dice_collection_roll() {
 	DiceCollection *dc = dice_collection_init(6, 50);
+	DiceCollectionResults *dcr = dice_collection_results_init(50);
 	int rolls[50] = { 0 } ;
 	bool have_rolled_every_number_at_least_once = true;
-	int results[6] = { 0 };
-	dice_collection_roll(dc, results);
+	int results[6] = { 0, 0, 0, 0, 0, 0 };
+	
+	dice_collection_roll(dc, dcr);
+	dice_collection_results_as_array(dcr, rolls);
 
 	for (size_t i = 0; i < 50; ++i) {
-		results[rolls[i]]++;
+		results[rolls[i]-1]++;
 	}
 	for (size_t i = 0; i < 6; ++i) {
 		if (results[i] == 0) {
@@ -47,6 +49,7 @@ void test_dice_collection_roll() {
 		}
 	}
 	CU_ASSERT(have_rolled_every_number_at_least_once);
+	dice_collection_results_free(dcr);
 	dice_collection_free(dc);
 }
 
