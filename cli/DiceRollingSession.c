@@ -15,7 +15,6 @@ void dice_rolling_session_free(DiceRollingSession *drs) {
 	free(drs);
 }
 
-
 char * dice_rolling_session_resolve_notation(DiceRollingSession *drs, char *notation) {
 	
 	DiceCollection *dc = dice_collection_from_core_notation(notation);
