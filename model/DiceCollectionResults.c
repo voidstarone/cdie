@@ -93,3 +93,4 @@ char * dice_collection_results_desc(DiceCollectionResults *dcr) {
 	dcr->results_array[0] = 0;
 	return desc_string;
 }
+

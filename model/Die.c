@@ -13,7 +13,6 @@ int die_faces(Die *d) {
 Die * die_init(int numFaces) {
 	Die *d = malloc(sizeof(Die));
 	d->num_faces = numFaces;
-	die_roll(d);
 	return d;
 }
 

@@ -4,9 +4,9 @@
 #include "CUnit/Basic.h"
 #include "Die.h"
 #include "DiceCollection.h"
-#include "DiceNotation.h"
+#include "DiceNotationInterpreter.h"
 
-#include "TestSuiteDiceNotation.h"
+#include "TestSuiteDiceNotationInterpreter.h"
 
 
 void test_dice_collection_from_core_notation() {

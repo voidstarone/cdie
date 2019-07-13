@@ -4,7 +4,7 @@
 
 #include "DieFactory.h"
 #include "DiceCollection.h"
-#include "DiceNotation.h"
+#include "DiceNotationInterpreter.h"
 
 
 // Take something like "2d6" and turn it into a dice collection

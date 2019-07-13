@@ -7,7 +7,7 @@
 
 DiceRollingSession * dice_rolling_session_init() {
 	DiceRollingSession *drs = malloc(sizeof(DiceRollingSession));
-	drs->single_digit_d10s = false;
+	// drs->single_digit_d10s = false;
 	return drs;
 }
 

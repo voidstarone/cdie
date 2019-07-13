@@ -1,12 +1,12 @@
 #ifndef DIE_ROLLING_SESSION_H_FA033981
 #define DIE_ROLLING_SESSION_H_FA033981
 
-#include "DiceDoodads.h"
+#include "DiceRollingSession.h"
 #import <stdbool.h>
 
 typedef struct {
 	// various settings
-	bool single_digit_d10s;
+	// bool single_digit_d10s;
 } DiceRollingSession;
 
 DiceRollingSession * dice_rolling_session_init();

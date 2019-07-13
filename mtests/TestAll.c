@@ -4,7 +4,7 @@
 #include "TestSuiteDieFactory.h"
 #include "TestSuiteDiceCollectionResults.h"
 #include "TestSuiteDiceCollection.h"
-#include "TestSuiteDiceNotation.h"
+#include "TestSuiteDiceNotationInterpreter.h"
 
 
 
