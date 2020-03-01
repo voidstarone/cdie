@@ -58,7 +58,7 @@ void test_dice_collection_roll_explode() {
 	 
 	dice_collection_set_explosion_lower_bound(dc, 6);
 	
-	CU_ASSERT_EQUAL(dice_collection_get_explosion_lower_bound(dc), 2);
+	CU_ASSERT_EQUAL(dice_collection_get_explosion_lower_bound(dc), 6);
 
 	dice_collection_roll_silent(dc);
 
@@ -66,7 +66,6 @@ void test_dice_collection_roll_explode() {
 	int num_results = dice_collection_results_count(dcr);
 
 	CU_ASSERT(num_results > 50);
-	
 }
 
 

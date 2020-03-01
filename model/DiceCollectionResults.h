@@ -1,5 +1,5 @@
 #include <stdbool.h>
-#import <stdlib.h>
+#include <stdlib.h>
 
 #ifndef DIE_COLLECTION_RESULTS_H_FA033981
 #define DIE_COLLECTION_RESULTS_H_FA033981
@@ -16,6 +16,7 @@ DiceCollectionResults * dice_collection_results_init(size_t capacity);
 void dice_collection_results_free(DiceCollectionResults *dcr);
 
 size_t dice_collection_results_count(DiceCollectionResults *dcr);
+int dice_collection_results_result_at(DiceCollectionResults *dcr, int index);
 void dice_collection_results_add(DiceCollectionResults *dcr, int result);
 
 void dice_collection_results_as_array(DiceCollectionResults *dcr, int *results);

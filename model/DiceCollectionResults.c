@@ -1,13 +1,13 @@
-#import <stdlib.h>
-#import <string.h>
-#import <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <stdio.h>
 
 
 #include "numutils.h"
 
 #include <stdarg.h>
-#import "DiceCollectionResults.h"
-#import "DiceCollection.h"
+#include "DiceCollectionResults.h"
+#include "DiceCollection.h"
 
 DiceCollectionResults * dice_collection_results_init(size_t capacity) {
 	DiceCollectionResults *dcr = malloc(sizeof(DiceCollectionResults));
@@ -18,6 +18,10 @@ DiceCollectionResults * dice_collection_results_init(size_t capacity) {
 	dcr->results_array[0] = 0;
 	
 	return dcr;
+}
+
+int dice_collection_results_result_at(DiceCollectionResults *dcr, int index) {
+	return dcr->results_array[index];
 }
 
 void dice_collection_results_add(DiceCollectionResults *dcr, int result) {

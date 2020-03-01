@@ -51,6 +51,18 @@ void test_dice_collection_results_get_array() {
 	dice_collection_results_free(dcr);
 }
 
+void test_dice_collection_results_result_at() {
+	DiceCollectionResults *dcr = dice_collection_results_init(10);
+
+	dice_collection_results_add(dcr, 90);
+
+	int value = dice_collection_results_result_at(dcr, 0);
+
+	CU_ASSERT_EQUAL(value, 90);
+
+	dice_collection_results_free(dcr);
+}
+
 int test_suite_dice_collection_results(int(*init_suite)(void),                                                         int(*clean_suite)(void) ) {
 	
 	CU_pSuite pSuite = CU_add_suite("test_suite_dice_collection_results", init_suite, clean_suite);
@@ -73,6 +85,12 @@ int test_suite_dice_collection_results(int(*init_suite)(void),                  
 	
 	if (NULL == CU_add_test(pSuite, "test_dice_collection_results_get_array",
 		test_dice_collection_results_get_array)) {
+		CU_cleanup_registry();
+		return CU_get_error();
+	}
+
+	if (NULL == CU_add_test(pSuite, "test_dice_collection_results_result_at",
+		test_dice_collection_results_result_at)) {
 		CU_cleanup_registry();
 		return CU_get_error();
 	}

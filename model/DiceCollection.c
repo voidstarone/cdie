@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
+#include <stdbool.h>
 
 #include "numutils.h"
 
@@ -16,6 +17,7 @@ DiceCollection * dice_collection_init(size_t count, int faces) {
 	dc->num_faces = faces;
 	dc->explosion_lower_bound = 0;
 	dc->last_results = NULL;
+	dc->do_explosions_stack = true;
 	return dc;
 }
 
@@ -31,10 +33,37 @@ inline Die * dice_collection_die_at(DiceCollection *dc, size_t index) {
 	return dc->_die_array[index];
 }
 
+void dice_collection_do_explodes(DiceCollection *dc, int start_index) {
+	DiceCollectionResults *dcr = dc->last_results;
+	int count = dice_collection_results_count(dcr);
+	int i, num_explosions = 0;
+	for (i=start_index; i < count; ++i) {
+		int die_result = dice_collection_results_result_at(dcr, i);
+		if (die_result >= dc->explosion_lower_bound) {
+			num_explosions++;
+		}
+	}
+	if (num_explosions == 0) {
+		return;
+	}
+	Die *d = die_init(dc->num_faces);
+	for (i = 0; i < num_explosions; ++i) {
+		dice_collection_results_add(dcr, die_roll(d));
+	}
+	die_free(d);
+	if (dc->do_explosions_stack) {
+		dice_collection_do_explodes(dc, count);
+	}
+}
+
 void dice_collection_roll_silent(DiceCollection *dc) {
 	DiceCollectionResults *dcr = dice_collection_results_init_for_dice_collection(dc);
-	
-	size_t count = dice_collection_count(dc);
+	if (dc->last_results) {
+		dice_collection_results_free(dc->last_results);
+	}
+	dc->last_results = dcr;
+
+	int count = dice_collection_count(dc);
 	Die *d;
 	int die_result, i;
 	for (i = 0; i < count; ++i) {
@@ -42,27 +71,10 @@ void dice_collection_roll_silent(DiceCollection *dc) {
 		die_result = die_roll(d);
 		dice_collection_results_add(dcr, die_result);
 	}
-
-	if (dc->explosion_lower_bound) {
-		int num_explosions = 0;
-		for (i = 0; i < count; ++i) {
-			d = dice_collection_die_at(dc, i);
-			die_result = die_last_result(d);
-			if (die_result >= dc->explosion_lower_bound) {
-				num_explosions++;
-			}
-		}
-		Die *d = die_init(dc->num_faces);
-		for (i = 0; i < num_explosions; ++i) {
-			dice_collection_results_add(dcr, die_roll(d));
-		}
-		die_free(d);
-	}
 	
-	if (dc->last_results) {
-		dice_collection_results_free(dc->last_results);
+	if (dc->explosion_lower_bound) {
+		dice_collection_do_explodes(dc, 0);
 	}
-	dc->last_results = dcr;
 }
 
 void dice_collection_roll(DiceCollection *dc, DiceCollectionResults *dcr) {
