@@ -57,6 +57,15 @@ void test_dice_collection_from_any_notation() {
 	CU_ASSERT_EQUAL(faces, 6);
 	CU_ASSERT_EQUAL(count, 2);
 	CU_ASSERT_EQUAL(explosion_lower, 5);
+
+	dc = dice_collection_from_notation("8d10!");
+
+	count = dice_collection_count(dc);
+	faces = dice_collection_faces(dc);
+	explosion_lower = dice_collection_get_explosion_lower_bound(dc);
+	CU_ASSERT_EQUAL(faces, 10);
+	CU_ASSERT_EQUAL(count, 8);
+	CU_ASSERT_EQUAL(explosion_lower, 10);
 	
 	dice_collection_free(dc);
 }

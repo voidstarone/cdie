@@ -113,7 +113,11 @@ DiceCollection * dice_collection_from_notation(char *notation) {
     next_index = does_dc_explode(&does_explode, notation, next_index);
     
     if (next_index >= len_notation) {
-        return dice_collection_init(num_dice, num_sides);
+		DiceCollection *dc = dice_collection_init(num_dice, num_sides);
+		if (does_explode) {
+			dice_collection_set_explosion_lower_bound(dc, num_sides);
+		}
+        return dc;
     }
     next_index = extract_explodes_at(&explodes_at, notation, next_index);
     if (!explodes_at) {
