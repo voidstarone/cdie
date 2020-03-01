@@ -36,11 +36,27 @@ void dice_collection_roll_silent(DiceCollection *dc) {
 	
 	size_t count = dice_collection_count(dc);
 	Die *d;
-	int die_result;
-	for(size_t i = 0; i < count; ++i) {
+	int die_result, i;
+	for (i = 0; i < count; ++i) {
 		d = dice_collection_die_at(dc, i);
 		die_result = die_roll(d);
 		dice_collection_results_add(dcr, die_result);
+	}
+
+	if (dc->explosion_lower_bound) {
+		int num_explosions = 0;
+		for (i = 0; i < count; ++i) {
+			d = dice_collection_die_at(dc, i);
+			die_result = die_last_result(d);
+			if (die_result >= dc->explosion_lower_bound) {
+				num_explosions++;
+			}
+		}
+		Die *d = die_init(dc->num_faces);
+		for (i = 0; i < num_explosions; ++i) {
+			dice_collection_results_add(dcr, die_roll(d));
+		}
+		die_free(d);
 	}
 	
 	if (dc->last_results) {

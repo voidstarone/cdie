@@ -115,7 +115,7 @@ DiceCollection * dice_collection_from_notation(char *notation) {
     if (next_index >= len_notation) {
         return dice_collection_init(num_dice, num_sides);
     }
-    next_index = extract_num_sides(&explodes_at, notation, next_index);
+    next_index = extract_explodes_at(&explodes_at, notation, next_index);
     if (!explodes_at) {
         explodes_at = num_sides;
     }

@@ -54,15 +54,18 @@ void test_dice_collection_roll() {
 }
 
 void test_dice_collection_roll_explode() {
-	DiceCollection *dc = dice_collection_init(2, 1);
+	DiceCollection *dc = dice_collection_init(50, 6);
 	 
-	dice_collection_set_explosion_lower_bound(dc, 2);
+	dice_collection_set_explosion_lower_bound(dc, 6);
 	
 	CU_ASSERT_EQUAL(dice_collection_get_explosion_lower_bound(dc), 2);
-	
-	//int & 
-	
-	//dice_collection_roll(dc, );
+
+	dice_collection_roll_silent(dc);
+
+	DiceCollectionResults *dcr = dice_collection_last_results(dc);
+	int num_results = dice_collection_results_count(dcr);
+
+	CU_ASSERT(num_results > 50);
 	
 }
 

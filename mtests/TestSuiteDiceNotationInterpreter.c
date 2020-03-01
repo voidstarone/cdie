@@ -39,9 +39,15 @@ void test_dice_collection_from_any_notation() {
 	int faces = dice_collection_faces(dc);
 	CU_ASSERT_EQUAL(faces, 6);
 	CU_ASSERT_EQUAL(count, 2);
-	printf("%dd%d", faces, count);
 	
 	dice_collection_free(dc);
+
+	dc = dice_collection_from_notation("50%");
+
+	count = dice_collection_count(dc);
+	faces = dice_collection_faces(dc);
+	CU_ASSERT_EQUAL(faces, 100);
+	CU_ASSERT_EQUAL(count, 50);
 
 	dc = dice_collection_from_notation("2d6!5");
 
