@@ -56,6 +56,22 @@ void test_dice_roll_instruction_from_string_with_max() {
 	dice_roll_instruction_free(dri);
 }
 
+void test_dice_roll_instruction_from_string_with_double() {
+	DiceRollInstruction *dri = dice_roll_instruction_from_string("3.5");
+	CU_ASSERT_PTR_NOT_NULL(dri);
+	OperationType opType = dice_roll_instruction_get_operation_type(dri);
+	CU_ASSERT_EQUAL(opType, number);
+	dice_roll_instruction_free(dri);
+}
+
+void test_dice_roll_instruction_from_string_with_dice_collection() {
+	DiceRollInstruction *dri = dice_roll_instruction_from_string("3d6");
+	CU_ASSERT_PTR_NOT_NULL(dri);
+	OperationType op_type = dice_roll_instruction_get_operation_type(dri);
+	CU_ASSERT_EQUAL(op_type, dice_collection);
+	dice_roll_instruction_free(dri);
+}
+
 int test_suite_dice_roll_instruction(int(*init_suite)(void), int(*clean_suite)(void) ) {
 	
 	CU_pSuite pSuite = CU_add_suite("test_suite_dice_roll_instruction", init_suite, clean_suite);
@@ -99,6 +115,18 @@ int test_suite_dice_roll_instruction(int(*init_suite)(void), int(*clean_suite)(v
 
 	if (NULL == CU_add_test(pSuite, "test_dice_roll_instruction_from_string_with_max",
 		test_dice_roll_instruction_from_string_with_max)) {
+		CU_cleanup_registry();
+		return CU_get_error();
+	}
+
+	if (NULL == CU_add_test(pSuite, "test_dice_roll_instruction_from_string_with_double",
+		test_dice_roll_instruction_from_string_with_double)) {
+		CU_cleanup_registry();
+		return CU_get_error();
+	}
+
+	if (NULL == CU_add_test(pSuite, "test_dice_roll_instruction_from_string_with_dice_collection",
+		test_dice_roll_instruction_from_string_with_dice_collection)) {
 		CU_cleanup_registry();
 		return CU_get_error();
 	}

@@ -7,7 +7,10 @@ typedef enum {
 	subtract = 1,
 	sum = 2,
 	mean = 3,
-	max = 4
+	max = 4,
+	unknown = -1,
+	number = -2,
+	dice_collection = -3
 } OperationType;
 
 typedef enum {
@@ -18,7 +21,7 @@ typedef enum {
 typedef struct _DieRollInstruction {
 	void *value;
 	int numArgs;
-	OperationType operationType;
+	OperationType operation_type;
 } DiceRollInstruction;
 
 typedef struct _DieRollInstructionResult {
