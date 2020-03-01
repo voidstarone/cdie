@@ -1,0 +1,4 @@
+struct {
+	DiceRollInstruction *firstInstruction;
+} DieRollInstructionStack;
+

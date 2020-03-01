@@ -5,7 +5,7 @@
 #include "TestSuiteDiceCollectionResults.h"
 #include "TestSuiteDiceCollection.h"
 #include "TestSuiteDiceNotationInterpreter.h"
-
+#include "TestSuiteDiceRollInstruction.h"
 
 
 int init_suite(void)  { return 0; }
@@ -21,6 +21,7 @@ int main (/*int argc, char const *argv[]*/) {
 	test_suite_dice_collection_results(&init_suite, &clean_suite);
 	test_suite_dice_collection(&init_suite, &clean_suite);
 	test_suite_dice_notation(&init_suite, &clean_suite);
+	test_suite_dice_roll_instruction(&init_suite, &clean_suite);
 	// Sets the basic run mode, CU_BRM_VERBOSE will show maximum output of run details
 	// Other choices are: CU_BRM_SILENT and CU_BRM_NORMAL
 	CU_basic_set_mode(CU_BRM_VERBOSE);

@@ -2,14 +2,14 @@
 #include <string.h>
 #include <stdio.h>
 
-#import "numutils.h"
+#include "numutils.h"
 
 #include "DieFactory.h"
 #include "DiceCollection.h"
 #include "DiceCollectionResults.h"
 
 
-DiceCollection * dice_collection_init(int faces, size_t count) {
+DiceCollection * dice_collection_init(size_t count, int faces) {
 	DiceCollection *dc = malloc(sizeof(DiceCollection));
 	dc->_die_array = diefactory_make_die_array(faces, count);
 	dc->_size = count;

@@ -1,6 +1,6 @@
-#import "Die.h"
-#import "DiceCollectionResults.h"
-#import <stdbool.h>
+#include "Die.h"
+#include "DiceCollectionResults.h"
+#include <stdbool.h>
 
 #ifndef DIE_COLLECTION_H_FA033981
 #define DIE_COLLECTION_H_FA033981
@@ -17,7 +17,7 @@ typedef struct {
 DiceCollectionResults * dice_collection_results_init_for_dice_collection(DiceCollection *dc);
 
 
-DiceCollection * dice_collection_init(int faces, size_t count);
+DiceCollection * dice_collection_init(size_t count, int faces);
 
 size_t dice_collection_count(DiceCollection *dc);
 int dice_collection_faces(DiceCollection *dc);

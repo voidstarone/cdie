@@ -1,4 +1,0 @@
-struct {
-	DieRollInstruction *firstInstruction;
-} DieRollInstructionStack;
-

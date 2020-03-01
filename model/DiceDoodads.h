@@ -6,6 +6,8 @@
 #include "DiceCollection.h"
 #include "DiceCollectionResults.h"
 #include "DiceCollection.h"
-#include "DiceNotation.h"
+#include "DiceNotationInterpreter.h"
+#include "DiceRollInstruction.h"
+#include "DiceRollInstructionStack.h"
 
 #endif

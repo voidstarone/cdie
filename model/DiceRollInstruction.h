@@ -1,26 +1,39 @@
 
+#ifndef DIE_ROLL_INSTRUCTION_H_FA033981
+#define DIE_ROLL_INSTRUCTION_H_FA033981
 
-enum InstructionType {
-	operation,
-	data
-}
+typedef enum {
+	add = 0,
+	subtract = 1,
+	sum = 2,
+	mean = 3,
+	max = 4
+} OperationType;
 
-enum ResultType {
+typedef enum {
 	intResult,
 	diceCollectionResult
-}
+} ResultType;
 
 typedef struct _DieRollInstruction {
 	void *value;
 	int numArgs;
-	InstructonType instructionType;
-} DieRollInstruction;
+	OperationType operationType;
+} DiceRollInstruction;
 
 typedef struct _DieRollInstructionResult {
 	ResultType type;
 	void *resultValue;
-} DieRollInstructionResult;
+} DiceRollInstructionResult;
 
+DiceRollInstruction *dice_roll_instruction_init();
+
+void dice_roll_instruction_free(DiceRollInstruction *dri);
+DiceRollInstruction *dice_roll_instruction_from_string(char *stringRepresentation);
+void dice_roll_instruction_set_operation_type(DiceRollInstruction *dri, OperationType opType);
+OperationType dice_roll_instruction_get_operation_type(DiceRollInstruction *dri);
+
+#endif /*DIE_ROLL_INSTRUCTION_H_FA033981*/
 /*
 2d6 + 4d20 =>
 DRIS[DRI(+), DRI(2d6), DRI(4d20)] => 
