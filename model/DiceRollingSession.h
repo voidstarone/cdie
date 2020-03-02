@@ -1,8 +1,8 @@
 #ifndef DIE_ROLLING_SESSION_H_FA033981
 #define DIE_ROLLING_SESSION_H_FA033981
+#include <stdbool.h>
 
 #include "DiceRollingSession.h"
-#import <stdbool.h>
 
 typedef struct {
 	// various settings
