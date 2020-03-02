@@ -18,24 +18,24 @@ void test_dice_roll_instruction_init() {
 void test_dice_roll_instruction_from_string_with_plus() {
 	DiceRollInstruction *dri = dice_roll_instruction_from_string("+");
 	CU_ASSERT_PTR_NOT_NULL(dri);
-	OperationType opType = dice_roll_instruction_get_operation_type(dri);
-	CU_ASSERT_EQUAL(opType, add);
+	OperationType op_type = dice_roll_instruction_get_operation_type(dri);
+	CU_ASSERT_EQUAL(op_type, op_type_add);
 	dice_roll_instruction_free(dri);
 }
 
 void test_dice_roll_instruction_from_string_with_minus() {
 	DiceRollInstruction *dri = dice_roll_instruction_from_string("-");
 	CU_ASSERT_PTR_NOT_NULL(dri);
-	OperationType opType = dice_roll_instruction_get_operation_type(dri);
-	CU_ASSERT_EQUAL(opType, subtract);
+	OperationType op_type = dice_roll_instruction_get_operation_type(dri);
+	CU_ASSERT_EQUAL(op_type, op_type_subtract);
 	dice_roll_instruction_free(dri);
 }
 
 void test_dice_roll_instruction_from_string_with_sum() {
 	DiceRollInstruction *dri = dice_roll_instruction_from_string("sum");
 	CU_ASSERT_PTR_NOT_NULL(dri);
-	OperationType opType = dice_roll_instruction_get_operation_type(dri);
-	CU_ASSERT_EQUAL(opType, sum);
+	OperationType op_type = dice_roll_instruction_get_operation_type(dri);
+	CU_ASSERT_EQUAL(op_type, op_type_sum);
 	dice_roll_instruction_free(dri);
 }
 
@@ -43,24 +43,24 @@ void test_dice_roll_instruction_from_string_with_sum() {
 void test_dice_roll_instruction_from_string_with_mean() {
 	DiceRollInstruction *dri = dice_roll_instruction_from_string("mean");
 	CU_ASSERT_PTR_NOT_NULL(dri);
-	OperationType opType = dice_roll_instruction_get_operation_type(dri);
-	CU_ASSERT_EQUAL(opType, mean);
+	OperationType op_type = dice_roll_instruction_get_operation_type(dri);
+	CU_ASSERT_EQUAL(op_type, op_type_mean);
 	dice_roll_instruction_free(dri);
 }
 
 void test_dice_roll_instruction_from_string_with_max() {
 	DiceRollInstruction *dri = dice_roll_instruction_from_string("max");
 	CU_ASSERT_PTR_NOT_NULL(dri);
-	OperationType opType = dice_roll_instruction_get_operation_type(dri);
-	CU_ASSERT_EQUAL(opType, max);
+	OperationType op_type = dice_roll_instruction_get_operation_type(dri);
+	CU_ASSERT_EQUAL(op_type, op_type_max);
 	dice_roll_instruction_free(dri);
 }
 
 void test_dice_roll_instruction_from_string_with_double() {
 	DiceRollInstruction *dri = dice_roll_instruction_from_string("3.5");
 	CU_ASSERT_PTR_NOT_NULL(dri);
-	OperationType opType = dice_roll_instruction_get_operation_type(dri);
-	CU_ASSERT_EQUAL(opType, number);
+	OperationType op_type = dice_roll_instruction_get_operation_type(dri);
+	CU_ASSERT_EQUAL(op_type, op_type_number);
 	dice_roll_instruction_free(dri);
 }
 
@@ -68,7 +68,7 @@ void test_dice_roll_instruction_from_string_with_dice_collection() {
 	DiceRollInstruction *dri = dice_roll_instruction_from_string("3d6");
 	CU_ASSERT_PTR_NOT_NULL(dri);
 	OperationType op_type = dice_roll_instruction_get_operation_type(dri);
-	CU_ASSERT_EQUAL(op_type, dice_collection);
+	CU_ASSERT_EQUAL(op_type, op_type_dice_collection);
 	dice_roll_instruction_free(dri);
 }
 

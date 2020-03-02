@@ -16,14 +16,16 @@ MOFILES= $(ODIR)/numutils.o \
 	$(ODIR)/DiceCollectionResults.o \
 	$(ODIR)/DiceCollection.o \
 	$(ODIR)/DiceNotationInterpreter.o \
-	$(ODIR)/DiceRollInstruction.o
+	$(ODIR)/DiceRollInstruction.o \
+	$(ODIR)/DiceRollInstructionStack.o
 	
 TOFILES=$(ODIR)/TestSuiteDie.o \
 	$(ODIR)/TestSuiteDieFactory.o \
 	$(ODIR)/TestSuiteDiceCollectionResults.o \
 	$(ODIR)/TestSuiteDiceCollection.o \
 	$(ODIR)/TestSuiteDiceNotationInterpreter.o \
-	$(ODIR)/TestSuiteDiceRollInstruction.o
+	$(ODIR)/TestSuiteDiceRollInstruction.o \
+	$(ODIR)/TestSuiteDiceRollInstructionStack.o 
 	
 
 test: $(BDIR)/testdie $(MOFILES) $(TOFILES)
@@ -36,9 +38,11 @@ $(BDIR)/testdie: $(MOFILES) $(TOFILES)
 	
 #----
 
+$(ODIR)/TestSuiteDiceRollInstructionStack.o: $(ODIR)/DiceRollInstructionStack.o
+	$(CCF) -c -o $(ODIR)/TestSuiteDiceRollInstructionStack.o $(MTDIR)/TestSuiteDiceRollInstructionStack.c;
+
 $(ODIR)/TestSuiteDiceRollInstruction.o: $(ODIR)/DiceRollInstruction.o
 	$(CCF) -c -o $(ODIR)/TestSuiteDiceRollInstruction.o $(MTDIR)/TestSuiteDiceRollInstruction.c;
-
 
 $(ODIR)/TestSuiteDiceNotationInterpreter.o: $(ODIR)/DiceNotationInterpreter.o
 	$(CCF) -c -o $(ODIR)/TestSuiteDiceNotationInterpreter.o $(MTDIR)/TestSuiteDiceNotationInterpreter.c;
@@ -65,9 +69,11 @@ $(ODIR)/DiceRollingSession.o:
 	$(CCF) -c -o $(ODIR)/DiceRollingSession.o $(MDIR)/DiceRollingSession.c;
 
 # Models
+$(ODIR)/DiceRollInstructionStack.o: 
+	$(CCF) -c -o $(ODIR)/DiceRollInstructionStack.o $(MDIR)/DiceRollInstructionStack.c;
+
 $(ODIR)/DiceRollInstruction.o: 
 	$(CCF) -c -o $(ODIR)/DiceRollInstruction.o $(MDIR)/DiceRollInstruction.c;
-
 
 $(ODIR)/DiceNotationInterpreter.o: 
 	$(CCF) -c -o $(ODIR)/DiceNotationInterpreter.o $(MDIR)/DiceNotationInterpreter.c;

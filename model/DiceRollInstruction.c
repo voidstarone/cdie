@@ -49,8 +49,13 @@ void dice_roll_instruction_set_operation_type(DiceRollInstruction *dri, Operatio
     dri->operation_type = op_type;
 }
 
+void dice_roll_instruction_set_expected_result_type(DiceRollInstruction *dri, ResultType result_type) {
+    dri->expected_result_type = result_type;
+}
+
 DiceRollInstruction *dice_roll_instruction_from_string(char *string_representation) {
     DiceRollInstruction *dri = dice_roll_instruction_init();
+    dice_roll_instruction_set_expected_result_type(dri, result_type_double);
     OperationType op_type = dice_roll_instruction_find_operation_type_for_string(string_representation);
     dice_roll_instruction_set_operation_type(dri, op_type);
     if (op_type < 0) {
@@ -58,17 +63,20 @@ DiceRollInstruction *dice_roll_instruction_from_string(char *string_representati
         char *end_of_double;
         double *double_value = malloc(sizeof(double));
         *double_value = strtod(string_representation, &end_of_double);
-        
         if (end_of_double == string_representation ||
             end_of_double != &string_representation[0] + strlen(string_representation)) {
             free(double_value);            
             dc = dice_collection_from_notation(string_representation);
+            if (dc == NULL) {
+                return NULL;
+            }
             dri->value = dc;
-            dice_roll_instruction_set_operation_type(dri, dice_collection);
+            dice_roll_instruction_set_operation_type(dri, op_type_dice_collection);
+            dice_roll_instruction_set_expected_result_type(dri, result_type_dice_collection);
             return dri;
         }
         dri->value = double_value;       
-        dice_roll_instruction_set_operation_type(dri, number);
+        dice_roll_instruction_set_operation_type(dri, op_type_number);
     }
     return dri;
 }
