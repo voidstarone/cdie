@@ -5,10 +5,12 @@
 typedef enum {
 	op_type_add = 0,
 	op_type_subtract = 1,
-	op_type_sum = 2,
-	op_type_mean = 3,
-	op_type_avg = 3,
-	op_type_max = 4,
+	op_type_multiply = 2,
+	op_type_divide = 3,
+	op_type_sum = 4,
+	op_type_mean = 5,
+	op_type_avg = 5,
+	op_type_max = 6,
 	op_type_unknown = -1,
 	op_type_number = -2,
 	op_type_dice_collection = -3
@@ -21,7 +23,7 @@ typedef enum {
 
 typedef struct _DieRollInstruction {
 	void *value;
-	int numArgs;
+	int num_args;
 	OperationType operation_type;
 	ResultType expected_result_type;
 } DiceRollInstruction;

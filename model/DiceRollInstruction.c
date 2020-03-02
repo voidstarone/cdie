@@ -9,11 +9,7 @@
 #include "Die.h"
 
 #define DRI_DATA_OP_TYPE -1
-#define NUM_OPERATIONS 5 
-
-char valid_operations[NUM_OPERATIONS][5] = {
-    "+", "-", "sum", "mean", "max"
-};
+#define NUM_OPERATIONS 8
 
 DiceRollInstruction *dice_roll_instruction_init() {
     DiceRollInstruction *dri = malloc(sizeof(DiceRollInstruction));
@@ -29,16 +25,32 @@ void dice_roll_instruction_free(DiceRollInstruction *dri) {
 }
 
 
-int dice_roll_instruction_find_operation_type_for_string(char *stringRepresentation) {
-    int search_index = 0, comparison_result;
-    for (; search_index < NUM_OPERATIONS; search_index++)
-    {
-        comparison_result = strcmp(stringRepresentation, valid_operations[search_index]);
-        if (comparison_result == 0) {
-            return search_index;
-        }
+OperationType dice_roll_instruction_find_operation_type_for_string(char *string_rep) {
+    if (strcmp(string_rep, "+") == 0) {
+        return op_type_add;
     }
-    return DRI_DATA_OP_TYPE;
+    if (strcmp(string_rep, "-") == 0) {
+        return op_type_subtract;
+    }
+    if (strcmp(string_rep, "*") == 0) {
+        return op_type_multiply;
+    }
+    if (strcmp(string_rep, "/") == 0) {
+        return op_type_divide;
+    }
+    if (strcmp(string_rep, "sum") == 0) {
+        return op_type_sum;
+    }
+    if (strcmp(string_rep, "mean") == 0) {
+        return op_type_mean;
+    }
+    if (strcmp(string_rep, "avg") == 0) {
+        return op_type_mean;
+    }
+    if (strcmp(string_rep, "max") == 0) {
+        return op_type_max;
+    }
+    return op_type_unknown;
 }
 
 OperationType dice_roll_instruction_get_operation_type(DiceRollInstruction *dri) {
@@ -46,6 +58,14 @@ OperationType dice_roll_instruction_get_operation_type(DiceRollInstruction *dri)
 }
 
 void dice_roll_instruction_set_operation_type(DiceRollInstruction *dri, OperationType op_type) {
+    if (op_type < 0) {
+        dri->num_args = 0;
+    } else if (op_type >= op_type_add && op_type <= op_type_divide) {
+        dri->num_args = 2;
+    } else {
+        dri->num_args = -1;
+    }
+    
     dri->operation_type = op_type;
 }
 
