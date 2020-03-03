@@ -72,12 +72,13 @@ void test_dice_collection_from_any_notation() {
 
 int test_suite_dice_notation(int(*init_suite)(void), int(*clean_suite)(void) ) {
 	
-	CU_pSuite pSuite = CU_add_suite("test_suite_dice_notation", init_suite, clean_suite);
+	char **test_suite_name = "test_suite_dice_notation";
+	CU_pSuite pSuite = CU_add_suite(test_suite_name, init_suite, clean_suite);
 	if (NULL == pSuite) {
 		CU_cleanup_registry();
 		return CU_get_error();
 	}
-	
+	printf("%s\n", test_suite_name);
 
 	if (NULL == CU_add_test(pSuite, "test_dice_collection_from_core_notation",
 		test_dice_collection_from_core_notation)) {

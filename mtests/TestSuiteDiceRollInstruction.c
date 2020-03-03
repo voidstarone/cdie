@@ -74,11 +74,13 @@ void test_dice_roll_instruction_from_string_with_dice_collection() {
 
 int test_suite_dice_roll_instruction(int(*init_suite)(void), int(*clean_suite)(void) ) {
 	
-	CU_pSuite pSuite = CU_add_suite("test_suite_dice_roll_instruction", init_suite, clean_suite);
+	char **test_suite_name = "test_suite_dice_roll_instruction";
+	CU_pSuite pSuite = CU_add_suite(test_suite_name, init_suite, clean_suite);
 	if (NULL == pSuite) {
 		CU_cleanup_registry();
 		return CU_get_error();
 	}
+	printf("%s\n", test_suite_name);
 
 	if (NULL == CU_add_test(pSuite, "test_dice_roll_instruction_init",
 		test_dice_roll_instruction_init)) {

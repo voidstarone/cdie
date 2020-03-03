@@ -44,6 +44,7 @@ void test_die_roll_returns_random_results() {
 int test_suite_die( int(*init_suite)(void), int(*clean_suite)(void)  ) {
 
 	CU_pSuite pSuite = CU_add_suite("die_test_suite", init_suite, clean_suite);
+	printf("test_suite_die\n");
 	if (NULL == pSuite) {
 		CU_cleanup_registry();
 		return CU_get_error();
