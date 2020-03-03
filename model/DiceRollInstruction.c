@@ -11,10 +11,34 @@
 #define DRI_DATA_OP_TYPE -1
 #define NUM_OPERATIONS 8
 
+bool has_first_instruction_been_created = false;
+int (*ops[7]) (DiceRollInstructionResult *, int, DiceRollInstruction **);
+void setup_ops();
+
 DiceRollInstruction *dice_roll_instruction_init() {
     DiceRollInstruction *dri = malloc(sizeof(DiceRollInstruction));
     dri->value = NULL;
+    if (has_first_instruction_been_created) {
+        setup_ops();
+        has_first_instruction_been_created = true;
+    }
     return dri;
+}
+
+DiceRollInstruction *dice_roll_instruction_clone(DiceRollInstruction *original) {
+    DiceRollInstruction *clone = malloc(sizeof(DiceRollInstruction));
+    clone->value = original->value;
+    clone->expected_result_type = original->expected_result_type;
+    clone->num_args = original->num_args;
+    clone->operation_type = original->operation_type;
+    return clone;
+}
+
+bool dice_roll_instruction_is_equal(DiceRollInstruction *dri1, DiceRollInstruction *dri2) {
+    return dri1->value == dri2->value &&
+           dri1->expected_result_type == dri2->expected_result_type &&
+           dri1->num_args == dri2->num_args &&
+           dri1->operation_type == dri2->operation_type;
 }
 
 void dice_roll_instruction_free(DiceRollInstruction *dri) {
@@ -69,6 +93,10 @@ void dice_roll_instruction_set_operation_type(DiceRollInstruction *dri, Operatio
     dri->operation_type = op_type;
 }
 
+int dice_roll_instruction_get_num_args(DiceRollInstruction *dri) {
+    return dri->num_args;
+}
+
 void dice_roll_instruction_set_expected_result_type(DiceRollInstruction *dri, ResultType result_type) {
     dri->expected_result_type = result_type;
 }
@@ -100,3 +128,22 @@ DiceRollInstruction *dice_roll_instruction_from_string(char *string_representati
     }
     return dri;
 }
+
+// This atrocity takes a DiceRollInstruction, returns a pointer to a function with the signature
+// int func(DiceRollInstructionResult *result, int argc, DiceRollInstruction **argv)
+int (*dice_roll_instruction_get_op(DiceRollInstruction *dri)) (DiceRollInstructionResult *, int, DiceRollInstruction **) {
+    return ops[dri->operation_type];
+}
+
+
+int op_add(DiceRollInstructionResult *result, int argc, DiceRollInstruction **argv) {
+
+    //TODO: Implement this
+    
+    return 0;
+}
+
+void setup_ops() {
+    ops[(int) op_type_add] = op_add;
+}
+
