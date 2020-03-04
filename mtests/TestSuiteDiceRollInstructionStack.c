@@ -51,11 +51,16 @@ void test_dice_roll_instruction_stack_evaluate_add_two_ints() {
 	dice_roll_instruction_stack_push(dris, dri_num2);
 
 	dice_roll_instruction_stack_evaluate(dris, drirs);
+
+	DiceRollInstructionResult *drir = dice_roll_instruction_result_stack_pop(drirs);
+	double real_result = dice_roll_instruction_result_get_number(drir);
+	CU_ASSERT_EQUAL(real_result, (double) 3.0);
+	dice_roll_instruction_stack_free(dris);
+	dice_roll_instruction_result_stack_free(drirs);
 }
 
 int test_suite_dice_roll_instruction_stack(int(*init_suite)(void), int(*clean_suite)(void) ) {
-	
-	char ** test_suite_name = "test_suite_dice_roll_instruction_stack";
+	const char *test_suite_name = "test_suite_dice_roll_instruction_stack";
 	CU_pSuite pSuite = CU_add_suite(test_suite_name, init_suite, clean_suite);
 	if (NULL == pSuite) {
 		CU_cleanup_registry();

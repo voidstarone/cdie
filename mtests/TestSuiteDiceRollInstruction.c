@@ -74,7 +74,7 @@ void test_dice_roll_instruction_from_string_with_dice_collection() {
 
 int test_suite_dice_roll_instruction(int(*init_suite)(void), int(*clean_suite)(void) ) {
 	
-	char **test_suite_name = "test_suite_dice_roll_instruction";
+	const char *test_suite_name = "test_suite_dice_roll_instruction";
 	CU_pSuite pSuite = CU_add_suite(test_suite_name, init_suite, clean_suite);
 	if (NULL == pSuite) {
 		CU_cleanup_registry();

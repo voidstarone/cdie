@@ -33,4 +33,6 @@ void dice_roll_instruction_set_operation_type(DiceRollInstruction *dri, Operatio
 OperationType dice_roll_instruction_get_operation_type(DiceRollInstruction *dri);
 int dice_roll_instruction_get_num_args(DiceRollInstruction *dri);
 void dice_roll_instruction_set_expected_result_type(DiceRollInstruction *dri, ResultType result_type);
+int dice_roll_instruction_do_op(DiceRollInstruction *dri, DiceRollInstructionResult *result, int argc, DiceRollInstruction **argv);
+
 #endif /*DIE_ROLL_INSTRUCTION_H_FA033981*/

@@ -26,6 +26,7 @@ Die * dice_collection_die_at(DiceCollection *dc, size_t index);
 
 void dice_collection_roll(DiceCollection *dc, DiceCollectionResults *dcr);
 void dice_collection_roll_silent(DiceCollection *dc);
+int dice_collection_total(DiceCollection *dc);
 
 int dice_collection_get_stacking_explosions(DiceCollection *dc);
 void dice_collection_set_stacking_explosions(DiceCollection *dc, bool do_explosions_stack);

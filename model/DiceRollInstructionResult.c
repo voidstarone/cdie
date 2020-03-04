@@ -13,14 +13,15 @@ DiceRollInstructionResult *dice_roll_instruction_result_init() {
     return drir;
 }
 
+// TODO: Actually assign the value
 DiceRollInstructionResult *dice_roll_instruction_result_with_double(double value) {
     DiceRollInstructionResult *drir = dice_roll_instruction_result_init();
     drir->type = result_type_double;
-    double *double_store = malloc(sizeof(double));
-    *double_store = value;
-    drir->result_value = double_store;
+    drir->result_value = malloc(sizeof(double));
+    memcpy(drir->result_value, &value, sizeof(double));
     return drir;
 }
+
 DiceRollInstructionResult *dice_roll_instruction_result_with_dice_collection(DiceCollection *dc) {
     DiceRollInstructionResult *drir = dice_roll_instruction_result_init();
     drir->type = result_type_dice_collection;
@@ -28,6 +29,15 @@ DiceRollInstructionResult *dice_roll_instruction_result_with_dice_collection(Dic
     return drir;
 }
 
+double dice_roll_instruction_result_get_number(DiceRollInstructionResult *drir) {
+    if (drir->type == result_type_double) {
+        double *result = drir->result_value;
+        return *result;
+    }
+    if (drir->type == result_type_dice_collection) {
+        return dice_collection_total(drir->result_value);
+    }
+}
 
 void dice_roll_instruction_result_free(DiceRollInstructionResult *drir) {
     if (drir->result_value != NULL) {

@@ -11,17 +11,13 @@
 #define DRI_DATA_OP_TYPE -1
 #define NUM_OPERATIONS 8
 
-bool has_first_instruction_been_created = false;
+
 int (*ops[7]) (DiceRollInstructionResult *, int, DiceRollInstruction **);
 void setup_ops();
 
 DiceRollInstruction *dice_roll_instruction_init() {
     DiceRollInstruction *dri = malloc(sizeof(DiceRollInstruction));
     dri->value = NULL;
-    if (has_first_instruction_been_created) {
-        setup_ops();
-        has_first_instruction_been_created = true;
-    }
     return dri;
 }
 
@@ -93,6 +89,19 @@ void dice_roll_instruction_set_operation_type(DiceRollInstruction *dri, Operatio
     dri->operation_type = op_type;
 }
 
+double dice_roll_instruction_get_number(DiceRollInstruction *dri) {
+    if (dri->operation_type == op_type_number) {
+        double *dbl_ptr = dri->value;
+        return *dbl_ptr;
+    }
+    if (dri->operation_type == op_type_dice_collection) {
+        DiceCollection *dc = dri->value;
+        dice_collection_roll_silent(dc);
+        return dice_collection_total(dc);
+    }
+    return 0;
+}
+
 int dice_roll_instruction_get_num_args(DiceRollInstruction *dri) {
     return dri->num_args;
 }
@@ -109,11 +118,11 @@ DiceRollInstruction *dice_roll_instruction_from_string(char *string_representati
     if (op_type < 0) {
         DiceCollection *dc;
         char *end_of_double;
-        double *double_value = malloc(sizeof(double));
-        *double_value = strtod(string_representation, &end_of_double);
-        if (end_of_double == string_representation ||
-            end_of_double != &string_representation[0] + strlen(string_representation)) {
-            free(double_value);            
+        int string_rep_length = strlen(string_representation);
+        double double_value = strtod(string_representation, &end_of_double);
+        if (string_rep_length > 1 &&
+            end_of_double == string_representation ||
+            end_of_double != &string_representation[0] + string_rep_length) {
             dc = dice_collection_from_notation(string_representation);
             if (dc == NULL) {
                 return NULL;
@@ -122,8 +131,9 @@ DiceRollInstruction *dice_roll_instruction_from_string(char *string_representati
             dice_roll_instruction_set_operation_type(dri, op_type_dice_collection);
             dice_roll_instruction_set_expected_result_type(dri, result_type_dice_collection);
             return dri;
-        }
-        dri->value = double_value;       
+        }        
+        dri->value = malloc(sizeof(double));
+        memcpy(dri->value, &double_value, sizeof(double));;
         dice_roll_instruction_set_operation_type(dri, op_type_number);
     }
     return dri;
@@ -134,12 +144,28 @@ DiceRollInstruction *dice_roll_instruction_from_string(char *string_representati
 int (*dice_roll_instruction_get_op(DiceRollInstruction *dri)) (DiceRollInstructionResult *, int, DiceRollInstruction **) {
     return ops[dri->operation_type];
 }
+static bool dri_should_setup_ops = true;
+int dice_roll_instruction_do_op(DiceRollInstruction *dri, DiceRollInstructionResult *result, int argc, DiceRollInstruction **argv) {
+    if (dri_should_setup_ops) {
+        setup_ops();
+        dri_should_setup_ops = false;
+    }
+    return ops[dri->operation_type](dri, argc, argv);
+}
 
 
 int op_add(DiceRollInstructionResult *result, int argc, DiceRollInstruction **argv) {
+    if (argc != 2) return -1;
+    DiceRollInstruction *arg1 = argv[0];
+    DiceRollInstruction *arg2 = argv[1];
+    double num1, num2;
 
-    //TODO: Implement this
-    
+    num1 = dice_roll_instruction_get_number(arg1);
+    num2 = dice_roll_instruction_get_number(arg2);
+    printf("%f+%f=%f\n", num1, num2, num1+num2);
+    result = dice_roll_instruction_result_with_double(num1 + num2);
+    printf("drir:%p\n", result);
+    printf("result:%f\n", result, result->result_value);
     return 0;
 }
 

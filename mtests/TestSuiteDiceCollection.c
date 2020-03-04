@@ -71,7 +71,7 @@ void test_dice_collection_roll_explode() {
 
 int test_suite_dice_collection (int(*init_suite)(void),
                                 int(*clean_suite)(void) ) {
-	char **test_suite_name = "test_suite_dice_collection";
+	const char *test_suite_name = "test_suite_dice_collection";
 	CU_pSuite pSuite = CU_add_suite(test_suite_name, 
 		init_suite, clean_suite);
 	if (NULL == pSuite) {

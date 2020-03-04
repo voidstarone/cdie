@@ -20,5 +20,6 @@ void dice_roll_instruction_result_free(DiceRollInstructionResult *drir);
 DiceRollInstructionResult *dice_roll_instruction_result_init();
 DiceRollInstructionResult *dice_roll_instruction_result_with_double(double value);
 DiceRollInstructionResult *dice_roll_instruction_result_with_dice_collection(DiceCollection *dc);
+double dice_roll_instruction_result_get_number(DiceRollInstructionResult *drir);
 
 #endif /*DIE_ROLL_INSTRUCTION_RESULT_H_FA033981*/

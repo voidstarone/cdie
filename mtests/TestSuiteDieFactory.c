@@ -27,7 +27,7 @@ void test_die_factory_create_dice() {
 
 int test_suite_die_factory (int(*init_suite)(void), int(*clean_suite)(void) ) {
 	
-	char ** test_suite_name = "die_factory_test_suite";
+	const char *test_suite_name = "die_factory_test_suite";
 	CU_pSuite pSuite = CU_add_suite(test_suite_name, init_suite, clean_suite);
 	if (NULL == pSuite) {
 		CU_cleanup_registry();

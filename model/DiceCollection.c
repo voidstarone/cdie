@@ -90,6 +90,18 @@ DiceCollectionResults * dice_collection_last_results(DiceCollection *dc) {
 	return dice_collection_results_clone(dc->last_results);
 }
 
+int dice_collection_total(DiceCollection *dc) {
+	if (!dc->last_results) {
+		return 0;
+	}
+	DiceCollectionResults *last_results = dc->last_results;
+	int total = 0, count = dice_collection_results_count(last_results);
+	for (int i = 0; i < count; i++) {
+		total += dice_collection_results_result_at(last_results, i);
+	}
+	return total;
+}
+
 int dice_collection_get_explosion_lower_bound(DiceCollection *dc) {
 	return dc->explosion_lower_bound;
 }

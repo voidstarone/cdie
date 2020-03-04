@@ -1,4 +1,4 @@
-#import "numutils.h"
+#include "numutils.h"
 
 int num_digits(int start) {
 	int count = 0;
@@ -8,4 +8,12 @@ int num_digits(int start) {
 		++count;
 	}
 	return count + (start < 0 ? 1 : 0);
+}
+
+int max(int num1, int num2) {
+	return num1 > num2 ? num1 : num2;
+}
+
+int min(int num1, int num2) {
+	return num1 < num2 ? num1 : num2;
 }
