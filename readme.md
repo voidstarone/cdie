@@ -1,7 +1,12 @@
-Requires: argp
+Requires: argp, cunit
 
 ```
+brew install cunit
 brew install argp
+mkdir bin
+mkdir obj
+make
+make build
 ```
 
 Example usage:
