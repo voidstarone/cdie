@@ -10,7 +10,7 @@ typedef struct {
 	int count;
 } DiceRollInstructionStack;
 
-DiceRollInstructionStack *dice_roll_instruction_stack_init();
+DiceRollInstructionStack *dice_roll_instruction_stack_create();
 void dice_roll_instruction_stack_free(DiceRollInstructionStack *dris);
 
 void dice_roll_instruction_stack_push(DiceRollInstructionStack *dris, DiceRollInstruction *dri);

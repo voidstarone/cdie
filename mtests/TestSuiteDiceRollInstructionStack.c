@@ -11,14 +11,14 @@
 #include "TestSuiteDiceRollInstructionStack.h"
 
 
-void test_dice_roll_instruction_stack_init() {
-	DiceRollInstructionStack *dris = dice_roll_instruction_stack_init();
+void test_dice_roll_instruction_stack_create() {
+	DiceRollInstructionStack *dris = dice_roll_instruction_stack_create();
 	CU_ASSERT_PTR_NOT_NULL(dris);
 	dice_roll_instruction_stack_free(dris);
 }
 
 void test_dice_roll_instruction_stack_push() {
-	DiceRollInstructionStack *dris = dice_roll_instruction_stack_init();
+	DiceRollInstructionStack *dris = dice_roll_instruction_stack_create();
 	DiceRollInstruction *dri1 = dice_roll_instruction_from_string("max");
 	dice_roll_instruction_stack_push(dris, dri1);
 	DiceRollInstruction *dri2 = dice_roll_instruction_stack_peek(dris);
@@ -29,7 +29,7 @@ void test_dice_roll_instruction_stack_push() {
 }
 
 void test_dice_roll_instruction_stack_pop() {
-	DiceRollInstructionStack *dris = dice_roll_instruction_stack_init();
+	DiceRollInstructionStack *dris = dice_roll_instruction_stack_create();
 	DiceRollInstruction *dri1 = dice_roll_instruction_from_string("max");
 	dice_roll_instruction_stack_push(dris, dri1);
 	DiceRollInstruction *dri2 = dice_roll_instruction_stack_pop(dris);
@@ -40,8 +40,8 @@ void test_dice_roll_instruction_stack_pop() {
 }
 
 void test_dice_roll_instruction_stack_evaluate_add_two_ints() {
-	DiceRollInstructionResultStack *drirs = NULL;
-	DiceRollInstructionStack *dris = dice_roll_instruction_stack_init();
+	DiceRollInstructionResultStack *drirs = dice_roll_instruction_result_stack_create();
+	DiceRollInstructionStack *dris = dice_roll_instruction_stack_create();
 	DiceRollInstruction *dri_num1 = dice_roll_instruction_from_string("1");
 	DiceRollInstruction *dri_num2 = dice_roll_instruction_from_string("2");
 	DiceRollInstruction *dri_add = dice_roll_instruction_from_string("+");
@@ -68,8 +68,8 @@ int test_suite_dice_roll_instruction_stack(int(*init_suite)(void), int(*clean_su
 	}
 	printf("%s\n", test_suite_name);
 
-	if (NULL == CU_add_test(pSuite, "dice_roll_instruction_stack_init",
-		test_dice_roll_instruction_stack_init)) {
+	if (NULL == CU_add_test(pSuite, "dice_roll_instruction_stack_create",
+		test_dice_roll_instruction_stack_create)) {
 		CU_cleanup_registry();
 		return CU_get_error();
 	}

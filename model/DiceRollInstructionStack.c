@@ -7,7 +7,7 @@
 #include "DiceRollInstructionStack.h"
 #include "DiceRollInstructionResultStack.h"
 
-DiceRollInstructionStack *dice_roll_instruction_stack_init() {
+DiceRollInstructionStack *dice_roll_instruction_stack_create() {
 	DiceRollInstructionStack *dris = malloc(sizeof(DiceRollInstructionStack));
 	dris->size = 5;
 	dris->count = 0;
@@ -61,7 +61,7 @@ DiceRollInstruction * dice_roll_instruction_stack_instruction_at(DiceRollInstruc
 
 int dice_roll_instruction_stack_evaluate(DiceRollInstructionStack *dris, DiceRollInstructionResultStack *drirs) {
 	if (drirs == NULL) {
-		drirs = dice_roll_instruction_result_stack_init();
+		drirs = dice_roll_instruction_result_stack_create();
 	}
 	DiceRollInstruction *dri = NULL;
 	DiceRollInstruction **args = NULL;

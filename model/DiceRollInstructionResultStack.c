@@ -4,7 +4,7 @@
 #include "DiceRollInstructionResult.h"
 #include "DiceRollInstructionResultStack.h"
 
-DiceRollInstructionResultStack *dice_roll_instruction_result_stack_init() {
+DiceRollInstructionResultStack *dice_roll_instruction_result_stack_create() {
 	DiceRollInstructionResultStack *drirs = malloc(sizeof(DiceRollInstructionResultStack));
 	drirs->size = 5;
 	drirs->count = 0;

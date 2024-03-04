@@ -5,12 +5,13 @@ ODIR=obj
 MTDIR=mtests
 
 CC=clang
-CFLAGS=-W -Wall -I$(MDIR)/
+CFLAGS=-W -Wall -g -I$(MDIR)/
 CCF=$(CC) $(CFLAGS)
 
 CLIFILES= $(ODIR)/DiceRollingSession.o 
 
-MOFILES= $(ODIR)/numutils.o \
+MOFILES= $(ODIR)/DynArray.o \
+	$(ODIR)/numutils.o \
 	$(ODIR)/Die.o \
 	$(ODIR)/DieFactory.o \
 	$(ODIR)/DiceCollectionResults.o \
@@ -21,7 +22,8 @@ MOFILES= $(ODIR)/numutils.o \
 	$(ODIR)/DiceRollInstructionResultStack.o \
 	$(ODIR)/DiceRollInstructionStack.o
 	
-TOFILES=$(ODIR)/TestSuiteDie.o \
+TOFILES= $(ODIR)/TestSuiteDynArray.o \
+	$(ODIR)/TestSuiteDie.o \
 	$(ODIR)/TestSuiteDieFactory.o \
 	$(ODIR)/TestSuiteDiceCollectionResults.o \
 	$(ODIR)/TestSuiteDiceCollection.o \
@@ -34,12 +36,18 @@ TOFILES=$(ODIR)/TestSuiteDie.o \
 test: $(BDIR)/testdie $(MOFILES) $(TOFILES)
 	bin/testdie
 
+debugtest: $(BDIR)/testdie $(MOFILES) $(TOFILES)
+	lldb bin/testdie
+
 # Model Tests
 	
 $(BDIR)/testdie: $(MOFILES) $(TOFILES)
 	$(CCF) -o $(BDIR)/testdie -lcunit -I$(MDIR)/DiceDoodads.h $(MTDIR)/TestAll.c $(MOFILES) $(TOFILES)
 	
 #----
+
+$(ODIR)/TestSuiteDynArray.o: $(ODIR)/DynArray.o 
+	$(CCF) -c -o $(ODIR)/TestSuiteDynArray.o $(MTDIR)/TestSuiteDynArray.c
 
 $(ODIR)/TestSuiteDiceRollInstructionStack.o: $(ODIR)/DiceRollInstructionStack.o
 	$(CCF) -c -o $(ODIR)/TestSuiteDiceRollInstructionStack.o $(MTDIR)/TestSuiteDiceRollInstructionStack.c;
@@ -75,6 +83,10 @@ $(ODIR)/DiceRollingSession.o:
 	$(CCF) -c -o $(ODIR)/DiceRollingSession.o $(MDIR)/DiceRollingSession.c;
 
 # Models
+
+$(ODIR)/DynArray.o: 
+	$(CCF) -c -o $(ODIR)/DynArray.o $(MDIR)/DynArray.c
+	
 $(ODIR)/DiceRollInstructionStack.o: 
 	$(CCF) -c -o $(ODIR)/DiceRollInstructionStack.o $(MDIR)/DiceRollInstructionStack.c;
 
@@ -104,6 +116,7 @@ $(ODIR)/Die.o: $(MDIR)/Die.c
 
 $(ODIR)/numutils.o: $(MDIR)/numutils.c
 	$(CCF) -c -o $(ODIR)/numutils.o $(MDIR)/numutils.c;
+	
 
 
 clean:

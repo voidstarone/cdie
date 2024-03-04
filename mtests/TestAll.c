@@ -1,5 +1,6 @@
 #include <stdbool.h>
 #include "CUnit/Basic.h"
+#include "TestSuiteDynArray.h"
 #include "TestSuiteDie.h"
 #include "TestSuiteDieFactory.h"
 #include "TestSuiteDiceCollectionResults.h"
@@ -17,6 +18,7 @@ int main (/*int argc, char const *argv[]*/) {
 	if (CUE_SUCCESS != CU_initialize_registry()) {
 		return CU_get_error();
 	}
+	test_suite_dyn_array(&init_suite, &clean_suite);
 	test_suite_die(&init_suite, &clean_suite);
 	test_suite_die_factory(&init_suite, &clean_suite);
 	test_suite_dice_collection_results(&init_suite, &clean_suite);
