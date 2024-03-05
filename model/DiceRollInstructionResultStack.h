@@ -1,3 +1,4 @@
+#include "DynArray.h"
 #include "DiceRollInstruction.h"
 
 #ifndef DIE_ROLL_INSTRUCTION_RESULT_STACK_H_FA033981
@@ -5,9 +6,7 @@
 
 
 typedef struct {
-	DiceRollInstructionResult **results;
-	size_t size;
-	size_t count;
+	DynArray *array;
 } DiceRollInstructionResultStack;
 
 DiceRollInstructionResultStack *dice_roll_instruction_result_stack_create();

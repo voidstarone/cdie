@@ -3,59 +3,41 @@
 #include <math.h>
 #include "numutils.h"
 
+#include "DynArray.h"
 #include "DiceRollInstruction.h"
 #include "DiceRollInstructionStack.h"
 #include "DiceRollInstructionResultStack.h"
 
 DiceRollInstructionStack *dice_roll_instruction_stack_create() {
 	DiceRollInstructionStack *dris = malloc(sizeof(DiceRollInstructionStack));
-	dris->size = 5;
-	dris->count = 0;
-	dris->instructions = malloc(sizeof(DiceRollInstruction *) * dris->size);
+	dris->instructions = dyn_array_create(8);
 	return dris;
 }
 
 void dice_roll_instruction_stack_free(DiceRollInstructionStack *dris) {
-	for (int i = dris->count-1; i > 0; --i) {
-		dice_roll_instruction_free(dris->instructions[i]);
+	for (int i = dyn_array_count(dris->instructions) - 1; i > 0; --i) {
+		DiceRollInstruction *instruction = dyn_array_element_at_index(dris->instructions, i);
+		dice_roll_instruction_free(instruction);
 	}
-	free(dris->instructions);
+	dyn_array_free(dris->instructions);
 	free(dris);
 }
 
 void dice_roll_instruction_stack_push(DiceRollInstructionStack *dris, DiceRollInstruction *dri) {
-	if (dris->count+1 >= (int) dris->size) {
-		size_t new_size = dris->size * 1.25;
-		dris->instructions = realloc(dris->instructions, new_size * sizeof(DiceRollInstruction *));
-		dris->size = new_size;
-	}
-	dris->instructions[dris->count] = dri;
-	dris->count += 1;
+	dyn_array_push(dris->instructions, dri);
 }
 
 DiceRollInstruction * dice_roll_instruction_stack_peek(DiceRollInstructionStack *dris) {
-	if (dris->count == 0) {
-		return NULL;
-	}
-	return dris->instructions[dris->count-1];
+	return dyn_array_peek(dris->instructions);
 }
 
 
 DiceRollInstruction * dice_roll_instruction_stack_pop(DiceRollInstructionStack *dris) {
-	if (dris->count == 0) {
-		return NULL;
-	}
-	DiceRollInstruction *dri = dris->instructions[dris->count-1];
-	dris->count = dris->count - 1;
-	return dri;
+	return dyn_array_pop(dris->instructions);
 }
 
 DiceRollInstruction * dice_roll_instruction_stack_instruction_at(DiceRollInstructionStack *dris, int index) {
-	if (index >= dris->count || index < 0) {
-		return NULL;
-	}
-	DiceRollInstruction *dri = dris->instructions[index];
-	return dri;
+	return dyn_array_element_at_index(dris->instructions, index);
 }
 
 
@@ -66,7 +48,7 @@ int dice_roll_instruction_stack_evaluate(DiceRollInstructionStack *dris, DiceRol
 	DiceRollInstruction *dri = NULL;
 	DiceRollInstruction **args = NULL;
 	DiceRollInstructionResult *drir = NULL;
-	int instruction_count = dris->count;
+	int instruction_count = dyn_array_count(dris->instructions);
 	int num_args = 0, arg_index = 0;
 	for (int instruction_index = 0; instruction_index < instruction_count; ) {
 		dri = dice_roll_instruction_stack_instruction_at(dris, instruction_index);
