@@ -24,7 +24,7 @@ typedef struct _DieRollInstruction {
 	ResultType expected_result_type;
 } DiceRollInstruction;
 
-DiceRollInstruction *dice_roll_instruction_init();
+DiceRollInstruction *dice_roll_instruction_create();
 void dice_roll_instruction_free(DiceRollInstruction *dri);
 DiceRollInstruction *dice_roll_instruction_clone(DiceRollInstruction *original);
 bool dice_roll_instruction_is_equal(DiceRollInstruction *dri1, DiceRollInstruction *dri2);
@@ -33,6 +33,6 @@ void dice_roll_instruction_set_operation_type(DiceRollInstruction *dri, Operatio
 OperationType dice_roll_instruction_get_operation_type(DiceRollInstruction *dri);
 int dice_roll_instruction_get_num_args(DiceRollInstruction *dri);
 void dice_roll_instruction_set_expected_result_type(DiceRollInstruction *dri, ResultType result_type);
-int dice_roll_instruction_do_op(DiceRollInstruction *dri, DiceRollInstructionResult *result, int argc, DiceRollInstruction **argv);
+DiceRollInstructionResult * dice_roll_instruction_do_op(DiceRollInstruction *dri, int argc, DiceRollInstruction **argv);
 
 #endif /*DIE_ROLL_INSTRUCTION_H_FA033981*/

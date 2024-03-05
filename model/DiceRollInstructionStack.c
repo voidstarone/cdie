@@ -42,9 +42,6 @@ DiceRollInstruction * dice_roll_instruction_stack_instruction_at(DiceRollInstruc
 
 
 int dice_roll_instruction_stack_evaluate(DiceRollInstructionStack *dris, DiceRollInstructionResultStack *drirs) {
-	if (drirs == NULL) {
-		drirs = dice_roll_instruction_result_stack_create();
-	}
 	DiceRollInstruction *dri = NULL;
 	DiceRollInstruction **args = NULL;
 	DiceRollInstructionResult *drir = NULL;
@@ -53,19 +50,21 @@ int dice_roll_instruction_stack_evaluate(DiceRollInstructionStack *dris, DiceRol
 	for (int instruction_index = 0; instruction_index < instruction_count; ) {
 		dri = dice_roll_instruction_stack_instruction_at(dris, instruction_index);
 		num_args = dice_roll_instruction_get_num_args(dri);
+		if (num_args == -1) {
+			exit(-1);
+		}
 		if (instruction_index + num_args > instruction_count) {
 			return -1;
 		}
-		args = malloc(sizeof(DiceRollInstruction) * num_args);
+		args = malloc(sizeof(DiceRollInstruction *) * num_args);
 		for (arg_index = 0; arg_index < num_args; arg_index++) {
 			args[arg_index] = dice_roll_instruction_stack_instruction_at(dris, instruction_index + arg_index+1);
 		}
-		dice_roll_instruction_do_op(dri, drir, num_args, args);
+		drir = dice_roll_instruction_do_op(dri, num_args, args);
 		free(args);
 		dice_roll_instruction_result_stack_push(drirs, drir);
-		instruction_index += num_args+1;
+		instruction_index += num_args + 1;
 	}
 	
-
 	return 0;
 }

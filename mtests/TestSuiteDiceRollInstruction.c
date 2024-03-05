@@ -10,7 +10,7 @@
 
 
 void test_dice_roll_instruction_init() {
-	DiceRollInstruction *dri = dice_roll_instruction_init();
+	DiceRollInstruction *dri = dice_roll_instruction_create();
 	CU_ASSERT_PTR_NOT_NULL(dri);
 	dice_roll_instruction_free(dri);
 }

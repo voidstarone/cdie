@@ -12,7 +12,7 @@ typedef struct {
 	int *results_array;
 } DiceCollectionResults;
 
-DiceCollectionResults * dice_collection_results_init(size_t capacity);
+DiceCollectionResults * dice_collection_results_create(size_t capacity);
 void dice_collection_results_free(DiceCollectionResults *dcr);
 
 size_t dice_collection_results_count(DiceCollectionResults *dcr);

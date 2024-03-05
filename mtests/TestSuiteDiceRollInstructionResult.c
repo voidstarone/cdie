@@ -10,7 +10,7 @@
 
 
 void test_dice_roll_instruction_result_init() {
-	DiceRollInstructionResult *drir = dice_roll_instruction_result_init();
+	DiceRollInstructionResult *drir = dice_roll_instruction_result_create();
 	CU_ASSERT_PTR_NOT_NULL(drir);
 	dice_roll_instruction_result_free(drir);
 }

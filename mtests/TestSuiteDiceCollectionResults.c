@@ -9,7 +9,7 @@
 
 
 void test_dice_collection_results_init() {
-	DiceCollectionResults *dcr = dice_collection_results_init(10);
+	DiceCollectionResults *dcr = dice_collection_results_create(10);
 	
 	size_t count = dice_collection_results_count(dcr);
 	
@@ -20,7 +20,7 @@ void test_dice_collection_results_init() {
 
 
 void test_dice_collection_results_add_count() {
-	DiceCollectionResults *dcr = dice_collection_results_init(10);
+	DiceCollectionResults *dcr = dice_collection_results_create(10);
 	size_t count = dice_collection_results_count(dcr);
 	
 	CU_ASSERT_EQUAL(count, 0);
@@ -33,7 +33,7 @@ void test_dice_collection_results_add_count() {
 }
 
 void test_dice_collection_results_get_array() {
-	DiceCollectionResults *dcr = dice_collection_results_init(10);
+	DiceCollectionResults *dcr = dice_collection_results_create(10);
 	dice_collection_results_add(dcr, 4);
 	dice_collection_results_add(dcr, 10);
 	dice_collection_results_add(dcr, 20);
@@ -52,7 +52,7 @@ void test_dice_collection_results_get_array() {
 }
 
 void test_dice_collection_results_result_at() {
-	DiceCollectionResults *dcr = dice_collection_results_init(10);
+	DiceCollectionResults *dcr = dice_collection_results_create(10);
 
 	dice_collection_results_add(dcr, 90);
 

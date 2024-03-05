@@ -10,7 +10,7 @@ int die_faces(Die *d) {
 }
 
 
-Die * die_init(int numFaces) {
+Die * die_create(int numFaces) {
 	Die *d = malloc(sizeof(Die));
 	d->num_faces = numFaces;
 	return d;

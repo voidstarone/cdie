@@ -14,13 +14,15 @@ typedef struct {
 	bool do_explosions_stack;
 } DiceCollection;
 
-DiceCollectionResults * dice_collection_results_init_for_dice_collection(DiceCollection *dc);
+DiceCollectionResults * dice_collection_results_create_for_dice_collection(DiceCollection *dc);
 
 
-DiceCollection * dice_collection_init(size_t count, int faces);
+DiceCollection * dice_collection_create(size_t count, int faces);
 
 size_t dice_collection_count(DiceCollection *dc);
 int dice_collection_faces(DiceCollection *dc);
+
+void dice_collection_set_results(DiceCollection *dc, int *results);
 
 Die * dice_collection_die_at(DiceCollection *dc, size_t index);
 
