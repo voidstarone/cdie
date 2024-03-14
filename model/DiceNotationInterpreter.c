@@ -11,7 +11,6 @@ bool is_digit(char c) {
     return c > 47 && c < 58;
 }
 
-
 int extract_num_dice(int *num_dice, char *notation) {
     if (notation[0] == 'd') {
         *num_dice = 1;
@@ -92,7 +91,7 @@ DiceCollection * dice_collection_from_percentile_notation(char *notation) {
 	return dice_collection_create(atoi(str_count), 100);
 }
 
-DiceCollection * dice_collection_from_notation(char *notation) {
+DiceCollection * dice_collection_create_from_notation(char *notation) {
 	
 	int num_dice = 0, 
     num_sides = 0,

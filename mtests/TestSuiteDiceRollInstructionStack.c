@@ -64,25 +64,21 @@ void test_dice_roll_instruction_stack_evaluate_max_dice_collection() {
 	DiceRollInstructionResultStack *drirs = dice_roll_instruction_result_stack_create();
 	DiceRollInstructionStack *dris = dice_roll_instruction_stack_create();
 	DiceRollInstruction *max = dice_roll_instruction_from_string("max");
-	DiceRollInstruction *dc = dice_roll_instruction_from_string("2d6");
-	size_t count = dice_collection_count(dc);
-	printf("count: %d\n", count);
-	int results[] = {1, 5};
-	dice_collection_set_results(dc->value, results);
+	DiceRollInstruction *dri_dc = dice_roll_instruction_from_string("4d6");
+	int results[] = {1, 5, 3, 2};
+	dice_collection_set_results(dri_dc->value, results);
 	dice_roll_instruction_stack_push(dris, max);
-	dice_roll_instruction_stack_push(dris, dc);
+	dice_roll_instruction_stack_push(dris, dri_dc);
 
 	dice_roll_instruction_stack_evaluate(dris, drirs);
 
 	DiceRollInstructionResult *drir = dice_roll_instruction_result_stack_pop(drirs);
 
 	double real_result = dice_roll_instruction_result_get_number(drir);
-	printf("real_result: %d\n", real_result);
 	CU_ASSERT_EQUAL(real_result, (double) 5.0);
 	dice_roll_instruction_stack_free(dris);
 	dice_roll_instruction_result_stack_free(drirs);
 }
-
 
 int test_suite_dice_roll_instruction_stack(int(*init_suite)(void), int(*clean_suite)(void) ) {
 	const char *test_suite_name = "test_suite_dice_roll_instruction_stack";

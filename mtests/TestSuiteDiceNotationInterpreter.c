@@ -33,7 +33,7 @@ void test_dice_collection_from_simple_percentile_notation() {
 
 
 void test_dice_collection_from_any_notation() {
-	DiceCollection *dc = dice_collection_from_notation("2d6");
+	DiceCollection *dc = dice_collection_create_from_notation("2d6");
 
 	int count = dice_collection_count(dc);
 	int faces = dice_collection_faces(dc);
@@ -42,14 +42,14 @@ void test_dice_collection_from_any_notation() {
 	
 	dice_collection_free(dc);
 
-	dc = dice_collection_from_notation("50%");
+	dc = dice_collection_create_from_notation("50%");
 
 	count = dice_collection_count(dc);
 	faces = dice_collection_faces(dc);
 	CU_ASSERT_EQUAL(faces, 100);
 	CU_ASSERT_EQUAL(count, 50);
 
-	dc = dice_collection_from_notation("2d6!5");
+	dc = dice_collection_create_from_notation("2d6!5");
 
 	count = dice_collection_count(dc);
 	faces = dice_collection_faces(dc);
@@ -58,7 +58,7 @@ void test_dice_collection_from_any_notation() {
 	CU_ASSERT_EQUAL(count, 2);
 	CU_ASSERT_EQUAL(explosion_lower, 5);
 
-	dc = dice_collection_from_notation("8d10!");
+	dc = dice_collection_create_from_notation("8d10!");
 
 	count = dice_collection_count(dc);
 	faces = dice_collection_faces(dc);

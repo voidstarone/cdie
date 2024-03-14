@@ -50,6 +50,7 @@ double dice_roll_instruction_result_get_number(DiceRollInstructionResult *drir) 
     if (drir->type == result_type_dice_collection) {
         return dice_collection_total(drir->result_value);
     }
+    return -1;
 }
 
 void dice_roll_instruction_result_free(DiceRollInstructionResult *drir) {

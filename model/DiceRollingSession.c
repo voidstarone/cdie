@@ -18,7 +18,7 @@ void dice_rolling_session_free(DiceRollingSession *drs) {
 
 char * dice_rolling_session_resolve_notation(DiceRollingSession *drs, char *notation) {
 	
-	DiceCollection *dc = dice_collection_from_notation(notation);
+	DiceCollection *dc = dice_collection_create_from_notation(notation);
 
 	if (dc == NULL) {
 		return NULL;

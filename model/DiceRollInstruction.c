@@ -163,7 +163,7 @@ DiceRollInstruction *dice_roll_instruction_from_string(char *string_representati
     DiceCollection *dc = NULL;
     switch (op_type) {
         case op_type_number:
-            strtod(string_representation, NULL);
+            double_value = strtod(string_representation, NULL);
             dri->value = malloc(sizeof(double));
             memcpy(dri->value, &double_value, sizeof(double));
             dice_roll_instruction_set_expected_result_type(dri, result_type_double);
@@ -212,9 +212,10 @@ DiceRollInstructionResult *op_max(int argc, DiceRollInstruction **argv) {
     double maximum = DBL_MIN;
     DiceCollectionResults *dcr = dice_collection_last_results(dc);
 
-    for (size_t i = dice_collection_results_count(dc) - 1; i > 0; --i) {
+    for (size_t i = dice_collection_results_count(dcr) - 1; i > 0; --i) {
         double current_val = dice_collection_results_result_at(dcr, i);
-;        if (current_val > maximum) {
+        printf("current_val: %lf", current_val);
+        if (current_val > maximum) {
             maximum = current_val;
         }
     }

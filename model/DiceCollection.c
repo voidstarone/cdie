@@ -57,14 +57,16 @@ void dice_collection_do_explodes(DiceCollection *dc, int start_index) {
 }
 
 void dice_collection_set_results(DiceCollection *dc, int *results) {
-	DiceCollectionResults *dcr = dc->last_results;
-	if (dcr != NULL) {
-		dice_collection_results_free(dcr);
+	if (dc == NULL) {
+		return;
 	}
-	dcr = dice_collection_results_create_for_dice_collection(dc);
-
-	for (size_t i = 0; i < dice_collection_count(dc); i++) {
-		dice_collection_results_add(dcr, results[i]);
+	if (dc->last_results != NULL) {
+		dice_collection_results_free(dc->last_results);
+	}
+	DiceCollectionResults *dcr = dice_collection_results_create_for_dice_collection(dc);
+	for (size_t i = 0, count = dice_collection_count(dc); i < count; i++) {
+		int result_value = results[i];
+		dice_collection_results_add(dcr, result_value);
 	}
 	dc->last_results = dcr;
 }
@@ -100,6 +102,9 @@ void dice_collection_roll(DiceCollection *dc, DiceCollectionResults *dcr) {
 }
 
 DiceCollectionResults * dice_collection_last_results(DiceCollection *dc) {
+	if (dc->last_results == NULL) {
+		dice_collection_roll_silent(dc);
+	}
 	return dc->last_results;
 }
 
@@ -187,7 +192,7 @@ DiceCollectionResults * dice_collection_results_create_for_dice_collection(DiceC
 	size_t results_array_size = dice_collection_count(dc);
 	if (explosion_lower_bound) {
 		size_t num_exploding_results = num_faces - explosion_lower_bound;
-		size_t probable_num_results = dice_collection_count(dc) *  num_faces/(num_faces-num_exploding_results);
+		size_t probable_num_results = dice_collection_count(dc) * num_faces/(num_faces-num_exploding_results);
 		
 		// Bad maths; just to be safe
 		size_t safety_net = probable_num_results * 0.25; 
