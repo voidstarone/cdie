@@ -140,7 +140,6 @@ double dice_roll_instruction_get_number(DiceRollInstruction *dri) {
     }
     if (dri->operation_type == op_type_dice_collection) {
         DiceCollection *dc = dri->value;
-        dice_collection_roll_silent(dc);
         return dice_collection_total(dc);
     }
     return 0;
@@ -202,6 +201,39 @@ DiceRollInstructionResult *op_add(int argc, DiceRollInstruction **argv) {
     return result;
 }
 
+DiceRollInstructionResult *op_subtract(int argc, DiceRollInstruction **argv) {
+    if (argc != 2) return NULL;
+    DiceRollInstruction *arg1 = argv[0];
+    DiceRollInstruction *arg2 = argv[1];
+    double num1, num2;
+    num1 = dice_roll_instruction_get_number(arg1);
+    num2 = dice_roll_instruction_get_number(arg2);
+    DiceRollInstructionResult *result = dice_roll_instruction_result_with_double(num1 - num2);
+    return result;
+}
+
+DiceRollInstructionResult *op_multiply(int argc, DiceRollInstruction **argv) {
+    if (argc != 2) return NULL;
+    DiceRollInstruction *arg1 = argv[0];
+    DiceRollInstruction *arg2 = argv[1];
+    double num1, num2;
+    num1 = dice_roll_instruction_get_number(arg1);
+    num2 = dice_roll_instruction_get_number(arg2);
+    DiceRollInstructionResult *result = dice_roll_instruction_result_with_double(num1 * num2);
+    return result;
+}
+
+DiceRollInstructionResult *op_divide(int argc, DiceRollInstruction **argv) {
+    if (argc != 2) return NULL;
+    DiceRollInstruction *arg1 = argv[0];
+    DiceRollInstruction *arg2 = argv[1];
+    double num1, num2;
+    num1 = dice_roll_instruction_get_number(arg1);
+    num2 = dice_roll_instruction_get_number(arg2);
+    DiceRollInstructionResult *result = dice_roll_instruction_result_with_double(num1 / num2);
+    return result;
+}
+
 DiceRollInstructionResult *op_max(int argc, DiceRollInstruction **argv) {
     if (argc != 1) return NULL;
     DiceRollInstruction *arg1 = argv[0];
@@ -214,7 +246,6 @@ DiceRollInstructionResult *op_max(int argc, DiceRollInstruction **argv) {
 
     for (size_t i = dice_collection_results_count(dcr) - 1; i > 0; --i) {
         double current_val = dice_collection_results_result_at(dcr, i);
-        printf("current_val: %lf", current_val);
         if (current_val > maximum) {
             maximum = current_val;
         }
@@ -222,8 +253,13 @@ DiceRollInstructionResult *op_max(int argc, DiceRollInstruction **argv) {
     return dice_roll_instruction_result_with_double(maximum);
 }
 
+
+
 void setup_ops() {
     ops[(int) op_type_add] = op_add;
+    ops[(int) op_type_subtract] = op_subtract;
+    ops[(int) op_type_multiply] = op_multiply;
+    ops[(int) op_type_divide] = op_divide;
     ops[(int) op_type_max] = op_max;
 }
 

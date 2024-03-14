@@ -27,4 +27,7 @@ DiceCollectionResults * dice_collection_results_filter(DiceCollectionResults *dc
 
 char * dice_collection_results_string(DiceCollectionResults *dcr);
 
+double dice_collection_results_sum(DiceCollectionResults *dcr);
+
+
 #endif /* end of include guard: DIE_COLLECTION_RESULTS_H_FA033981 */

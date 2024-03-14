@@ -60,6 +60,69 @@ void test_dice_roll_instruction_stack_evaluate_add_two_ints() {
 	dice_roll_instruction_result_stack_free(drirs);
 }
 
+void test_dice_roll_instruction_stack_evaluate_subtract_two_ints() {
+	DiceRollInstructionResultStack *drirs = dice_roll_instruction_result_stack_create();
+	DiceRollInstructionStack *dris = dice_roll_instruction_stack_create();
+	DiceRollInstruction *dri_num1 = dice_roll_instruction_from_string("109");
+	DiceRollInstruction *dri_num2 = dice_roll_instruction_from_string("9");
+	DiceRollInstruction *dri_subtract = dice_roll_instruction_from_string("-");
+
+	dice_roll_instruction_stack_push(dris, dri_subtract);
+	dice_roll_instruction_stack_push(dris, dri_num1);
+	dice_roll_instruction_stack_push(dris, dri_num2);
+
+	dice_roll_instruction_stack_evaluate(dris, drirs);
+
+	DiceRollInstructionResult *drir = dice_roll_instruction_result_stack_pop(drirs);
+
+	double real_result = dice_roll_instruction_result_get_number(drir);
+	CU_ASSERT_EQUAL(real_result, (double) 100.0);
+	dice_roll_instruction_stack_free(dris);
+	dice_roll_instruction_result_stack_free(drirs);
+}
+
+void test_dice_roll_instruction_stack_evaluate_multiply_two_ints() {
+	DiceRollInstructionResultStack *drirs = dice_roll_instruction_result_stack_create();
+	DiceRollInstructionStack *dris = dice_roll_instruction_stack_create();
+	DiceRollInstruction *dri_num1 = dice_roll_instruction_from_string("7");
+	DiceRollInstruction *dri_num2 = dice_roll_instruction_from_string("8");
+	DiceRollInstruction *dri_multiply = dice_roll_instruction_from_string("*");
+
+	dice_roll_instruction_stack_push(dris, dri_multiply);
+	dice_roll_instruction_stack_push(dris, dri_num1);
+	dice_roll_instruction_stack_push(dris, dri_num2);
+
+	dice_roll_instruction_stack_evaluate(dris, drirs);
+
+	DiceRollInstructionResult *drir = dice_roll_instruction_result_stack_pop(drirs);
+
+	double real_result = dice_roll_instruction_result_get_number(drir);
+	CU_ASSERT_EQUAL(real_result, (double) 56.0);
+	dice_roll_instruction_stack_free(dris);
+	dice_roll_instruction_result_stack_free(drirs);
+}
+
+void test_dice_roll_instruction_stack_evaluate_divide_two_ints() {
+	DiceRollInstructionResultStack *drirs = dice_roll_instruction_result_stack_create();
+	DiceRollInstructionStack *dris = dice_roll_instruction_stack_create();
+	DiceRollInstruction *dri_num1 = dice_roll_instruction_from_string("120");
+	DiceRollInstruction *dri_num2 = dice_roll_instruction_from_string("10");
+	DiceRollInstruction *dri_divide = dice_roll_instruction_from_string("/");
+
+	dice_roll_instruction_stack_push(dris, dri_divide);
+	dice_roll_instruction_stack_push(dris, dri_num1);
+	dice_roll_instruction_stack_push(dris, dri_num2);
+
+	dice_roll_instruction_stack_evaluate(dris, drirs);
+
+	DiceRollInstructionResult *drir = dice_roll_instruction_result_stack_pop(drirs);
+
+	double real_result = dice_roll_instruction_result_get_number(drir);
+	CU_ASSERT_EQUAL(real_result, (double) 12.0);
+	dice_roll_instruction_stack_free(dris);
+	dice_roll_instruction_result_stack_free(drirs);
+}
+
 void test_dice_roll_instruction_stack_evaluate_max_dice_collection() {
 	DiceRollInstructionResultStack *drirs = dice_roll_instruction_result_stack_create();
 	DiceRollInstructionStack *dris = dice_roll_instruction_stack_create();
@@ -76,6 +139,54 @@ void test_dice_roll_instruction_stack_evaluate_max_dice_collection() {
 
 	double real_result = dice_roll_instruction_result_get_number(drir);
 	CU_ASSERT_EQUAL(real_result, (double) 5.0);
+	dice_roll_instruction_stack_free(dris);
+	dice_roll_instruction_result_stack_free(drirs);
+}
+
+
+void test_dice_roll_instruction_stack_evaluate_add_num_to_dc() {
+	DiceRollInstructionResultStack *drirs = dice_roll_instruction_result_stack_create();
+	DiceRollInstructionStack *dris = dice_roll_instruction_stack_create();
+	DiceRollInstruction *add = dice_roll_instruction_from_string("+");
+	DiceRollInstruction *num10 = dice_roll_instruction_from_string("10");
+	DiceRollInstruction *dri_dc = dice_roll_instruction_from_string("4d6");
+	int results[] = {1, 6, 3, 2};
+	dice_collection_set_results(dri_dc->value, results);
+	dice_roll_instruction_stack_push(dris, add);
+	dice_roll_instruction_stack_push(dris, num10);
+	dice_roll_instruction_stack_push(dris, dri_dc);
+
+	dice_roll_instruction_stack_evaluate(dris, drirs);
+
+	DiceRollInstructionResult *drir = dice_roll_instruction_result_stack_pop(drirs);
+
+	double real_result = dice_roll_instruction_result_get_number(drir);
+	CU_ASSERT_EQUAL(real_result, (double) 22);
+	dice_roll_instruction_stack_free(dris);
+	dice_roll_instruction_result_stack_free(drirs);
+}
+
+void test_dice_roll_instruction_stack_evaluate_add_dc_to_dc() {
+	DiceRollInstructionResultStack *drirs = dice_roll_instruction_result_stack_create();
+	DiceRollInstructionStack *dris = dice_roll_instruction_stack_create();
+	DiceRollInstruction *add = dice_roll_instruction_from_string("+");
+	DiceRollInstruction *dri_dc1 = dice_roll_instruction_from_string("6d6");
+	DiceRollInstruction *dri_dc2 = dice_roll_instruction_from_string("4d6");
+	int results1[] = {1, 2, 4, 6, 3, 2};
+	int results2[] = {1, 6, 3, 2};
+	dice_collection_set_results(dri_dc1->value, results1);
+	dice_collection_set_results(dri_dc2->value, results2);
+
+	dice_roll_instruction_stack_push(dris, add);
+	dice_roll_instruction_stack_push(dris, dri_dc1);
+	dice_roll_instruction_stack_push(dris, dri_dc2);
+
+	dice_roll_instruction_stack_evaluate(dris, drirs);
+
+	DiceRollInstructionResult *drir = dice_roll_instruction_result_stack_pop(drirs);
+
+	double real_result = dice_roll_instruction_result_get_number(drir);
+	CU_ASSERT_EQUAL(real_result, (double) 18 + 12);
 	dice_roll_instruction_stack_free(dris);
 	dice_roll_instruction_result_stack_free(drirs);
 }
@@ -112,9 +223,38 @@ int test_suite_dice_roll_instruction_stack(int(*init_suite)(void), int(*clean_su
 		CU_cleanup_registry();
 		return CU_get_error();
 	}
+	
+	if (NULL == CU_add_test(pSuite, "test_dice_roll_instruction_stack_evaluate_subtract_two_ints",
+		test_dice_roll_instruction_stack_evaluate_subtract_two_ints)) {
+		CU_cleanup_registry();
+		return CU_get_error();
+	}
 
+	if (NULL == CU_add_test(pSuite, "test_dice_roll_instruction_stack_evaluate_multiply_two_ints",
+		test_dice_roll_instruction_stack_evaluate_multiply_two_ints)) {
+		CU_cleanup_registry();
+		return CU_get_error();
+	}
+
+	if (NULL == CU_add_test(pSuite, "test_dice_roll_instruction_stack_evaluate_divide_two_ints",
+		test_dice_roll_instruction_stack_evaluate_divide_two_ints)) {
+		CU_cleanup_registry();
+		return CU_get_error();
+	}
 	if (NULL == CU_add_test(pSuite, "test_dice_roll_instruction_stack_evaluate_max_dice_collection",
 		test_dice_roll_instruction_stack_evaluate_max_dice_collection)) {
+		CU_cleanup_registry();
+		return CU_get_error();
+	}
+
+	if (NULL == CU_add_test(pSuite, "test_dice_roll_instruction_stack_evaluate_add_num_to_dc",
+		test_dice_roll_instruction_stack_evaluate_add_num_to_dc)) {
+		CU_cleanup_registry();
+		return CU_get_error();
+	}
+
+	if (NULL == CU_add_test(pSuite, "test_dice_roll_instruction_stack_evaluate_add_dc_to_dc",
+		test_dice_roll_instruction_stack_evaluate_add_dc_to_dc)) {
 		CU_cleanup_registry();
 		return CU_get_error();
 	}
