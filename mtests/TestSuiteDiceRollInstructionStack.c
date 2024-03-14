@@ -105,8 +105,8 @@ void test_dice_roll_instruction_stack_evaluate_multiply_two_ints() {
 void test_dice_roll_instruction_stack_evaluate_divide_two_ints() {
 	DiceRollInstructionResultStack *drirs = dice_roll_instruction_result_stack_create();
 	DiceRollInstructionStack *dris = dice_roll_instruction_stack_create();
-	DiceRollInstruction *dri_num1 = dice_roll_instruction_from_string("120");
-	DiceRollInstruction *dri_num2 = dice_roll_instruction_from_string("10");
+	DiceRollInstruction *dri_num1 = dice_roll_instruction_from_string("101");
+	DiceRollInstruction *dri_num2 = dice_roll_instruction_from_string("2");
 	DiceRollInstruction *dri_divide = dice_roll_instruction_from_string("/");
 
 	dice_roll_instruction_stack_push(dris, dri_divide);
@@ -118,7 +118,7 @@ void test_dice_roll_instruction_stack_evaluate_divide_two_ints() {
 	DiceRollInstructionResult *drir = dice_roll_instruction_result_stack_pop(drirs);
 
 	double real_result = dice_roll_instruction_result_get_number(drir);
-	CU_ASSERT_EQUAL(real_result, (double) 12.0);
+	CU_ASSERT_EQUAL(real_result, (double) 50.5);
 	dice_roll_instruction_stack_free(dris);
 	dice_roll_instruction_result_stack_free(drirs);
 }
@@ -142,7 +142,6 @@ void test_dice_roll_instruction_stack_evaluate_max_dice_collection() {
 	dice_roll_instruction_stack_free(dris);
 	dice_roll_instruction_result_stack_free(drirs);
 }
-
 
 void test_dice_roll_instruction_stack_evaluate_add_num_to_dc() {
 	DiceRollInstructionResultStack *drirs = dice_roll_instruction_result_stack_create();
