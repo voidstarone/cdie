@@ -52,6 +52,13 @@ double dice_roll_instruction_result_get_number(DiceRollInstructionResult *drir) 
     return -1;
 }
 
+DiceCollection *dice_roll_instruction_result_get_dice_collection(DiceRollInstructionResult *drir) {
+    if (drir->type != result_type_dice_collection) {
+        return NULL;
+    }
+    return drir->result_value;
+}
+
 void dice_roll_instruction_result_free(DiceRollInstructionResult *drir) {
     if (drir->result_value != NULL) {
         free(drir->result_value);
