@@ -41,19 +41,20 @@ DiceRollInstruction * dice_roll_instruction_stack_instruction_at(DiceRollInstruc
 }
 
 
-int dice_roll_instruction_stack_evaluate(DiceRollInstructionStack *dris, DiceRollInstructionResultStack *drirs) {
+DiceRollInstructionResult *dice_roll_instruction_stack_evaluate(DiceRollInstructionStack *dris) {
 	DiceRollInstruction *dri = NULL;
 	DiceCollection *dc = NULL;
 	double d = -1;
 	DiceRollInstructionResult *drir = NULL;
-
+	DiceRollInstructionResultStack *drirs = dice_roll_instruction_result_stack_create();
 	// todo: return single result from this func
 
 	while (dice_roll_instruction_stack_peek(dris)) {
 		dri = dice_roll_instruction_stack_pop(dris);
 		OperationType op_type = dice_roll_instruction_get_operation_type(dri);
 		if (op_type == op_type_unknown) {
-			return 0;
+			dice_roll_instruction_result_stack_free(drirs);
+			return NULL;
 		}
 		// Operands
 		if (op_type <= op_type_number) {
@@ -74,10 +75,10 @@ int dice_roll_instruction_stack_evaluate(DiceRollInstructionStack *dris, DiceRol
 		}
 
 		// Operations
-		//  let the op take the stack and pop as much as they want off it.
 		drir = dice_roll_instruction_do_op(dri, drirs);
 		dice_roll_instruction_result_stack_push(drirs, drir);
 	}
-	
-	return 1;
+	drir = dice_roll_instruction_result_stack_pop(drirs);
+	dice_roll_instruction_result_stack_free(drirs);
+	return drir;
 }

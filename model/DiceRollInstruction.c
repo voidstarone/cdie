@@ -206,6 +206,8 @@ DiceRollInstructionResult *op_add(DiceRollInstructionResultStack *argv) {
     num1 = dice_roll_instruction_result_get_number(arg1);
     num2 = dice_roll_instruction_result_get_number(arg2);
     DiceRollInstructionResult *result = dice_roll_instruction_result_with_double(num1 + num2);
+    dice_roll_instruction_result_free(arg1);
+    dice_roll_instruction_result_free(arg2);
     return result;
 }
 
@@ -216,6 +218,8 @@ DiceRollInstructionResult *op_subtract(DiceRollInstructionResultStack *argv) {
     num1 = dice_roll_instruction_result_get_number(arg1);
     num2 = dice_roll_instruction_result_get_number(arg2);
     DiceRollInstructionResult *result = dice_roll_instruction_result_with_double(num1 - num2);
+    dice_roll_instruction_result_free(arg1);
+    dice_roll_instruction_result_free(arg2);
     return result;
 }
 
@@ -226,6 +230,8 @@ DiceRollInstructionResult *op_multiply(DiceRollInstructionResultStack *argv) {
     num1 = dice_roll_instruction_result_get_number(arg1);
     num2 = dice_roll_instruction_result_get_number(arg2);
     DiceRollInstructionResult *result = dice_roll_instruction_result_with_double(num1 * num2);
+    dice_roll_instruction_result_free(arg1);
+    dice_roll_instruction_result_free(arg2);
     return result;
 }
 
@@ -236,6 +242,8 @@ DiceRollInstructionResult *op_divide(DiceRollInstructionResultStack *argv) {
     num1 = dice_roll_instruction_result_get_number(arg1);
     num2 = dice_roll_instruction_result_get_number(arg2);
     DiceRollInstructionResult *result = dice_roll_instruction_result_with_double(num1 / num2);
+    dice_roll_instruction_result_free(arg1);
+    dice_roll_instruction_result_free(arg2);
     return result;
 }
 
@@ -248,13 +256,17 @@ DiceRollInstructionResult *op_max(DiceRollInstructionResultStack *argv) {
     double maximum = DBL_MIN;
     DiceCollectionResults *dcr = dice_collection_last_results(dc);
 
+
     for (size_t i = dice_collection_results_count(dcr) - 1; i > 0; --i) {
         double current_val = dice_collection_results_result_at(dcr, i);
         if (current_val > maximum) {
             maximum = current_val;
         }
     }
-    return dice_roll_instruction_result_with_double(maximum);
+
+    DiceRollInstructionResult *result = dice_roll_instruction_result_with_double(maximum);
+    dice_roll_instruction_result_free(arg1);
+    return result;
 }
 
 void setup_ops() {

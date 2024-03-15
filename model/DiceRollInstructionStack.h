@@ -16,5 +16,5 @@ void dice_roll_instruction_stack_push(DiceRollInstructionStack *dris, DiceRollIn
 DiceRollInstruction * dice_roll_instruction_stack_peek(DiceRollInstructionStack *dris);
 DiceRollInstruction * dice_roll_instruction_stack_pop(DiceRollInstructionStack *dris);
 
-int dice_roll_instruction_stack_evaluate(DiceRollInstructionStack *dris, DiceRollInstructionResultStack *drirs);
+DiceRollInstructionResult *dice_roll_instruction_stack_evaluate(DiceRollInstructionStack *dris);
 #endif /*DICE_ROLL_INSTRUCTION_STACK_H_FA033981*/
