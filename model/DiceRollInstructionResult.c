@@ -23,7 +23,6 @@ DiceRollInstructionResult *dice_roll_instruction_result_init() {
     return drir;
 }
 
-// TODO: Actually assign the value
 DiceRollInstructionResult *dice_roll_instruction_result_with_double(double value) {
     DiceRollInstructionResult *drir = dice_roll_instruction_result_create();
     drir->type = result_type_double;

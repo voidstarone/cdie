@@ -47,8 +47,8 @@ void test_dice_roll_instruction_stack_evaluate_add_two_ints() {
 	DiceRollInstruction *dri_add = dice_roll_instruction_from_string("+");
 
 	dice_roll_instruction_stack_push(dris, dri_add);
-	dice_roll_instruction_stack_push(dris, dri_num1);
 	dice_roll_instruction_stack_push(dris, dri_num2);
+	dice_roll_instruction_stack_push(dris, dri_num1);
 
 	dice_roll_instruction_stack_evaluate(dris, drirs);
 
@@ -66,7 +66,7 @@ void test_dice_roll_instruction_stack_evaluate_subtract_two_ints() {
 	DiceRollInstruction *dri_num1 = dice_roll_instruction_from_string("109");
 	DiceRollInstruction *dri_num2 = dice_roll_instruction_from_string("9");
 	DiceRollInstruction *dri_subtract = dice_roll_instruction_from_string("-");
-
+	
 	dice_roll_instruction_stack_push(dris, dri_subtract);
 	dice_roll_instruction_stack_push(dris, dri_num1);
 	dice_roll_instruction_stack_push(dris, dri_num2);
@@ -130,6 +130,7 @@ void test_dice_roll_instruction_stack_evaluate_max_dice_collection() {
 	DiceRollInstruction *dri_dc = dice_roll_instruction_from_string("4d6");
 	int results[] = {1, 5, 3, 2};
 	dice_collection_set_results(dri_dc->value, results);
+
 	dice_roll_instruction_stack_push(dris, max);
 	dice_roll_instruction_stack_push(dris, dri_dc);
 
@@ -151,6 +152,7 @@ void test_dice_roll_instruction_stack_evaluate_add_num_to_dc() {
 	DiceRollInstruction *dri_dc = dice_roll_instruction_from_string("4d6");
 	int results[] = {1, 6, 3, 2};
 	dice_collection_set_results(dri_dc->value, results);
+	
 	dice_roll_instruction_stack_push(dris, add);
 	dice_roll_instruction_stack_push(dris, num10);
 	dice_roll_instruction_stack_push(dris, dri_dc);

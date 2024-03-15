@@ -43,28 +43,41 @@ DiceRollInstruction * dice_roll_instruction_stack_instruction_at(DiceRollInstruc
 
 int dice_roll_instruction_stack_evaluate(DiceRollInstructionStack *dris, DiceRollInstructionResultStack *drirs) {
 	DiceRollInstruction *dri = NULL;
-	DiceRollInstruction **args = NULL;
+	DiceCollection *dc = NULL;
+	double d = -1;
 	DiceRollInstructionResult *drir = NULL;
-	int instruction_count = dyn_array_count(dris->instructions);
-	int num_args = 0, arg_index = 0;
-	for (int instruction_index = 0; instruction_index < instruction_count; ) {
-		dri = dice_roll_instruction_stack_instruction_at(dris, instruction_index);
-		num_args = dice_roll_instruction_get_num_args(dri);
-		if (num_args == -1) {
-			exit(-1);
+
+	// todo: return single result from this func
+
+	while (dice_roll_instruction_stack_peek(dris)) {
+		dri = dice_roll_instruction_stack_pop(dris);
+		OperationType op_type = dice_roll_instruction_get_operation_type(dri);
+		if (op_type == op_type_unknown) {
+			return 0;
 		}
-		if (instruction_index + num_args > instruction_count) {
-			return -1;
+		// Operands
+		if (op_type <= op_type_number) {
+			switch (op_type) {
+				case op_type_number:
+					d = dice_roll_instruction_get_number(dri);
+					drir = dice_roll_instruction_result_with_double(d);
+					break;
+				case op_type_dice_collection:
+					dc = dice_roll_instruction_get_dice_collection(dri);
+					drir = dice_roll_instruction_result_with_dice_collection(dc);
+					break;
+				default:
+					break;
+			}
+			dice_roll_instruction_result_stack_push(drirs, drir);
+			continue;
 		}
-		args = malloc(sizeof(DiceRollInstruction *) * num_args);
-		for (arg_index = 0; arg_index < num_args; arg_index++) {
-			args[arg_index] = dice_roll_instruction_stack_instruction_at(dris, instruction_index + arg_index+1);
-		}
-		drir = dice_roll_instruction_do_op(dri, num_args, args);
-		free(args);
+
+		// Operations
+		//  let the op take the stack and pop as much as they want off it.
+		drir = dice_roll_instruction_do_op(dri, drirs);
 		dice_roll_instruction_result_stack_push(drirs, drir);
-		instruction_index += num_args + 1;
 	}
 	
-	return 0;
+	return 1;
 }
