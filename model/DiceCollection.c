@@ -128,6 +128,15 @@ void dice_collection_set_explosion_lower_bound(DiceCollection *dc, int lower_bou
 	dc->explosion_lower_bound = lower_bound;
 }
 
+bool dice_collection_get_stacking_explosions(DiceCollection *dc) {
+	return dc->do_explosions_stack;
+}
+
+void dice_collection_set_stacking_explosions(DiceCollection *dc, bool do_explosions_stack) {
+	dc->do_explosions_stack = do_explosions_stack;
+}
+
+
 void dice_collection_free(DiceCollection *dc) {
 	
 	for(size_t i = 0; i < dc->_size; ++i) {
