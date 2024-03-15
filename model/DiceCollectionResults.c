@@ -9,14 +9,16 @@
 #include "DiceCollectionResults.h"
 #include "DiceCollection.h"
 
-DiceCollectionResults * dice_collection_results_init(size_t capacity) {
+DiceCollectionResults * dice_collection_results_create(size_t capacity) {
 	DiceCollectionResults *dcr = malloc(sizeof(DiceCollectionResults));
 	
 	dcr->results_array = (int *) malloc(sizeof(int) * capacity);
 	dcr->size = capacity;
 	dcr->count = 0;
-	dcr->results_array[0] = 0;
-	
+	for (size_t i = 0; i < capacity; i++) {
+		dcr->results_array[i] = 0;
+	}
+		
 	return dcr;
 }
 
@@ -45,7 +47,7 @@ void dice_collection_results_update_count(DiceCollectionResults *dcr) {
 }
 
 DiceCollectionResults * dice_collection_results_clone(DiceCollectionResults *dcr) {
-	DiceCollectionResults *clone_dcr = dice_collection_results_init(dcr->count);
+	DiceCollectionResults *clone_dcr = dice_collection_results_create(dcr->count);
 	clone_dcr->count = dcr->count;
 	for(size_t i = 0; i < dcr->count; ++i) {
 		clone_dcr->results_array[i] = dcr->results_array[i];
@@ -92,8 +94,6 @@ char * dice_collection_results_string(DiceCollectionResults *dcr) {
 char * dice_collection_results_desc(DiceCollectionResults *dcr) {
 	
 	char *desc_string = "NOT IMPLEMENTED";
-
-	
 	dcr->results_array[0] = 0;
 	return desc_string;
 }

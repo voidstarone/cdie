@@ -12,7 +12,7 @@ typedef struct {
 	int *results_array;
 } DiceCollectionResults;
 
-DiceCollectionResults * dice_collection_results_init(size_t capacity);
+DiceCollectionResults * dice_collection_results_create(size_t capacity);
 void dice_collection_results_free(DiceCollectionResults *dcr);
 
 size_t dice_collection_results_count(DiceCollectionResults *dcr);
@@ -26,5 +26,8 @@ DiceCollectionResults * dice_collection_results_clone(DiceCollectionResults *dcr
 DiceCollectionResults * dice_collection_results_filter(DiceCollectionResults *dcr, bool (*condition)(int) );
 
 char * dice_collection_results_string(DiceCollectionResults *dcr);
+
+double dice_collection_results_sum(DiceCollectionResults *dcr);
+
 
 #endif /* end of include guard: DIE_COLLECTION_RESULTS_H_FA033981 */

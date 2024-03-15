@@ -6,7 +6,7 @@ typedef struct {
 	int last_result;
 } Die;
 
-Die * die_init(int faces);
+Die * die_create(int faces);
 
 void die_free(Die *d);
 

@@ -3,7 +3,7 @@
 #include "Die.h"
 
 void test_roll_returns_reasonable_result() {
-	Die *d = die_init(6);
+	Die *d = die_create(6);
 	
 	int result = die_roll(d);
 
@@ -13,7 +13,7 @@ void test_roll_returns_reasonable_result() {
 }
 
 void test_die_saves_result() {
-	Die *d = die_init(6);
+	Die *d = die_create(6);
 	
 	int result = die_roll(d);
 	
@@ -26,7 +26,7 @@ void test_die_roll_returns_random_results() {
 	bool have_rolled_every_number_at_least_once = true;
 	
 	for (size_t i = 0; i < num_dice; ++i) {
-		Die *d = die_init(6);
+		Die *d = die_create(6);
 		results[die_roll(d)-1]++;
 		die_free(d);
 	}
@@ -44,6 +44,7 @@ void test_die_roll_returns_random_results() {
 int test_suite_die( int(*init_suite)(void), int(*clean_suite)(void)  ) {
 
 	CU_pSuite pSuite = CU_add_suite("die_test_suite", init_suite, clean_suite);
+	printf("test_suite_die\n");
 	if (NULL == pSuite) {
 		CU_cleanup_registry();
 		return CU_get_error();

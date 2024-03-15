@@ -11,7 +11,6 @@ bool is_digit(char c) {
     return c > 47 && c < 58;
 }
 
-
 int extract_num_dice(int *num_dice, char *notation) {
     if (notation[0] == 'd') {
         *num_dice = 1;
@@ -74,7 +73,7 @@ DiceCollection * dice_collection_from_core_notation(char *notation) {
 	str_count = strtok(mutable_notation, separator);
 	str_faces = strtok(NULL, separator);
 	
-	return dice_collection_init(atoi(str_count), atoi(str_faces));
+	return dice_collection_create(atoi(str_count), atoi(str_faces));
 }
 
 DiceCollection * dice_collection_from_percentile_notation(char *notation) {
@@ -89,10 +88,10 @@ DiceCollection * dice_collection_from_percentile_notation(char *notation) {
 	char *str_count;
 	str_count = strtok(mutable_notation, percentile_indicator);
 	
-	return dice_collection_init(atoi(str_count), 100);
+	return dice_collection_create(atoi(str_count), 100);
 }
 
-DiceCollection * dice_collection_from_notation(char *notation) {
+DiceCollection * dice_collection_create_from_notation(char *notation) {
 	
 	int num_dice = 0, 
     num_sides = 0,
@@ -113,7 +112,7 @@ DiceCollection * dice_collection_from_notation(char *notation) {
     next_index = does_dc_explode(&does_explode, notation, next_index);
     
     if (next_index >= len_notation) {
-		DiceCollection *dc = dice_collection_init(num_dice, num_sides);
+		DiceCollection *dc = dice_collection_create(num_dice, num_sides);
 		if (does_explode) {
 			dice_collection_set_explosion_lower_bound(dc, num_sides);
 		}
@@ -126,7 +125,7 @@ DiceCollection * dice_collection_from_notation(char *notation) {
     if (next_index < len_notation) {
         return NULL;
     }
-	DiceCollection *dc = dice_collection_init(num_dice, num_sides);
+	DiceCollection *dc = dice_collection_create(num_dice, num_sides);
 	dice_collection_set_explosion_lower_bound(dc, explodes_at);
 	return dc;
 }
