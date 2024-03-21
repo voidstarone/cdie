@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <stdbool.h>
 
 #ifndef DYN_ARRAY_H_FA033981
 #define DYN_ARRAY_H_FA033981
@@ -12,6 +13,8 @@ typedef struct {
 DynArray *dyn_array_create(size_t initial_size);
 
 size_t dyn_array_count(DynArray *a);
+
+bool dyn_array_is_empty(DynArray *a);
 
 void dyn_array_push(DynArray *a, void *element);
 

@@ -1,5 +1,6 @@
 #include "DynArray.h"
 #include <stdio.h>
+#include <stdbool.h>
 
 DynArray *dyn_array_create(size_t initial_size) {
 	DynArray *a = (DynArray *) malloc(sizeof(DynArray));
@@ -18,6 +19,10 @@ DynArray *dyn_array_create(size_t initial_size) {
 
 size_t dyn_array_count(DynArray *a) {
 	return a->used;
+}
+
+bool dyn_array_is_empty(DynArray *a) {
+	return dyn_array_count(a) == 0;
 }
 
 void dyn_array_push(DynArray *a, void *element) {
