@@ -45,6 +45,7 @@ void dice_roll_instruction_free(DiceRollInstruction *dri) {
         free(dri->value);
     }
     free(dri);
+    dri = NULL;
 }
 
 bool true_if_regex_match(char *regex_str, char *string_rep) {

@@ -21,6 +21,7 @@ void dice_roll_instruction_stack_free(DiceRollInstructionStack *dris) {
 	}
 	dyn_array_free(dris->instructions);
 	free(dris);
+	dris = NULL;
 }
 
 void dice_roll_instruction_stack_push(DiceRollInstructionStack *dris, DiceRollInstruction *dri) {

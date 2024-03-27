@@ -153,6 +153,7 @@ void dice_collection_free(DiceCollection *dc) {
 	}
 	
 	free(dc);
+	dc = NULL;
 }
 
 char * dice_collection_desc(DiceCollection *dc) {

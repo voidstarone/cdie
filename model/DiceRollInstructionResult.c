@@ -64,5 +64,6 @@ void dice_roll_instruction_result_free(DiceRollInstructionResult *drir) {
         free(drir->result_value);
     }
     free(drir);
+    drir = NULL;
 }
 

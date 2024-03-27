@@ -23,4 +23,5 @@ int die_roll(Die *d) {
 
 void die_free(Die *d) {
 	free(d);
+	d = NULL;
 }
