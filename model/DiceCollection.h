@@ -16,7 +16,6 @@ typedef struct {
 
 DiceCollectionResults * dice_collection_results_create_for_dice_collection(DiceCollection *dc);
 
-
 DiceCollection * dice_collection_create(size_t count, int faces);
 
 size_t dice_collection_count(DiceCollection *dc);

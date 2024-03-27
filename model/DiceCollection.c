@@ -138,7 +138,7 @@ void dice_collection_set_stacking_explosions(DiceCollection *dc, bool do_explosi
 
 
 void dice_collection_free(DiceCollection *dc) {
-	
+	if (dc == NULL) { return; }
 	for(size_t i = 0; i < dc->_size; ++i) {
 		die_free(dc->_die_array[i]);
 	}
@@ -148,7 +148,7 @@ void dice_collection_free(DiceCollection *dc) {
 	dc->num_faces = 0;
 	dc->explosion_lower_bound = 0;
 	
-	if (dc->last_results) {
+	if (dc->last_results != NULL) {
 		dice_collection_results_free(dc->last_results);
 	}
 	
@@ -160,7 +160,7 @@ char * dice_collection_desc(DiceCollection *dc) {
 	int die_faces = dc->num_faces;
 	char *out_str;
 	char out_str_start[30];
-	sprintf(out_str_start, "DiceCollection(%d, %d){ ", die_faces, (int) die_count);
+	snprintf(out_str_start, 30, "DiceCollection(%d, %d){ ", die_faces, (int) die_count);
 	size_t die_index;
 	Die *current_die;
 	int last_result;
@@ -179,10 +179,11 @@ char * dice_collection_desc(DiceCollection *dc) {
 		current_die = dice_collection_die_at(dc, die_index);
 		last_result = die_last_result(current_die);
 		
+		size_t size = sizeof(out_str) + sizeof(result_str_index);
 		if (die_index == (size_t) die_count-1) {
-			sprintf(out_str+result_str_index, "%d }", last_result);
+			snprintf(out_str+result_str_index, size, "%d }", last_result);
 		} else {
-			sprintf(out_str+result_str_index, "%d, ", last_result);
+			snprintf(out_str+result_str_index, size, "%d, ", last_result);
 		}
 		
 		result_str_index += (num_digits(last_result) + 2) * sizeof(char);

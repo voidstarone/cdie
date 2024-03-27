@@ -66,6 +66,7 @@ void test_dice_collection_roll_explode() {
 	int num_results = dice_collection_results_count(dcr);
 
 	CU_ASSERT(num_results > 50);
+	dice_collection_free(dc);
 }
 
 

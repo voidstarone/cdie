@@ -5,7 +5,7 @@ ODIR=obj
 MTDIR=mtests
 
 CC=clang
-CFLAGS=-W -Wall -g -I$(MDIR)/
+CFLAGS=-fsanitize=address -fno-omit-frame-pointer -fsanitize=undefined -W -Wall -g -I$(MDIR)/
 CCF=$(CC) $(CFLAGS)
 
 CLIFILES= $(ODIR)/DiceRollingSession.o 

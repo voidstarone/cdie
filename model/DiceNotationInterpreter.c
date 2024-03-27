@@ -64,7 +64,7 @@ DiceCollection * dice_collection_from_core_notation(char *notation) {
 	// We assume only one dice notation here; nothing surrounding it
 	char *separator = DICE_NOTATION_SEPARATOR;
 
-	char *mutable_notation = malloc(sizeof(char) * strlen(notation));
+	char *mutable_notation = malloc(sizeof(char) * (strlen(notation) + 1));
 	strcpy(mutable_notation, notation);
 
 	char *str_faces;
@@ -82,7 +82,7 @@ DiceCollection * dice_collection_from_percentile_notation(char *notation) {
 		return NULL; // Not percentile
 	}
 	
-	char *mutable_notation = malloc(sizeof(char) * strlen(notation));
+	char *mutable_notation = malloc(sizeof(char) * (strlen(notation) + 1));
 	strcpy(mutable_notation, notation);
 
 	char *str_count;
