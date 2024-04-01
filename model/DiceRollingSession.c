@@ -27,7 +27,7 @@ char * dice_rolling_session_resolve_notation(DiceRollingSession *drs, char *nota
 	dice_collection_roll_silent(dc);
 	DiceCollectionResults *dcr = dice_collection_last_results(dc);
 		
-	char *retStr = dice_collection_results_string(dcr);
+	char *retStr = dice_collection_create_results_string(dcr);
 	
 	dice_collection_free(dc);
 	dice_collection_results_free(dcr);

@@ -25,7 +25,7 @@ DiceCollectionResults * dice_collection_results_clone(DiceCollectionResults *dcr
 
 DiceCollectionResults * dice_collection_results_filter(DiceCollectionResults *dcr, bool (*condition)(int) );
 
-char * dice_collection_results_string(DiceCollectionResults *dcr);
+char * dice_collection_create_results_string(DiceCollectionResults *dcr);
 
 double dice_collection_results_sum(DiceCollectionResults *dcr);
 

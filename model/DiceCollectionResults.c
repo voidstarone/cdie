@@ -80,8 +80,8 @@ void dice_collection_results_as_array(DiceCollectionResults *dcr, int *results) 
 	}
 }
 
-char * dice_collection_results_string(DiceCollectionResults *dcr) {
-	int total_characters = dcr->count - (dcr->count == 1 ? 0 : 1);
+char * dice_collection_create_results_string(DiceCollectionResults *dcr) {
+	size_t total_characters = dcr->count - (dcr->count == 1 ? 0 : 1) * 100;
 	
 	for(size_t i = 0; i < dcr->count; ++i) {
 		total_characters += num_digits(dcr->results_array[i]);

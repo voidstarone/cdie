@@ -135,7 +135,7 @@ void test_dyn_array_push_ints_pop_ints() {
     dyn_array_free(a);
 }
 
-int test_suite_dyn_array (int(*init_suite)(void), int(*clean_suite)(void) ) {
+int test_suite_dyn_array (int(*init_suite)(void), int(*clean_suite)(void)) {
     
     const char *test_suite_name = "test_suite_dyn_array";
     CU_pSuite pSuite = CU_add_suite(test_suite_name, init_suite, clean_suite);
