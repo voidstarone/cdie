@@ -64,8 +64,8 @@ void *dyn_array_pop(DynArray *a) {
 
 void *dyn_array_element_at_index(DynArray *a, size_t index) {
 	size_t real_index = index < 0 ? a->used - index : index;
-	if (real_index >= a->used) {
-		printf("WARNING: dyn_array(%p) index(%ld -> %ld) out of bounds\n", a, index, real_index);
+	if (real_index > a->used) {
+		printf("WARNING: dyn_array(%p) index(%ld -> %ld) out of bounds. Size=%ld, Used=%ld\n", a, index, real_index, a->size, a->used);
 		return NULL;
 	}
 	return a->array[real_index];
@@ -73,11 +73,18 @@ void *dyn_array_element_at_index(DynArray *a, size_t index) {
 
 void dyn_array_set_element_at_index(DynArray *a, size_t index, void *new_element) {
 	size_t real_index = index < 0 ? a->used - index : index;
-	if (real_index >= a->used) {
-		printf("WARNING: dyn_array(%p) index(%ld -> %ld) out of bounds\n", a, index, real_index);
-		return;
+	
+	if (real_index >= a->size) {
+		a->size = real_index + 1;
+		void **tmp_array = (void **) realloc(a->array, a->size * sizeof(void *));
+		if (tmp_array == NULL) { return; }
+		a->array = tmp_array;
+		for (size_t i = a->used+1; i < index; i++) {
+			a->array[i] = NULL;
+		}
 	}
 	a->array[index] = new_element;
+	a->used = index;
 }
 
 void dyn_array_free(DynArray *a) {

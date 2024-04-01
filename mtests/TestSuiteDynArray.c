@@ -91,6 +91,26 @@ void test_dyn_array_push_ints_requiring_growth() {
     dyn_array_free(a);
 }
 
+void test_dyn_array_set_ints_requiring_growth() {
+    DynArray *a = dyn_array_create(2);
+
+    int expected_number1 = 8;
+    int expected_number2 = 864;
+    int *expected_element1 = &expected_number1;
+    int *expected_element2 = &expected_number2;
+
+    dyn_array_set_element_at_index(a, 0, expected_element1);
+    dyn_array_set_element_at_index(a, 40, expected_element2);
+    
+    int *actual_element1 = dyn_array_element_at_index(a, 0);
+    int *actual_element2 = dyn_array_element_at_index(a, 40);
+
+    CU_ASSERT_EQUAL(actual_element1, expected_element1);
+    CU_ASSERT_EQUAL(actual_element2, expected_element2);
+    
+    dyn_array_free(a);
+}
+
 void test_dyn_array_push_ints_pop_ints() {
     DynArray *a = dyn_array_create(2);
 
@@ -151,6 +171,12 @@ int test_suite_dyn_array (int(*init_suite)(void), int(*clean_suite)(void) ) {
     
     if (NULL == CU_add_test(pSuite, "test_dyn_array_push_ints_requiring_growth", 
         test_dyn_array_push_ints_requiring_growth)) {
+        CU_cleanup_registry();
+        return CU_get_error();
+    }
+
+        if (NULL == CU_add_test(pSuite, "test_dyn_array_set_ints_requiring_growth", 
+        test_dyn_array_set_ints_requiring_growth)) {
         CU_cleanup_registry();
         return CU_get_error();
     }
