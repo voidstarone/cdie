@@ -127,12 +127,80 @@ void test_dyn_array_push_ints_pop_ints() {
     int *actual_element3 = dyn_array_pop(a);
     int *actual_element2 = dyn_array_pop(a);
     int *actual_element1 = dyn_array_pop(a);
+    
 
     CU_ASSERT_EQUAL(actual_element1, expected_element1);
     CU_ASSERT_EQUAL(actual_element2, expected_element2);
     CU_ASSERT_EQUAL(actual_element3, expected_element3);
     
     dyn_array_free(a);
+}
+
+int compare_int(void *a, void *b) {
+    int *int_a = (int *)a;
+    int *int_b = (int *)b;
+    printf("a:%d, b:%d\n", *int_a, *int_b);
+    return (*int_a - *int_b);
+}
+
+void print_element_int(void *element) {
+    int *value = element;
+    printf("%d", *value);
+}
+
+void print_element_address(void *element) {
+    printf("%p", element);
+}
+
+void test_dyn_array_sort_in_place_ints() {
+    int expected_number0 = 0;
+    int expected_number1 = 8;
+    int expected_number2 = 864;
+    int expected_number3 = 10098;
+    int expected_number4 = 10098;
+    int expected_number5 = 50000;
+    int expected_number6 = 100390;
+    int *expected_element0 = &expected_number0;
+    int *expected_element1 = &expected_number1;
+    int *expected_element2 = &expected_number2;
+    int *expected_element3 = &expected_number3;
+    int *expected_element4 = &expected_number4;
+    int *expected_element5 = &expected_number5;
+    int *expected_element6 = &expected_number6;
+    DynArray *a = dyn_array_create(2);
+    dyn_array_push(a, expected_element1);
+    dyn_array_print(a, &print_element_int);
+    dyn_array_push(a, expected_element6);
+    dyn_array_print(a, &print_element_int);
+    dyn_array_push(a, expected_element2);
+    dyn_array_print(a, &print_element_int);
+    dyn_array_push(a, expected_element4);
+    dyn_array_print(a, &print_element_int);
+    dyn_array_push(a, expected_element0);
+    dyn_array_print(a, &print_element_int);
+    dyn_array_push(a, expected_element3);
+    dyn_array_push(a, expected_element5);
+    dyn_array_print(a, &print_element_int);
+    dyn_array_print(a, &print_element_address);
+    dyn_array_sort_in_place(a, &compare_int);
+
+    dyn_array_print(a, &print_element_int);
+
+    int *actual_element0 = dyn_array_element_at_index(a, 0);
+    int *actual_element1 = dyn_array_element_at_index(a, 1);
+    int *actual_element2 = dyn_array_element_at_index(a, 2);
+    int *actual_element3 = dyn_array_element_at_index(a, 3);
+    int *actual_element4 = dyn_array_element_at_index(a, 4);
+    int *actual_element5 = dyn_array_element_at_index(a, 5);
+    int *actual_element6 = dyn_array_element_at_index(a, 6);
+
+    CU_ASSERT_EQUAL(actual_element0, expected_element0);
+    CU_ASSERT_EQUAL(actual_element1, expected_element1);
+    CU_ASSERT_EQUAL(actual_element2, expected_element2);
+    CU_ASSERT_EQUAL(actual_element3, expected_element3);
+    CU_ASSERT_EQUAL(actual_element4, expected_element4);
+    CU_ASSERT_EQUAL(actual_element5, expected_element5);
+    CU_ASSERT_EQUAL(actual_element6, expected_element6);
 }
 
 int test_suite_dyn_array (int(*init_suite)(void), int(*clean_suite)(void)) {
@@ -183,6 +251,12 @@ int test_suite_dyn_array (int(*init_suite)(void), int(*clean_suite)(void)) {
 
     if (NULL == CU_add_test(pSuite, "test_dyn_array_push_ints_pop_ints", 
         test_dyn_array_push_ints_pop_ints)) {
+        CU_cleanup_registry();
+        return CU_get_error();
+    }
+
+    if (NULL == CU_add_test(pSuite, "test_dyn_array_sort_in_place_ints", 
+        test_dyn_array_sort_in_place_ints)) {
         CU_cleanup_registry();
         return CU_get_error();
     }

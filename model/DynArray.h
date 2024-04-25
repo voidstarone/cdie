@@ -26,6 +26,15 @@ void *dyn_array_element_at_index(DynArray *a, size_t index);
 
 void dyn_array_set_element_at_index(DynArray *a, size_t index, void *new_element);
 
+void dyn_array_filter_out_null(DynArray *a);
+
+void dyn_array_sort_in_place(
+	DynArray *a, 
+	int (*compare)(void *, void *)
+);
+
+void dyn_array_print(DynArray *a, void (*print_element)(void *));
+
 void dyn_array_free(DynArray *a);
 
 #endif /* DYN_ARRAY_H_FA033981 */
