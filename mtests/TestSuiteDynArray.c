@@ -169,22 +169,14 @@ void test_dyn_array_sort_in_place_ints() {
     int *expected_element6 = &expected_number6;
     DynArray *a = dyn_array_create(2);
     dyn_array_push(a, expected_element1);
-    dyn_array_print(a, &print_element_int);
     dyn_array_push(a, expected_element6);
-    dyn_array_print(a, &print_element_int);
     dyn_array_push(a, expected_element2);
-    dyn_array_print(a, &print_element_int);
     dyn_array_push(a, expected_element4);
-    dyn_array_print(a, &print_element_int);
     dyn_array_push(a, expected_element0);
-    dyn_array_print(a, &print_element_int);
     dyn_array_push(a, expected_element3);
     dyn_array_push(a, expected_element5);
-    dyn_array_print(a, &print_element_int);
-    dyn_array_print(a, &print_element_address);
-    dyn_array_sort_in_place(a, &compare_int);
 
-    dyn_array_print(a, &print_element_int);
+    dyn_array_sort_in_place(a, &compare_int);
 
     int *actual_element0 = dyn_array_element_at_index(a, 0);
     int *actual_element1 = dyn_array_element_at_index(a, 1);
