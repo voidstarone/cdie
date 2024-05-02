@@ -11,6 +11,8 @@ typedef struct {
 	char *_str_notation;
 } DiceNotation;
 
+bool is_digit(char c);
+
 // Take something like "2d6" and turn it into a dice collection
 DiceCollection * dice_collection_from_core_notation(char *notation);
 DiceCollection * dice_collection_from_percentile_notation(char *notation);

@@ -14,15 +14,18 @@ void quicksort(
 	void *tmp_element;
 
 	while (low <= high) {
-		while (compare(array[low], pivot_element) < 0) low++;
-		while (compare(array[high], pivot_element) > 0) high--;
-
+		while (compare(array[low], pivot_element) < 0) {
+			low++;
+		}
+		while (compare(array[high], pivot_element) > 0) {
+			high--;
+		}
 		if (low <= high) {
 			tmp_element = array[low];
 			array[low] = array[high];
 			array[high] = tmp_element;
 			low++;
-			high--;
+			high = high == 0 ? 0 : high - 1;
 		}
 	}
 

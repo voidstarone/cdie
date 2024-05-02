@@ -20,7 +20,8 @@ MOFILES= $(ODIR)/DynArray.o \
 	$(ODIR)/DiceRollInstructionResult.o \
 	$(ODIR)/DiceRollInstruction.o \
 	$(ODIR)/DiceRollInstructionResultStack.o \
-	$(ODIR)/DiceRollInstructionStack.o
+	$(ODIR)/DiceRollInstructionStack.o \
+	$(ODIR)/ExpressionToDiceRollInstructionStack.o
 	
 TOFILES= $(ODIR)/TestSuiteDynArray.o \
 	$(ODIR)/TestSuiteDie.o \
@@ -30,7 +31,8 @@ TOFILES= $(ODIR)/TestSuiteDynArray.o \
 	$(ODIR)/TestSuiteDiceNotationInterpreter.o \
 	$(ODIR)/TestSuiteDiceRollInstructionResult.o \
 	$(ODIR)/TestSuiteDiceRollInstruction.o \
-	$(ODIR)/TestSuiteDiceRollInstructionStack.o 
+	$(ODIR)/TestSuiteDiceRollInstructionStack.o \
+	$(ODIR)/TestSuiteExpressionToDiceRollInstructionStack.o 
 	
 
 test: $(BDIR)/testdie $(MOFILES) $(TOFILES)
@@ -46,8 +48,8 @@ $(BDIR)/testdie: $(MOFILES) $(TOFILES)
 	
 #----
 
-$(ODIR)/TestSuiteDynArray.o: $(ODIR)/DynArray.o 
-	$(CCF) -c -o $(ODIR)/TestSuiteDynArray.o $(MTDIR)/TestSuiteDynArray.c
+$(ODIR)/TestSuiteExpressionToDiceRollInstructionStack.o: $(ODIR)/ExpressionToDiceRollInstructionStack.o
+	$(CCF) -c -o $(ODIR)/TestSuiteExpressionToDiceRollInstructionStack.o $(MTDIR)/TestSuiteExpressionToDiceRollInstructionStack.c
 
 $(ODIR)/TestSuiteDiceRollInstructionStack.o: $(ODIR)/DiceRollInstructionStack.o
 	$(CCF) -c -o $(ODIR)/TestSuiteDiceRollInstructionStack.o $(MTDIR)/TestSuiteDiceRollInstructionStack.c;
@@ -73,6 +75,10 @@ $(ODIR)/TestSuiteDieFactory.o: $(ODIR)/DieFactory.o
 $(ODIR)/TestSuiteDie.o: $(ODIR)/Die.o
 	$(CCF) -c -o $(ODIR)/TestSuiteDie.o $(MTDIR)/TestSuiteDie.c;
 
+$(ODIR)/TestSuiteDynArray.o: $(ODIR)/DynArray.o 
+	$(CCF) -c -o $(ODIR)/TestSuiteDynArray.o $(MTDIR)/TestSuiteDynArray.c
+
+
 # CLI
 build: $(MOFILES) $(CLIFILES) 
 	$(CCF) -o $(BDIR)/roll $(UDIR)/main.c $(MOFILES) $(CLIFILES) 
@@ -84,8 +90,8 @@ $(ODIR)/DiceRollingSession.o:
 
 # Models
 
-$(ODIR)/DynArray.o: 
-	$(CCF) -c -o $(ODIR)/DynArray.o $(MDIR)/DynArray.c
+$(ODIR)/ExpressionToDiceRollInstructionStack.o:
+	$(CCF) -c -o $(ODIR)/ExpressionToDiceRollInstructionStack.o $(MDIR)/ExpressionToDiceRollInstructionStack.c;
 	
 $(ODIR)/DiceRollInstructionStack.o: 
 	$(CCF) -c -o $(ODIR)/DiceRollInstructionStack.o $(MDIR)/DiceRollInstructionStack.c;
@@ -113,10 +119,12 @@ $(ODIR)/DieFactory.o: $(ODIR)/Die.o
 
 $(ODIR)/Die.o: $(MDIR)/Die.c
 	$(CCF) -c -o $(ODIR)/Die.o $(MDIR)/Die.c;
+	
+$(ODIR)/DynArray.o: 
+	$(CCF) -c -o $(ODIR)/DynArray.o $(MDIR)/DynArray.c
 
 $(ODIR)/numutils.o: $(MDIR)/numutils.c
 	$(CCF) -c -o $(ODIR)/numutils.o $(MDIR)/numutils.c;
-	
 
 
 clean:

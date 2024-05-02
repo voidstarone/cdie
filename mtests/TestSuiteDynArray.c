@@ -139,7 +139,6 @@ void test_dyn_array_push_ints_pop_ints() {
 int compare_int(void *a, void *b) {
     int *int_a = (int *)a;
     int *int_b = (int *)b;
-    printf("a:%d, b:%d\n", *int_a, *int_b);
     return (*int_a - *int_b);
 }
 

@@ -8,7 +8,7 @@
  
 
 bool is_digit(char c) {
-    return c > 47 && c < 58;
+	return c >= '0' && c <= '9';
 }
 
 int extract_num_dice(int *num_dice, char *notation) {

@@ -9,6 +9,7 @@
 #include "TestSuiteDiceRollInstruction.h"
 #include "TestSuiteDiceRollInstructionResult.h"
 #include "TestSuiteDiceRollInstructionStack.h"
+#include "TestSuiteExpressionToDiceRollInstructionStack.h"
 
 int init_suite(void)  { return 0; }
 int clean_suite(void) { return 0; }
