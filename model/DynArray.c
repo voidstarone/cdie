@@ -129,6 +129,15 @@ void dyn_array_sort_in_place(
 	quicksort(a->array, 0, a->used-1, compare);
 }
 
+void dyn_array_map_in_place(
+	DynArray *a, 
+	void *(*callback)(void *)
+) {
+	for (size_t i = 0; i < a->used; i++) {
+		callback(a->array[i]);
+	}
+}
+
 void dyn_array_print(DynArray *a, void (*print_element)(void *)) {
 	printf("DynArray(used: %zu, size: %zu): [", a->used, a->size);
     for (size_t i = 0; i < dyn_array_count(a); i++)

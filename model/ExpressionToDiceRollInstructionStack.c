@@ -59,6 +59,14 @@ void range_free(Range *r) {
 	r = NULL;
 }
 
+size_t range_get_index(Range *r) {
+	return r->index;
+}
+
+size_t range_get_length(Range *r) {
+	return r->length;
+}
+
 typedef struct {
 	Range *range;
 	int priority;
@@ -98,13 +106,12 @@ int range_with_priority_compare_priority_desc(void *arg1, void *arg2) {
 	return range_with_priority_compare_priority_asc(arg2, arg1);
 }
 
-
 void range_with_priority_print(void *arg) {
 	RangeWithPriority *r = arg;
 	printf("{priority:%d, range: %zu:%zu}", r->priority, r->range->index, r->range->length);
 }
 
-int range_with_priority_prioriy(RangeWithPriority *r) {
+int range_with_priority_get_prioriy(RangeWithPriority *r) {
 	return r->priority;
 }
 
@@ -112,7 +119,7 @@ void range_with_priority_set_prioriy(RangeWithPriority *r, int priority) {
 	r->priority = priority;
 }
 
-size_t range_with_priority_index(RangeWithPriority *r) {
+size_t range_with_priority_get_index(RangeWithPriority *r) {
 	return r->range->index;
 }
 
@@ -120,7 +127,7 @@ void range_with_priority_set_index(RangeWithPriority *r, size_t index) {
 	r->range->index = index;
 }
 
-size_t range_with_priority_length(RangeWithPriority *r) {
+size_t range_with_priority_get_length(RangeWithPriority *r) {
 	return r->range->length;
 }
 
@@ -258,6 +265,10 @@ bool char_is_operator(char c) {
 	return c == '+' || c == '-' || c == '*' || c == '/';
 }
 
+bool char_is_inline_whitespace(char c) {
+	return c == ' ' || c == '\t';
+}
+
 int priority_for_operator(char c) {
 	if (c == '^') {
 		return 6;
@@ -280,7 +291,58 @@ size_t index_of_next_operator_in_range(char *str, size_t start_index, size_t len
 	return SIZE_MAX;
 }
 
+Range *range_of_operand_moving_left(char *str, size_t start_index, size_t leftmost_bound) {
+	Range *range = range_create();
+	bool have_found_operand = false;
+	bool have_found_end_of_operand = false;
+	size_t left_index;
+	size_t right_index;
+	for (size_t i = start_index; i >= leftmost_bound; i--) {
+		if (!have_found_operand && !char_is_inline_whitespace(str[i])) {
+			right_index = i;
+			have_found_operand = true;
+			continue;
+		}
+		if (have_found_operand && char_is_inline_whitespace(str[i])) {
+			left_index = i + 1;
+			have_found_end_of_operand = true;
+			break;
+		}
+	}
+	if (!have_found_end_of_operand) {
+		left_index = leftmost_bound;
+	}
+	range->index = left_index;
+	range->length = right_index - left_index + 1;
+	return range;
+}
 
+// WRONG
+Range *range_of_operand_moving_right(char *str, size_t start_index, size_t rightmost_bound) {
+	Range *range = range_create();
+	bool have_found_operand = false;
+	bool have_found_end_of_operand = false;
+	size_t left_index;
+	size_t right_index;
+	for (size_t i = start_index; i < rightmost_bound; i++) {
+		if (!have_found_operand && !char_is_inline_whitespace(str[i])) {
+			left_index = i;
+			have_found_operand = true;
+			continue;
+		}
+		if (have_found_operand && char_is_inline_whitespace(str[i])) {
+			right_index = i - 1;
+			have_found_end_of_operand = true;
+			break;
+		}
+	}
+	if (!have_found_end_of_operand) {
+		right_index = rightmost_bound;
+	}
+	range->index = left_index;
+	range->length = right_index - left_index + 1;
+	return range;
+}
 
 void dice_roll_instruction_stack_from_expression(char *expression) {
 	DynArray *postfix = dyn_array_create(32);
@@ -317,20 +379,32 @@ void dice_roll_instruction_stack_from_expression(char *expression) {
 	printf("\n");
 	dyn_array_print(operators, &range_with_priority_print);
 	dyn_array_sort_in_place(operators, &range_with_priority_compare_priority_desc);
-	// sort list
-	
+
 	for (size_t i = 0; i < dyn_array_count(operators); i++) {
 		if (i != 0) {
 			printf(", ");
 		}
 		RangeWithPriority *r = dyn_array_element_at_index(operators, i);
-		int priority = range_with_priority_prioriy(r);
+		int priority = range_with_priority_get_prioriy(r);
 		printf("%d", priority);
 		/* code */
 	}
 	printf("\n");
 
-	printf("index: %ld-%ld\n", opening_index, closing_index);
+	printf("index: %zu-%zu\n", opening_index, closing_index);
+
+	for (size_t i = 0; i < dyn_array_count(operators); i++) {
+		// add operand on left
+		RangeWithPriority *operator = dyn_array_element_at_index(operators, i);
+		size_t op_index = range_with_priority_get_index(operator);
+		Range *range_of_left_operand = range_of_operand_moving_left(expression, op_index - 1, opening_index);
+		printf("RANGE1: %zu:%zu\n", range_of_left_operand->index, range_of_left_operand->length);
+		Range *range_of_right_operand = range_of_operand_moving_right(expression, op_index + 1, closing_index);
+		printf("RANGE2: %zu:%zu\n", range_of_right_operand->index, range_of_right_operand->length);
+
+		// add operand on right
+		// move to next operator
+	}
 
 	size_t first_op = index_of_next_operator_in_range(expression, opening_index, closing_index);
 }
