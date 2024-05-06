@@ -126,6 +126,7 @@ void dyn_array_sort_in_place(
 	DynArray *a, 
 	int (*compare)(void *, void *)
 ) {
+	if (a->used == 0) { return; }
 	quicksort(a->array, 0, a->used-1, compare);
 }
 
@@ -136,6 +137,32 @@ void dyn_array_map_in_place(
 	for (size_t i = 0; i < a->used; i++) {
 		callback(a->array[i]);
 	}
+}
+
+bool dyn_array_does_match(
+	DynArray *a, 
+	bool (*does_match)(void *)
+) {
+	for (size_t i = 0; i < a->used; i++) {
+		if (does_match(a->array[i])) {
+			return true;
+		}
+	}
+	return false;
+}
+
+
+bool dyn_array_contains(
+	DynArray *a, 
+	bool (*compare)(void *, void *),
+	void *element
+) {
+	for (size_t i = 0; i < a->used; i++) {
+		if (compare(a->array[i], element)) {
+			return true;
+		}
+	}
+	return false;
 }
 
 void dyn_array_print(DynArray *a, void (*print_element)(void *)) {

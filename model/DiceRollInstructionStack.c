@@ -32,7 +32,6 @@ DiceRollInstruction * dice_roll_instruction_stack_peek(DiceRollInstructionStack 
 	return dyn_array_peek(dris->instructions);
 }
 
-
 DiceRollInstruction * dice_roll_instruction_stack_pop(DiceRollInstructionStack *dris) {
 	return dyn_array_pop(dris->instructions);
 }
@@ -41,6 +40,18 @@ DiceRollInstruction * dice_roll_instruction_stack_instruction_at(DiceRollInstruc
 	return dyn_array_element_at_index(dris->instructions, index);
 }
 
+DynArray *dice_roll_instruction_stack_get_dice_collections(DiceRollInstructionStack *dris) {
+	size_t instruction_count = dyn_array_count(dris->instructions);
+	DynArray *dice_collections = dyn_array_create(instruction_count);
+	for (size_t i = 0; i < instruction_count; i++) {
+		DiceRollInstruction *instrution = dice_roll_instruction_stack_instruction_at(dris, i);
+		DiceCollection *potential_dc = dice_roll_instruction_get_dice_collection(instrution);
+		if (potential_dc != NULL) {
+			dyn_array_push(dice_collections, potential_dc);
+		}
+	}
+	return dice_collections;
+}
 
 DiceRollInstructionResult *dice_roll_instruction_stack_evaluate(DiceRollInstructionStack *dris) {
 	DiceRollInstruction *dri = NULL;
@@ -48,7 +59,6 @@ DiceRollInstructionResult *dice_roll_instruction_stack_evaluate(DiceRollInstruct
 	double d = -1;
 	DiceRollInstructionResult *drir = NULL;
 	DiceRollInstructionResultStack *drirs = dice_roll_instruction_result_stack_create();
-	// todo: return single result from this func
 
 	while (dice_roll_instruction_stack_peek(dris)) {
 		dri = dice_roll_instruction_stack_pop(dris);

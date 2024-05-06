@@ -33,6 +33,17 @@ void dyn_array_sort_in_place(
 	int (*compare)(void *, void *)
 );
 
+bool dyn_array_any_match(
+	DynArray *a,
+	bool (*does_match)(void *)
+);
+
+bool dyn_array_contains(
+	DynArray *a,
+	bool (*compare)(void *, void *),
+  void *element
+);
+
 void dyn_array_print(DynArray *a, void (*print_element)(void *));
 
 void dyn_array_free(DynArray *a);
