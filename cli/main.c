@@ -16,7 +16,7 @@ int main (int argc, char **argv) {
 			}
 			printf("%s ", result);
 			fflush(stdin);
-			free(result);
+			// free(result);
 	}
 	printf("\n");
 

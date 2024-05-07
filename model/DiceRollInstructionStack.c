@@ -45,6 +45,7 @@ DynArray *dice_roll_instruction_stack_get_dice_collections(DiceRollInstructionSt
 	DynArray *dice_collections = dyn_array_create(instruction_count);
 	for (size_t i = 0; i < instruction_count; i++) {
 		DiceRollInstruction *instrution = dice_roll_instruction_stack_instruction_at(dris, i);
+
 		DiceCollection *potential_dc = dice_roll_instruction_get_dice_collection(instrution);
 		if (potential_dc != NULL) {
 			dyn_array_push(dice_collections, potential_dc);

@@ -9,8 +9,7 @@
 #include "DiceCollection.h"
 #include "DiceCollectionResults.h"
 
-
-DiceCollection * dice_collection_create(size_t count, int faces) {
+DiceCollection * dice_collection_create(size_t count, size_t faces) {
 	DiceCollection *dc = malloc(sizeof(DiceCollection));
 	dc->_die_array = diefactory_make_die_array(faces, count);
 	dc->_size = count;
@@ -25,7 +24,7 @@ size_t dice_collection_count(DiceCollection *dc) {
 	return dc->_size;
 }
 
-int dice_collection_faces(DiceCollection *dc) {
+size_t dice_collection_faces(DiceCollection *dc) {
 	return dc->num_faces;
 }
 
@@ -56,7 +55,7 @@ void dice_collection_do_explodes(DiceCollection *dc, int start_index) {
 	}
 }
 
-void dice_collection_set_results(DiceCollection *dc, int *results) {
+void dice_collection_set_results(DiceCollection *dc, size_t *results) {
 	if (dc == NULL) {
 		return;
 	}
@@ -65,7 +64,7 @@ void dice_collection_set_results(DiceCollection *dc, int *results) {
 	}
 	DiceCollectionResults *dcr = dice_collection_results_create_for_dice_collection(dc);
 	for (size_t i = 0, count = dice_collection_count(dc); i < count; i++) {
-		int result_value = results[i];
+		size_t result_value = results[i];
 		dice_collection_results_add(dcr, result_value);
 	}
 	dc->last_results = dcr;
@@ -108,23 +107,23 @@ DiceCollectionResults * dice_collection_last_results(DiceCollection *dc) {
 	return dc->last_results;
 }
 
-int dice_collection_total(DiceCollection *dc) {
+size_t dice_collection_total(DiceCollection *dc) {
 	if (!dc->last_results) {
 		return 0;
 	}
 	DiceCollectionResults *last_results = dice_collection_last_results(dc);
-	int total = 0, count = dice_collection_results_count(last_results);
-	for (int i = 0; i < count; i++) {
+	size_t total = 0, count = dice_collection_results_count(last_results);
+	for (size_t i = 0; i < count; i++) {
 		total += dice_collection_results_result_at(last_results, i);
 	}
 	return total;
 }
 
-int dice_collection_get_explosion_lower_bound(DiceCollection *dc) {
+size_t dice_collection_get_explosion_lower_bound(DiceCollection *dc) {
 	return dc->explosion_lower_bound;
 }
 
-void dice_collection_set_explosion_lower_bound(DiceCollection *dc, int lower_bound) {
+void dice_collection_set_explosion_lower_bound(DiceCollection *dc, size_t lower_bound) {
 	dc->explosion_lower_bound = lower_bound;
 }
 
@@ -203,7 +202,7 @@ DiceCollectionResults * dice_collection_results_create_for_dice_collection(DiceC
 	size_t results_array_size = dice_collection_count(dc);
 	if (explosion_lower_bound) {
 		size_t num_exploding_results = num_faces - explosion_lower_bound;
-		size_t probable_num_results = dice_collection_count(dc) * num_faces/(num_faces-num_exploding_results);
+		size_t probable_num_results = dice_collection_count(dc) * num_faces / (num_faces - num_exploding_results);
 		
 		// Bad maths; just to be safe
 		size_t safety_net = probable_num_results * 0.25; 

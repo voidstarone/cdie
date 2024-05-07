@@ -252,6 +252,9 @@ size_t index_of_innermost_opening_paren(char *str, size_t start_index, size_t le
 			--depth;
 		}
 	}
+	if (max_depth == 0) {
+		return SIZE_MAX;
+	}
 	return paren_index;
 }
 
@@ -404,10 +407,10 @@ void postfixify_part_expression_without_parens(
 ) {
 	DynArray *operators = dyn_array_create(8);
 	// create list of operator indices in priority order
-	printf("opening_index: %ld, length: %ld\n", opening_index, length);
+	// printf("opening_index: %ld, length: %ld\n", opening_index, length);
 	for (size_t i = opening_index; i < closing_index; i++) {
 		char c = expression[i];
-		printf("%c", c);
+		// printf("%c", c);
 		if (is_operator(c)) {
 			RangeWithPriority *r = range_with_priority_create();
 			range_with_priority_set_index(r, i);
@@ -416,21 +419,19 @@ void postfixify_part_expression_without_parens(
 			dyn_array_push(operators, r);
 		}
 	}
-	printf("\n");
-	dyn_array_print(operators, &range_with_priority_print);
-	dyn_array_sort_in_place(operators, &range_with_priority_compare_priority_desc);
+	// printf("\n");
+	// dyn_array_print(operators, &range_with_priority_print);
+	// dyn_array_sort_in_place(operators, &range_with_priority_compare_priority_desc);
 
-	for (size_t i = 0; i < dyn_array_count(operators); i++) {
-		if (i != 0) {
-			printf(", ");
-		}
-		RangeWithPriority *r = dyn_array_element_at_index(operators, i);
-		int priority = range_with_priority_get_prioriy(r);
-		printf("%d", priority);
-	}
-	printf("\n");
-
-	printf("index: %zu-%zu\n", opening_index, closing_index);
+	// for (size_t i = 0; i < dyn_array_count(operators); i++) {
+	// 	if (i != 0) {
+	// 		printf(", ");
+	// 	}
+	// 	RangeWithPriority *r = dyn_array_element_at_index(operators, i);
+	// 	int priority = range_with_priority_get_prioriy(r);
+	// 	printf("%d", priority);
+	// }
+	// printf("\n");
 
 	for (size_t i = 0; i < dyn_array_count(operators); i++) {
 		RangeWithPriority *operator = dyn_array_element_at_index(operators, i);
@@ -440,7 +441,6 @@ void postfixify_part_expression_without_parens(
 			operator_index - 1, 
 			opening_index
 		);
-		printf("RANGE1: %zu:%zu\n", range_left_operand->index, range_left_operand->length);
 		if (!dyn_array_contains(postfix_ranges, &range_compare, range_left_operand)) {
 			dyn_array_push(postfix_ranges, range_left_operand);
 		}
@@ -452,16 +452,31 @@ void postfixify_part_expression_without_parens(
 		if (!dyn_array_contains(postfix_ranges, &range_compare, range_right_operand)) {
 			dyn_array_push(postfix_ranges, range_right_operand);
 		}
-		printf("RANGE2: %zu:%zu\n", range_right_operand->index, range_right_operand->length);
 		dyn_array_push(postfix_ranges, operator->range);
 	}
 }
 
+void copy_range_to_string(char *buf, char *target, size_t start_index, size_t length) {
+	if (length == 0) { return; }
+	for (size_t i = 0; i < length; i++) {
+		buf[i] = target[start_index + i];
+	}
+	buf[length - 1] = '\0';
+}
+
 DiceRollInstructionStack *dice_roll_instruction_stack_from_expression(char *expression) {
-	DynArray *postfix = dyn_array_create(32);
+	DiceRollInstructionStack *instruction_stack = dice_roll_instruction_stack_create(32);
 	DynArray *postfix_ranges = dyn_array_create(32);
-	size_t opening_index = index_of_innermost_opening_paren(expression, 0, strlen(expression) ) + 1;
-	size_t closing_index = index_of_next_closing_param(expression, opening_index);
+	size_t opening_index = index_of_innermost_opening_paren(expression, 0, strlen(expression));
+	size_t closing_index;
+	if (opening_index == SIZE_MAX) { // No parens
+		opening_index = 0;
+		closing_index = strlen(expression);
+	} else {
+		opening_index++;
+		closing_index = index_of_next_closing_param(expression, opening_index);
+	}
+	
 	size_t length = closing_index - opening_index;
 
 	postfixify_part_expression_without_parens(
@@ -484,10 +499,14 @@ DiceRollInstructionStack *dice_roll_instruction_stack_from_expression(char *expr
 	// 	}
 	// }
 	
-	DiceRollInstructionStack *instruction_stack = dice_roll_instruction_stack_create();
 	size_t max_op_length = 8;
 	char *op_as_string = malloc(sizeof(char) * max_op_length);
-	size_t first_op = index_of_next_operator_in_range(expression, opening_index, closing_index);
+	size_t first_op_index = index_of_next_operator_in_range(expression, opening_index, closing_index);
+	if (first_op_index == SIZE_MAX) {
+		copy_range_to_string(op_as_string, expression, opening_index, closing_index - opening_index + 1);
+		DiceRollInstruction *instrucion = dice_roll_instruction_from_string(op_as_string);
+		dice_roll_instruction_stack_push(instruction_stack, instrucion);
+	}
 	for (size_t i = 0; i < dyn_array_count(postfix_ranges); i++) {
 		Range *range = dyn_array_element_at_index(postfix_ranges, i);
 		size_t range_start = range_get_index(range);
@@ -496,10 +515,7 @@ DiceRollInstructionStack *dice_roll_instruction_stack_from_expression(char *expr
 			op_as_string = realloc(op_as_string, sizeof(char) * op_strlen);
 			max_op_length = op_strlen;
 		}
-		for (size_t i = 0; i < op_strlen; i++) {
-			op_as_string[i] = expression[range_start + i];
-		}
-		op_as_string[op_strlen - 1] = '\0';
+		copy_range_to_string(op_as_string, expression, range_start, op_strlen);
 		DiceRollInstruction *instrucion = dice_roll_instruction_from_string(op_as_string);
 		dice_roll_instruction_stack_push(instruction_stack, instrucion);
 	}

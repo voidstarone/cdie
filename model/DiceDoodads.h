@@ -1,6 +1,7 @@
 #ifndef DICE_DOODADS
 #define DICE_DOODADS
 
+#include "numutils.h"
 #include "Die.h"
 #include "DieFactory.h"
 #include "DiceCollection.h"
