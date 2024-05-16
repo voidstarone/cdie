@@ -351,7 +351,10 @@ Range *range_of_operand_moving_left(char *str, size_t start_index, size_t leftmo
 	bool have_found_end_of_operand = false;
 	size_t left_index;
 	size_t right_index;
+	if (start_index == 0) { return NULL; }
 	for (size_t i = start_index; i >= leftmost_bound; i--) {
+		
+		printf("i: %zu\n", i);
 		if (!have_found_operand && !char_is_inline_whitespace(str[i])) {
 			right_index = i;
 			have_found_operand = true;
@@ -360,6 +363,9 @@ Range *range_of_operand_moving_left(char *str, size_t start_index, size_t leftmo
 		if (have_found_operand && char_is_inline_whitespace(str[i])) {
 			left_index = i + 1;
 			have_found_end_of_operand = true;
+			break;
+		}
+		if (i == 0) {
 			break;
 		}
 	}
@@ -410,7 +416,7 @@ void postfixify_part_expression_without_parens(
 	// printf("opening_index: %ld, length: %ld\n", opening_index, length);
 	for (size_t i = opening_index; i < closing_index; i++) {
 		char c = expression[i];
-		// printf("%c", c);
+		printf("%c", c);
 		if (is_operator(c)) {
 			RangeWithPriority *r = range_with_priority_create();
 			range_with_priority_set_index(r, i);
@@ -419,19 +425,19 @@ void postfixify_part_expression_without_parens(
 			dyn_array_push(operators, r);
 		}
 	}
-	// printf("\n");
-	// dyn_array_print(operators, &range_with_priority_print);
-	// dyn_array_sort_in_place(operators, &range_with_priority_compare_priority_desc);
+	printf("\n");
+	dyn_array_print(operators, &range_with_priority_print);
+	dyn_array_sort_in_place(operators, &range_with_priority_compare_priority_desc);
 
-	// for (size_t i = 0; i < dyn_array_count(operators); i++) {
-	// 	if (i != 0) {
-	// 		printf(", ");
-	// 	}
-	// 	RangeWithPriority *r = dyn_array_element_at_index(operators, i);
-	// 	int priority = range_with_priority_get_prioriy(r);
-	// 	printf("%d", priority);
-	// }
-	// printf("\n");
+	for (size_t i = 0; i < dyn_array_count(operators); i++) {
+		if (i != 0) {
+			printf(", ");
+		}
+		RangeWithPriority *r = dyn_array_element_at_index(operators, i);
+		int priority = range_with_priority_get_prioriy(r);
+		printf("%d", priority);
+	}
+	printf("\n");
 
 	for (size_t i = 0; i < dyn_array_count(operators); i++) {
 		RangeWithPriority *operator = dyn_array_element_at_index(operators, i);
@@ -441,8 +447,10 @@ void postfixify_part_expression_without_parens(
 			operator_index - 1, 
 			opening_index
 		);
-		if (!dyn_array_contains(postfix_ranges, &range_compare, range_left_operand)) {
-			dyn_array_push(postfix_ranges, range_left_operand);
+		if (range_left_operand != NULL) {
+			if (!dyn_array_contains(postfix_ranges, &range_compare, range_left_operand)) {
+				dyn_array_push(postfix_ranges, range_left_operand);
+			}
 		}
 		Range *range_right_operand = range_of_operand_moving_right(
 			expression, 
@@ -487,26 +495,21 @@ DiceRollInstructionStack *dice_roll_instruction_stack_from_expression(char *expr
 		closing_index
 	);
 	
-	// dyn_array_print(postfix_ranges, &range_print);
-	// for (size_t i = 0; i < dyn_array_count(postfix_ranges); i++) {
-	// 	if (i != 0) {
-	// 		printf(", ");
-	// 	}
-	// 	Range *range = dyn_array_element_at_index(postfix_ranges, i);
-	// 	size_t start_index = range_get_index(range);
-	// 	for (size_t j = start_index; j < start_index + range_get_length(range); j++) {
-	// 		printf("%c", expression[j]);
-	// 	}
-	// }
+	dyn_array_print(postfix_ranges, &range_print);
+	for (size_t i = 0; i < dyn_array_count(postfix_ranges); i++) {
+		if (i != 0) {
+			printf(", ");
+		}
+		Range *range = dyn_array_element_at_index(postfix_ranges, i);
+		size_t start_index = range_get_index(range);
+		for (size_t j = start_index; j < start_index + range_get_length(range); j++) {
+			printf("%c", expression[j]);
+		}
+	}
+	printf("\n");
 	
 	size_t max_op_length = 8;
 	char *op_as_string = malloc(sizeof(char) * max_op_length);
-	size_t first_op_index = index_of_next_operator_in_range(expression, opening_index, closing_index);
-	if (first_op_index == SIZE_MAX) {
-		copy_range_to_string(op_as_string, expression, opening_index, closing_index - opening_index + 1);
-		DiceRollInstruction *instrucion = dice_roll_instruction_from_string(op_as_string);
-		dice_roll_instruction_stack_push(instruction_stack, instrucion);
-	}
 	for (size_t i = 0; i < dyn_array_count(postfix_ranges); i++) {
 		Range *range = dyn_array_element_at_index(postfix_ranges, i);
 		size_t range_start = range_get_index(range);
@@ -522,47 +525,12 @@ DiceRollInstructionStack *dice_roll_instruction_stack_from_expression(char *expr
 	free(op_as_string);
 	op_as_string = NULL;
 
+	DynArray *instructions = instruction_stack->instructions;
+	for (size_t i = 0; i < dyn_array_count(instructions); i++) {
+		DiceRollInstruction *instruction = dyn_array_element_at_index(instructions, i);
+		printf("op type: %d\n", instruction->operation_type);
+		printf("op value: %lf\n", dice_roll_instruction_get_number(instruction));
+	}
+
 	return instruction_stack;
 }
-
-    // char exp[] = "(1 + 2)";
-    // split_string(array, "1 + 2d6 * 10, hello world", ",");
-    // DynArray *array = printWords("1 + 2d6 * 10", " ");
-        
-    // const char delimiter[] = " ";
-
-    // DynArray *strings = split_string(exp, delimiter);
-
-    // for (size_t i = 0; i < dyn_array_count(strings); i++)
-    // {
-    //     printf("%s\n", dyn_array_element_at_index(strings, i));
-    // }
-    
-	// DynArray *infix = dyn_array_create(32);
-    // expression_to_infix(infix, "1 +  2d6 * 10");
-
-	// for (size_t i = 0; i < dyn_array_count(infix); i++)
-    // {
-    //     printf("%s\n", dyn_array_element_at_index(infix, i));
-    // }
-
-	// printf("%d\n", could_be_number("1"));
-	// printf("%d\n", could_be_number("200"));
-	// printf("%d\n", could_be_number("1.1"));
-	// printf("%d\n", could_be_number("1e"));
-	// printf("%d\n", could_be_number("+"));
-	// printf("%d\n", could_be_number("."));
-	// printf("%d\n", could_be_number("10d6"));
-	// printf("%d\n", could_be_number("10..6"));
-	// printf("---\n");
-	// printf("%d\n", could_be_dice_collection("1"));
-	// printf("%d\n", could_be_dice_collection("200"));
-	// printf("%d\n", could_be_dice_collection("1.1"));
-	// printf("%d\n", could_be_dice_collection("1e"));
-	// printf("%d\n", could_be_dice_collection("+"));
-	// printf("%d\n", could_be_dice_collection("."));
-	// printf("%d\n", could_be_dice_collection("10d6"));
-	// printf("%d\n", could_be_dice_collection("d6"));
-	// printf("%d\n", could_be_dice_collection("1d96"));
-	// printf("%d\n", could_be_dice_collection("10dd6"));
-	// printf("%d\n", could_be_dice_collection("10d1d6"));

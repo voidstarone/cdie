@@ -81,7 +81,7 @@ void dice_collection_results_as_array(DiceCollectionResults *dcr, int *results) 
 }
 
 char * dice_collection_create_results_string(DiceCollectionResults *dcr) {
-	size_t total_characters = dcr->count * 100;
+	size_t total_characters = dcr->count;
 	
 	for(size_t i = 0; i < dcr->count; ++i) {
 		total_characters += num_digits(dcr->results_array[i]);
@@ -89,12 +89,12 @@ char * dice_collection_create_results_string(DiceCollectionResults *dcr) {
 	char *results_string = malloc(sizeof(char) * total_characters);
 	size_t char_index = 0;
 	for(size_t i = 0; i < dcr->count; ++i) {
-		snprintf(results_string+char_index, total_characters, "%d", dcr->results_array[i]);
-		char_index += num_digits(dcr->results_array[i]);
-		if (i != dcr->count-1) {
-			snprintf(results_string+char_index, total_characters, " ");
+		if (i != 0 && char_index != 0) {
+			snprintf(results_string + char_index, total_characters, " ");
 			char_index++;
 		}
+		snprintf(results_string+char_index, total_characters, "%d", dcr->results_array[i]);
+		char_index += num_digits(dcr->results_array[i]);
 	}
 	return results_string;
 }

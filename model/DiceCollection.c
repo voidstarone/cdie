@@ -108,9 +108,6 @@ DiceCollectionResults * dice_collection_last_results(DiceCollection *dc) {
 }
 
 size_t dice_collection_total(DiceCollection *dc) {
-	if (!dc->last_results) {
-		return 0;
-	}
 	DiceCollectionResults *last_results = dice_collection_last_results(dc);
 	size_t total = 0, count = dice_collection_results_count(last_results);
 	for (size_t i = 0; i < count; i++) {
