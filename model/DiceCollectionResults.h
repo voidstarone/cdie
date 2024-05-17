@@ -9,17 +9,17 @@ typedef struct {
 	// int num_faces;
 	size_t count;
 	size_t size;
-	int *results_array;
+	size_t *results_array;
 } DiceCollectionResults;
 
 DiceCollectionResults * dice_collection_results_create(size_t capacity);
 void dice_collection_results_free(DiceCollectionResults *dcr);
 
 size_t dice_collection_results_count(DiceCollectionResults *dcr);
-int dice_collection_results_result_at(DiceCollectionResults *dcr, int index);
-void dice_collection_results_add(DiceCollectionResults *dcr, int result);
+size_t dice_collection_results_result_at(DiceCollectionResults *dcr, size_t index);
+void dice_collection_results_add(DiceCollectionResults *dcr, size_t result);
 
-void dice_collection_results_as_array(DiceCollectionResults *dcr, int *results);
+void dice_collection_results_as_array(DiceCollectionResults *dcr, size_t *results);
 
 DiceCollectionResults * dice_collection_results_clone(DiceCollectionResults *dcr);
 

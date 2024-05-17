@@ -32,9 +32,9 @@ void test_dice_collection_die_at() {
 void test_dice_collection_roll() {
 	DiceCollection *dc = dice_collection_create(50, 6);
 	DiceCollectionResults *dcr = dice_collection_results_create(50);
-	int rolls[50] = { 0 } ;
+	size_t rolls[50] = { 0 } ;
 	bool have_rolled_every_number_at_least_once = true;
-	int results[6] = { 0, 0, 0, 0, 0, 0 };
+	size_t results[6] = { 0, 0, 0, 0, 0, 0 };
 	
 	dice_collection_roll(dc, dcr);
 	dice_collection_results_as_array(dcr, rolls);
@@ -63,7 +63,7 @@ void test_dice_collection_roll_explode() {
 	dice_collection_roll_silent(dc);
 
 	DiceCollectionResults *dcr = dice_collection_last_results(dc);
-	int num_results = dice_collection_results_count(dcr);
+	size_t num_results = dice_collection_results_count(dcr);
 
 	CU_ASSERT(num_results > 50);
 	dice_collection_free(dc);

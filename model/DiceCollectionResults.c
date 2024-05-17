@@ -12,7 +12,7 @@
 DiceCollectionResults * dice_collection_results_create(size_t capacity) {
 	DiceCollectionResults *dcr = malloc(sizeof(DiceCollectionResults));
 	
-	dcr->results_array = (int *) malloc(sizeof(int) * capacity);
+	dcr->results_array = malloc(sizeof(size_t) * capacity);
 	dcr->size = capacity;
 	dcr->count = 0;
 	for (size_t i = 0; i < capacity; i++) {
@@ -22,14 +22,14 @@ DiceCollectionResults * dice_collection_results_create(size_t capacity) {
 	return dcr;
 }
 
-int dice_collection_results_result_at(DiceCollectionResults *dcr, int index) {
+size_t dice_collection_results_result_at(DiceCollectionResults *dcr, size_t index) {
 	return dcr->results_array[index];
 }
 
-void dice_collection_results_add(DiceCollectionResults *dcr, int result) {
+void dice_collection_results_add(DiceCollectionResults *dcr, size_t result) {
 	if (dcr->count+1 >= dcr->size) {
 		size_t new_size = dcr->size * 1.25;
-		int *tmp_results_array = realloc(dcr->results_array, new_size * sizeof(int));
+		int *tmp_results_array = realloc(dcr->results_array, new_size * sizeof(size_t));
 		if (tmp_results_array == NULL) {
 			exit(1);
 		}
@@ -74,7 +74,7 @@ size_t dice_collection_results_count(DiceCollectionResults *dcr) {
 	return dcr->count;
 }
 
-void dice_collection_results_as_array(DiceCollectionResults *dcr, int *results) {
+void dice_collection_results_as_array(DiceCollectionResults *dcr, size_t *results) {
 	for(size_t i = 0; i < dcr->count; ++i) {
 		results[i] = dcr->results_array[i];
 	}

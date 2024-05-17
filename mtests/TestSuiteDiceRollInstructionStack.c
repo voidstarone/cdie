@@ -125,7 +125,9 @@ void test_dice_roll_instruction_stack_evaluate_max_dice_collection() {
 	DiceRollInstructionStack *dris = dice_roll_instruction_stack_create();
 	DiceRollInstruction *max = dice_roll_instruction_from_string("max");
 	DiceRollInstruction *dri_dc = dice_roll_instruction_from_string("4d6");
-	int results[] = {1, 5, 3, 2};
+
+	size_t *results = malloc(sizeof(size_t) * 4);
+	results[0] = 1; results[1] = 5; results[2] = 3; results[3] = 2;
 	dice_collection_set_results(dri_dc->value, results);
 
 	dice_roll_instruction_stack_push(dris, max);
@@ -143,7 +145,7 @@ void test_dice_roll_instruction_stack_evaluate_add_num_to_dc() {
 	DiceRollInstruction *add = dice_roll_instruction_from_string("+");
 	DiceRollInstruction *num10 = dice_roll_instruction_from_string("10");
 	DiceRollInstruction *dri_dc = dice_roll_instruction_from_string("4d6");
-	int results[] = {1, 6, 3, 2};
+	size_t results[] = {1, 6, 3, 2};
 	dice_collection_set_results(dri_dc->value, results);
 	
 	dice_roll_instruction_stack_push(dris, add);
@@ -162,8 +164,8 @@ void test_dice_roll_instruction_stack_evaluate_add_dc_to_dc() {
 	DiceRollInstruction *add = dice_roll_instruction_from_string("+");
 	DiceRollInstruction *dri_dc1 = dice_roll_instruction_from_string("6d6");
 	DiceRollInstruction *dri_dc2 = dice_roll_instruction_from_string("4d6");
-	int results1[] = {1, 2, 4, 6, 3, 2};
-	int results2[] = {1, 6, 3, 2};
+	size_t results1[] = {1, 2, 4, 6, 3, 2};
+	size_t results2[] = {1, 6, 3, 2};
 	dice_collection_set_results(dri_dc1->value, results1);
 	dice_collection_set_results(dri_dc2->value, results2);
 

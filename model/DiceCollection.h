@@ -10,7 +10,7 @@ typedef struct {
 	size_t _size;
 	Die **_die_array;
 	DiceCollectionResults *last_results;
-	int explosion_lower_bound;
+	size_t explosion_lower_bound;
 	bool do_explosions_stack;
 } DiceCollection;
 

@@ -529,7 +529,7 @@ DiceRollInstructionStack *dice_roll_instruction_stack_from_expression(char *expr
 	for (size_t i = 0; i < dyn_array_count(instructions); i++) {
 		DiceRollInstruction *instruction = dyn_array_element_at_index(instructions, i);
 		printf("op type: %d\n", instruction->operation_type);
-		printf("op value: %lf\n", dice_roll_instruction_get_number(instruction));
+		printf("op value: %lf\n", dice_roll_instruction_get_number(instruction->value));
 	}
 
 	return instruction_stack;

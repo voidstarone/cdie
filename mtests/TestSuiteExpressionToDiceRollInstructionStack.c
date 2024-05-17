@@ -16,7 +16,9 @@ void test_dice_roll_instruction_stack_from_expression_simple_maths() {
 	char exp[] = "10 + 2 * 8.2";
 	printf("\n%s\n", exp);
 	
-	dice_roll_instruction_stack_from_expression(exp);
+	DiceRollInstructionStack *dris = dice_roll_instruction_stack_from_expression(exp);
+
+	CU_ASSERT_EQUAL(dyn_array_count(dris->instructions), 5);
 }
 
 void test_dice_roll_instruction_stack_from_expression_simple_dice() {
@@ -24,7 +26,9 @@ void test_dice_roll_instruction_stack_from_expression_simple_dice() {
 	char exp[] = "2d6";
 	printf("\n%s\n", exp);
 	
-	dice_roll_instruction_stack_from_expression(exp);
+	DiceRollInstructionStack *dris = dice_roll_instruction_stack_from_expression(exp);
+
+	CU_ASSERT_EQUAL(dyn_array_count(dris->instructions), 1);
 }
 
 void test_dice_roll_instruction_stack_from_expression_parens_maths() {
@@ -32,7 +36,9 @@ void test_dice_roll_instruction_stack_from_expression_parens_maths() {
 	char exp[] = "(1 + ((2d6) * ((10 + 1 * 80) + 1)))";
 	printf("\n%s\n", exp);
 	
-	dice_roll_instruction_stack_from_expression(exp);
+	DiceRollInstructionStack *dris = dice_roll_instruction_stack_from_expression(exp);
+
+	CU_ASSERT_EQUAL(dyn_array_count(dris->instructions), 11);
 }
 
 int test_suite_expression_to_dice_roll_instruction_stack(int(*init_suite)(void), int(*clean_suite)(void) ) {
