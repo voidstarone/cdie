@@ -136,6 +136,10 @@ void dice_roll_instruction_set_operation_type(DiceRollInstruction *dri, Operatio
 }
 
 double dice_roll_instruction_get_number(DiceRollInstruction *dri) {
+    if (dri == NULL) {
+        printf("NULL dri access in dice_roll_instruction_get_number");
+        return -1;
+    }
     if (dri->operation_type == op_type_number) {
         double *dbl_ptr = dri->value;
         return *dbl_ptr;

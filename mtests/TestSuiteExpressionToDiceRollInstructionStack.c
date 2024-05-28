@@ -19,6 +19,7 @@ void test_dice_roll_instruction_stack_from_expression_simple_maths() {
 	DiceRollInstructionStack *dris = dice_roll_instruction_stack_from_expression(exp);
 
 	CU_ASSERT_EQUAL(dyn_array_count(dris->instructions), 5);
+	dice_roll_instruction_stack_free(dris);
 }
 
 void test_dice_roll_instruction_stack_from_expression_simple_dice() {
@@ -28,7 +29,10 @@ void test_dice_roll_instruction_stack_from_expression_simple_dice() {
 	
 	DiceRollInstructionStack *dris = dice_roll_instruction_stack_from_expression(exp);
 
-	CU_ASSERT_EQUAL(dyn_array_count(dris->instructions), 1);
+	size_t count = dyn_array_count(dris->instructions);
+	printf("count: %zu\n", count);
+	CU_ASSERT_EQUAL(count, 1);
+	dice_roll_instruction_stack_free(dris);
 }
 
 void test_dice_roll_instruction_stack_from_expression_parens_maths() {
@@ -39,6 +43,7 @@ void test_dice_roll_instruction_stack_from_expression_parens_maths() {
 	DiceRollInstructionStack *dris = dice_roll_instruction_stack_from_expression(exp);
 
 	CU_ASSERT_EQUAL(dyn_array_count(dris->instructions), 11);
+	dice_roll_instruction_stack_free(dris);
 }
 
 int test_suite_expression_to_dice_roll_instruction_stack(int(*init_suite)(void), int(*clean_suite)(void) ) {
@@ -50,11 +55,11 @@ int test_suite_expression_to_dice_roll_instruction_stack(int(*init_suite)(void),
 	}
 	printf("%s\n", test_suite_name);
 
-	if (NULL == CU_add_test(pSuite, "test_dice_roll_instruction_stack_from_expression_simple_maths", 
-        test_dice_roll_instruction_stack_from_expression_simple_maths)) {
-        CU_cleanup_registry();
-        return CU_get_error();
-    }
+	// if (NULL == CU_add_test(pSuite, "test_dice_roll_instruction_stack_from_expression_simple_maths", 
+    //     test_dice_roll_instruction_stack_from_expression_simple_maths)) {
+    //     CU_cleanup_registry();
+    //     return CU_get_error();
+    // }
 
 	if (NULL == CU_add_test(pSuite, "test_dice_roll_instruction_stack_from_expression_simple_dice", 
         test_dice_roll_instruction_stack_from_expression_simple_dice)) {

@@ -425,7 +425,15 @@ void postfixify_part_expression_without_parens(
 			dyn_array_push(operators, r);
 		}
 	}
-	printf("\n");
+	if (dyn_array_count(operators) == 0) {
+		Range *r = range_create();
+		r->index = opening_index;
+		r->length = closing_index - opening_index;
+		dyn_array_push(postfix_ranges, r);
+		return;
+	}
+
+	printf("\n operators:\n");
 	dyn_array_print(operators, &range_with_priority_print);
 	dyn_array_sort_in_place(operators, &range_with_priority_compare_priority_desc);
 
@@ -525,12 +533,12 @@ DiceRollInstructionStack *dice_roll_instruction_stack_from_expression(char *expr
 	free(op_as_string);
 	op_as_string = NULL;
 
-	DynArray *instructions = instruction_stack->instructions;
-	for (size_t i = 0; i < dyn_array_count(instructions); i++) {
-		DiceRollInstruction *instruction = dyn_array_element_at_index(instructions, i);
-		printf("op type: %d\n", instruction->operation_type);
-		printf("op value: %lf\n", dice_roll_instruction_get_number(instruction->value));
-	}
+	// DynArray *instructions = instruction_stack->instructions;
+	// for (size_t i = 0; i < dyn_array_count(instructions); i++) {
+	// 	DiceRollInstruction *instruction = dyn_array_element_at_index(instructions, i);
+	// 	printf("op type: %d\n", instruction->operation_type);
+	// 	printf("op value: %lf\n", dice_roll_instruction_get_number(instruction->value));
+	// }
 
 	return instruction_stack;
 }
