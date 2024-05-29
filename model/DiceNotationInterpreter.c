@@ -73,7 +73,9 @@ DiceCollection * dice_collection_from_core_notation(char *notation) {
 	str_count = strtok(mutable_notation, separator);
 	str_faces = strtok(NULL, separator);
 	
-	return dice_collection_create(atoi(str_count), atoi(str_faces));
+    DiceCollection *dc = dice_collection_create(atoi(str_count), atoi(str_faces));
+    free(mutable_notation);
+    return dc;
 }
 
 DiceCollection * dice_collection_from_percentile_notation(char *notation) {
@@ -88,7 +90,9 @@ DiceCollection * dice_collection_from_percentile_notation(char *notation) {
 	char *str_count;
 	str_count = strtok(mutable_notation, percentile_indicator);
 	
-	return dice_collection_create(atoi(str_count), 100);
+    DiceCollection *dc = dice_collection_create(atoi(str_count), 100);
+    free(mutable_notation);
+    return dc;
 }
 
 DiceCollection * dice_collection_create_from_notation(char *notation) {

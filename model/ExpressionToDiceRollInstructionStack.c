@@ -349,9 +349,12 @@ Range *range_of_operand_moving_left(char *str, size_t start_index, size_t leftmo
 	Range *range = range_create();
 	bool have_found_operand = false;
 	bool have_found_end_of_operand = false;
-	size_t left_index;
-	size_t right_index;
-	if (start_index == 0) { return NULL; }
+	size_t left_index = leftmost_bound;
+	size_t right_index = start_index;
+    if (start_index == 0) {
+        range_free(range);
+        return NULL;
+    }
 	for (size_t i = start_index; i >= leftmost_bound; i--) {
 		
 		printf("i: %zu\n", i);
@@ -382,8 +385,8 @@ Range *range_of_operand_moving_right(char *str, size_t start_index, size_t right
 	Range *range = range_create();
 	bool have_found_operand = false;
 	bool have_found_end_of_operand = false;
-	size_t left_index;
-	size_t right_index;
+	size_t left_index = start_index;
+	size_t right_index = rightmost_bound;
 	for (size_t i = start_index; i <= rightmost_bound; i++) {
 		if (!have_found_operand && !char_is_inline_whitespace(str[i])) {
 			left_index = i;

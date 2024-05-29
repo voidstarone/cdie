@@ -184,6 +184,7 @@ DiceRollInstruction *dice_roll_instruction_from_string(char *string_representati
         case op_type_dice_collection:
             dc = dice_collection_create_from_notation(string_representation);
             if (dc == NULL) {
+                dice_roll_instruction_free(dri);
                 return NULL;
             }
             dri->value = dc;

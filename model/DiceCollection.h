@@ -37,8 +37,7 @@ void dice_collection_set_explosion_lower_bound(DiceCollection *dc, size_t lower_
 
 DiceCollectionResults * dice_collection_last_results(DiceCollection *dc);
 
-
-char * dice_collection_desc(DiceCollection *dc);
+char * dice_collection_desc(DiceCollection *dc, char *final_str);
 
 void dice_collection_free(DiceCollection *dc);
 

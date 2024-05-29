@@ -152,15 +152,13 @@ void dice_collection_free(DiceCollection *dc) {
 	dc = NULL;
 }
 
-char * dice_collection_desc(DiceCollection *dc) {
+char * dice_collection_desc(DiceCollection *dc, char *final_str) {
 	size_t die_count = dc->_size;
-	int die_faces = dc->num_faces;
-	char *out_str;
-	char out_str_start[30];
-	snprintf(out_str_start, 30, "DiceCollection(%d, %d){ ", die_faces, (int) die_count);
+	size_t die_faces = dc->num_faces;
+	snprintf(final_str, 30, "DiceCollection(%zu, %zu){ ", die_faces, die_count);
 	size_t die_index;
 	Die *current_die;
-	int last_result;
+	size_t last_result;
 	
 	// string length
 	size_t result_str_len_max = (die_count * 2) + 1;
@@ -171,25 +169,20 @@ char * dice_collection_desc(DiceCollection *dc) {
 		result_str_len_max += num_digits(last_result);
 	}
 	// Write string
-	out_str = malloc(sizeof(char) * result_str_len_max);
 	for(die_index = 0; die_index < die_count; ++die_index) {
 		current_die = dice_collection_die_at(dc, die_index);
 		last_result = die_last_result(current_die);
 		
-		size_t size = sizeof(out_str) + sizeof(result_str_index);
+		size_t size = sizeof(final_str) + sizeof(result_str_index);
 		if (die_index == (size_t) die_count-1) {
-			snprintf(out_str+result_str_index, size, "%d }", last_result);
+			snprintf(final_str+result_str_index, size, "%zu }", last_result);
 		} else {
-			snprintf(out_str+result_str_index, size, "%d, ", last_result);
+			snprintf(final_str+result_str_index, size, "%zu, ", last_result);
 		}
 		
 		result_str_index += (num_digits(last_result) + 2) * sizeof(char);
 	}
 	
-	size_t total_str_len = strlen(out_str_start) + result_str_len_max;
-	char *final_str = malloc(total_str_len * sizeof(char));
-	strcat(final_str, out_str_start);
-	strcat(final_str, out_str);
 	return final_str;
 }
 

@@ -29,7 +29,7 @@ size_t dice_collection_results_result_at(DiceCollectionResults *dcr, size_t inde
 void dice_collection_results_add(DiceCollectionResults *dcr, size_t result) {
 	if (dcr->count+1 >= dcr->size) {
 		size_t new_size = dcr->size * 1.25;
-		int *tmp_results_array = realloc(dcr->results_array, new_size * sizeof(size_t));
+		size_t *tmp_results_array = realloc(dcr->results_array, new_size * sizeof(size_t));
 		if (tmp_results_array == NULL) {
 			exit(1);
 		}
