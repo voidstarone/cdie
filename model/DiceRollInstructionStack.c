@@ -8,14 +8,14 @@
 #include "DiceRollInstructionStack.h"
 #include "DiceRollInstructionResultStack.h"
 
-DiceRollInstructionStack *dice_roll_instruction_stack_create() {
+DiceRollInstructionStack *dice_roll_instruction_stack_create(size_t size) {
 	DiceRollInstructionStack *dris = malloc(sizeof(DiceRollInstructionStack));
-	dris->instructions = dyn_array_create(8);
+	dris->instructions = dyn_array_create(size);
 	return dris;
 }
 
 void dice_roll_instruction_stack_free(DiceRollInstructionStack *dris) {
-	for (int i = dyn_array_count(dris->instructions) - 1; i > 0; --i) {
+	for (size_t i = dyn_array_count(dris->instructions) - 1; i > 0; --i) {
 		DiceRollInstruction *instruction = dyn_array_element_at_index(dris->instructions, i);
 		dice_roll_instruction_free(instruction);
 	}
@@ -59,7 +59,7 @@ DiceRollInstructionResult *dice_roll_instruction_stack_evaluate(DiceRollInstruct
 	DiceCollection *dc = NULL;
 	double d = -1;
 	DiceRollInstructionResult *drir = NULL;
-	DiceRollInstructionResultStack *drirs = dice_roll_instruction_result_stack_create();
+	DiceRollInstructionResultStack *drirs = dice_roll_instruction_result_stack_create(8);
 
 	while (dice_roll_instruction_stack_peek(dris)) {
 		dri = dice_roll_instruction_stack_pop(dris);

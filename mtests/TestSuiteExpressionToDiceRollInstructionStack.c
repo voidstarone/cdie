@@ -55,11 +55,11 @@ int test_suite_expression_to_dice_roll_instruction_stack(int(*init_suite)(void),
 	}
 	printf("%s\n", test_suite_name);
 
-	// if (NULL == CU_add_test(pSuite, "test_dice_roll_instruction_stack_from_expression_simple_maths", 
-    //     test_dice_roll_instruction_stack_from_expression_simple_maths)) {
-    //     CU_cleanup_registry();
-    //     return CU_get_error();
-    // }
+	if (NULL == CU_add_test(pSuite, "test_dice_roll_instruction_stack_from_expression_simple_maths", 
+        test_dice_roll_instruction_stack_from_expression_simple_maths)) {
+        CU_cleanup_registry();
+        return CU_get_error();
+    }
 
 	if (NULL == CU_add_test(pSuite, "test_dice_roll_instruction_stack_from_expression_simple_dice", 
         test_dice_roll_instruction_stack_from_expression_simple_dice)) {

@@ -453,6 +453,7 @@ void postfixify_part_expression_without_parens(
 	for (size_t i = 0; i < dyn_array_count(operators); i++) {
 		RangeWithPriority *operator = dyn_array_element_at_index(operators, i);
 		size_t operator_index = range_with_priority_get_index(operator);
+		printf("operator index: %zu\n", operator_index);
 		Range *range_left_operand = range_of_operand_moving_left(
 			expression, 
 			operator_index - 1, 
@@ -499,10 +500,10 @@ DiceRollInstructionStack *dice_roll_instruction_stack_from_expression(char *expr
 	size_t length = closing_index - opening_index;
 
 	postfixify_part_expression_without_parens(
-		postfix_ranges, 
-		expression, 
-		length, 
-		opening_index, 
+		postfix_ranges,
+		expression,
+		length,
+		opening_index,
 		closing_index
 	);
 	

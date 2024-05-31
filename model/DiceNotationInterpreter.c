@@ -11,7 +11,7 @@ bool is_digit(char c) {
 	return c >= '0' && c <= '9';
 }
 
-int extract_num_dice(int *num_dice, char *notation) {
+size_t extract_num_dice(size_t *num_dice, char *notation) {
     if (notation[0] == 'd') {
         *num_dice = 1;
         return 0;
@@ -29,12 +29,12 @@ int extract_num_dice(int *num_dice, char *notation) {
     return num_digits;
 }
 
-int is_dc_percentile(bool *is_percentile, char *notation, int start_index) {
+size_t is_dc_percentile(bool *is_percentile, char *notation, size_t start_index) {
     *is_percentile = notation[start_index] == '%';
     return start_index+1;
 }
 
-int extract_num_sides(int *num_sides, char *notation, int start_index) {
+size_t extract_num_sides(size_t *num_sides, char *notation, size_t start_index) {
     int num_digits = 0;
     while (is_digit(notation[num_digits+start_index]) && notation[num_digits+start_index] != 0) {
         ++num_digits;
@@ -44,12 +44,12 @@ int extract_num_sides(int *num_sides, char *notation, int start_index) {
     return start_index+num_digits;
 }
 
-int does_dc_explode(bool *does_explode, char *notation, int start_index) {
+size_t does_dc_explode(bool *does_explode, char *notation, int start_index) {
     *does_explode = notation[start_index] == '!';
     return start_index+1;
 }
 
-int extract_explodes_at(int *explodes_at, char *notation, int start_index) {
+size_t extract_explodes_at(size_t *explodes_at, char *notation, size_t start_index) {
     int num_digits = 0;
     while (is_digit(notation[num_digits]) && notation[num_digits] != 0) {
         ++num_digits;
@@ -97,13 +97,13 @@ DiceCollection * dice_collection_from_percentile_notation(char *notation) {
 
 DiceCollection * dice_collection_create_from_notation(char *notation) {
 	
-	int num_dice = 0, 
+    size_t num_dice = 0,
     num_sides = 0,
     explodes_at = 0,
     len_notation = strlen(notation);
     
     bool is_percentile, does_explode;
-    int next_index = extract_num_dice(&num_dice, notation);
+    size_t next_index = extract_num_dice(&num_dice, notation);
     if (num_dice == 0) return NULL;
     next_index = is_dc_percentile(&is_percentile, notation, next_index);
     if (is_percentile) {

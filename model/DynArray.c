@@ -86,12 +86,11 @@ void *dyn_array_pop(DynArray *a) {
 }
 
 void *dyn_array_element_at_index(DynArray *a, size_t index) {
-	size_t real_index = index < 0 ? a->used - index : index;
-	if (real_index > a->used) {
-		printf("WARNING: dyn_array(%p) index(%ld -> %ld) out of bounds. Size=%ld, Used=%ld\n", a, index, real_index, a->size, a->used);
+	if (index > a->used) {
+		//printf("WARNING: dyn_array(%p) index(%zu -> %zu) out of bounds. Size=%zu, Used=%zu\n", a, index, a->size, a->used);
 		return NULL;
 	}
-	return a->array[real_index];
+	return a->array[index];
 }
 
 void dyn_array_set_element_at_index(DynArray *a, size_t index, void *new_element) {

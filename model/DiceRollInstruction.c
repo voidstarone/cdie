@@ -41,6 +41,7 @@ bool dice_roll_instruction_is_equal(DiceRollInstruction *dri1, DiceRollInstructi
 }
 
 void dice_roll_instruction_free(DiceRollInstruction *dri) {
+    if (dri == NULL) return;
     if (dri->value != NULL) {
         free(dri->value);
     }

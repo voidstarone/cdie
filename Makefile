@@ -33,13 +33,6 @@ TOFILES= $(ODIR)/TestSuiteDynArray.o \
 	$(ODIR)/TestSuiteDiceRollInstruction.o \
 	$(ODIR)/TestSuiteDiceRollInstructionStack.o \
 	$(ODIR)/TestSuiteExpressionToDiceRollInstructionStack.o 
-	
-
-test: $(BDIR)/testdie $(MOFILES) $(TOFILES)
-	bin/testdie
-
-debugtest: $(BDIR)/testdie $(MOFILES) $(TOFILES)
-	lldb bin/testdie
 
 # Model Tests
 	
@@ -82,6 +75,12 @@ $(ODIR)/TestSuiteDynArray.o: $(ODIR)/DynArray.o
 # CLI
 build: $(MOFILES) $(CLIFILES) 
 	$(CCF) -o $(BDIR)/roll $(UDIR)/main.c $(MOFILES) $(CLIFILES) 
+
+test: $(BDIR)/testdie $(MOFILES) $(TOFILES)
+	bin/testdie
+
+debugtest: $(BDIR)/testdie $(MOFILES) $(TOFILES)
+	lldb bin/testdie
 	
 # will need  -largp 
 
