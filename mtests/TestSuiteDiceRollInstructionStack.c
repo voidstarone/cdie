@@ -81,8 +81,8 @@ void test_dice_roll_instruction_stack_evaluate_subtract_two_ints() {
 	DiceRollInstruction *dri_subtract = dice_roll_instruction_from_string("-");
 	
 	dice_roll_instruction_stack_push(dris, dri_subtract);
-	dice_roll_instruction_stack_push(dris, dri_num1);
 	dice_roll_instruction_stack_push(dris, dri_num2);
+	dice_roll_instruction_stack_push(dris, dri_num1);
 
 	DiceRollInstructionResult *drir = dice_roll_instruction_stack_evaluate(dris);
 
@@ -115,8 +115,8 @@ void test_dice_roll_instruction_stack_evaluate_divide_two_ints() {
 	DiceRollInstruction *dri_divide = dice_roll_instruction_from_string("/");
 
 	dice_roll_instruction_stack_push(dris, dri_divide);
-	dice_roll_instruction_stack_push(dris, dri_num1);
 	dice_roll_instruction_stack_push(dris, dri_num2);
+	dice_roll_instruction_stack_push(dris, dri_num1);
 
 	DiceRollInstructionResult *drir = dice_roll_instruction_stack_evaluate(dris);
 

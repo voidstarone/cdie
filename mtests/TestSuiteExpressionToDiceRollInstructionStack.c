@@ -11,6 +11,28 @@
 #include "TestSuiteDiceRollInstructionStack.h"
 
 
+void test_dice_roll_instruction_stack_from_expression_subtract() {
+	
+	char exp[] = "10 - 2";
+	
+	DiceRollInstructionStack *dris = dice_roll_instruction_stack_from_expression(exp);
+
+	CU_ASSERT_EQUAL(dyn_array_count(dris->instructions), 3);
+	DiceRollInstruction *instruction1 = dyn_array_element_at_index(dris->instructions, 2);
+	CU_ASSERT_EQUAL(instruction1->operation_type, op_type_number);
+	CU_ASSERT_EQUAL(dice_roll_instruction_get_number(instruction1), 10);
+	DiceRollInstruction *instruction2 = dyn_array_element_at_index(dris->instructions, 1);
+	CU_ASSERT_EQUAL(instruction2->operation_type, op_type_number);
+	CU_ASSERT_EQUAL(dice_roll_instruction_get_number(instruction2), 2);
+	DiceRollInstruction *instruction3 = dyn_array_element_at_index(dris->instructions, 0);
+	CU_ASSERT_EQUAL(instruction3->operation_type, op_type_subtract);
+	
+	DiceRollInstructionResult* result = dice_roll_instruction_stack_evaluate(dris);
+	CU_ASSERT_EQUAL(dice_roll_instruction_result_get_number(result), 8);
+
+	dice_roll_instruction_stack_free(dris);
+}
+
 void test_dice_roll_instruction_stack_from_expression_divide() {
 	
 	char exp[] = "10 / 2";
@@ -26,6 +48,10 @@ void test_dice_roll_instruction_stack_from_expression_divide() {
 	CU_ASSERT_EQUAL(dice_roll_instruction_get_number(instruction2), 2);
 	DiceRollInstruction *instruction3 = dyn_array_element_at_index(dris->instructions, 0);
 	CU_ASSERT_EQUAL(instruction3->operation_type, op_type_divide);
+	
+	DiceRollInstructionResult* result = dice_roll_instruction_stack_evaluate(dris);
+	CU_ASSERT_EQUAL(dice_roll_instruction_result_get_number(result), 5.0);
+
 	dice_roll_instruction_stack_free(dris);
 }
 
@@ -108,6 +134,12 @@ int test_suite_expression_to_dice_roll_instruction_stack(int(*init_suite)(void),
 		return CU_get_error();
 	}
 	printf("%s\n", test_suite_name);
+
+	if (NULL == CU_add_test(pSuite, "test_dice_roll_instruction_stack_from_expression_subtract", 
+        test_dice_roll_instruction_stack_from_expression_subtract)) {
+        CU_cleanup_registry();
+        return CU_get_error();
+    }
 
 	if (NULL == CU_add_test(pSuite, "test_dice_roll_instruction_stack_from_expression_divide", 
         test_dice_roll_instruction_stack_from_expression_divide)) {

@@ -16,9 +16,9 @@
 
 
 DiceRollInstructionResult * (*ops[7]) (DiceRollInstructionResultStack *);
-void setup_ops(void);
+void setup_ops();
 
-DiceRollInstruction *dice_roll_instruction_create(void) {
+DiceRollInstruction *dice_roll_instruction_create() {
     DiceRollInstruction *dri = malloc(sizeof(DiceRollInstruction));
     dri->value = NULL;
     return dri;
@@ -224,7 +224,7 @@ DiceRollInstructionResult *op_subtract(DiceRollInstructionResultStack *argv) {
     double num1, num2;
     num1 = dice_roll_instruction_result_get_number(arg1);
     num2 = dice_roll_instruction_result_get_number(arg2);
-    DiceRollInstructionResult *result = dice_roll_instruction_result_with_double(num1 - num2);
+    DiceRollInstructionResult *result = dice_roll_instruction_result_with_double(num2 - num1);
     dice_roll_instruction_result_free(arg1);
     dice_roll_instruction_result_free(arg2);
     return result;
@@ -248,7 +248,7 @@ DiceRollInstructionResult *op_divide(DiceRollInstructionResultStack *argv) {
     double num1, num2;
     num1 = dice_roll_instruction_result_get_number(arg1);
     num2 = dice_roll_instruction_result_get_number(arg2);
-    DiceRollInstructionResult *result = dice_roll_instruction_result_with_double(num1 / num2);
+    DiceRollInstructionResult *result = dice_roll_instruction_result_with_double(num2 / num1);
     dice_roll_instruction_result_free(arg1);
     dice_roll_instruction_result_free(arg2);
     return result;
