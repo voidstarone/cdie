@@ -28,7 +28,6 @@ bool is_arg_operator(char *arg) {
 	return is_plus || is_minus || is_star || is_slash;
 }
 
-// Function to parse a single option
 static error_t parse_opt(int key, char *arg, struct argp_state *state) {
     roll_arguments *arguments = state->input;
     switch (key) {
@@ -39,7 +38,6 @@ static error_t parse_opt(int key, char *arg, struct argp_state *state) {
             arguments->successes_at = atoll(arg);
             break;
         case ARGP_KEY_ARG:
-            // Handle non-option arguments
             arguments->args = realloc(arguments->args, sizeof(char*) * (arguments->arg_count + 1));
             arguments->args[arguments->arg_count] = arg;
             arguments->arg_count++;
@@ -52,7 +50,6 @@ static error_t parse_opt(int key, char *arg, struct argp_state *state) {
     return 0;
 }
 
-// Argp parser
 static struct argp argp = {options, parse_opt, 0, 0};
 
 int main (int argc, char **argv) {
@@ -112,6 +109,9 @@ int main (int argc, char **argv) {
 	printf("\n");
 
 	dice_rolling_session_free(drs);
+	if (expression != NULL) {
+		free(expression);
+	}
 	free(arguments.args);
 	return 0;
 }
