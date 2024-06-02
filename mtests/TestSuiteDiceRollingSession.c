@@ -5,7 +5,7 @@
 void test_dice_rolling_session_resolve_notation_simple_dice() {
     DiceRollingSession *drs = dice_rolling_session_create();
 
-    
+    dice_rolling_session_free(drs);
 }
 
 int test_suite_dice_rolling_session( int(*init_suite)(void), int(*clean_suite)(void)  ) {

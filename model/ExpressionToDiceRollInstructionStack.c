@@ -438,7 +438,7 @@ void postfixify_part_expression_without_parens(
 
 	// printf("\n operators:\n");
 	// dyn_array_print(operators, &range_with_priority_print);
-	// dyn_array_sort_in_place(operators, &range_with_priority_compare_priority_desc);
+	dyn_array_sort_in_place(operators, &range_with_priority_compare_priority_desc);
 
 	// for (size_t i = 0; i < dyn_array_count(operators); i++) {
 	// 	if (i != 0) {
