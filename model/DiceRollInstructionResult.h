@@ -17,7 +17,7 @@ typedef struct _DieRollInstructionResult {
 
 
 void dice_roll_instruction_result_free(DiceRollInstructionResult *drir);
-DiceRollInstructionResult *dice_roll_instruction_result_create();
+DiceRollInstructionResult *dice_roll_instruction_result_create(void);
 DiceRollInstructionResult *dice_roll_instruction_result_with_double(double value);
 double dice_roll_instruction_result_value_as_double(DiceRollInstructionResult *drir);
 DiceRollInstructionResult *dice_roll_instruction_result_with_dice_collection(DiceCollection *dc);

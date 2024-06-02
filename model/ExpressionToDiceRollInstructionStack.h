@@ -1,0 +1,8 @@
+#include "DiceRollInstructionStack.h"
+
+#ifndef EXPRESSION_TO_DICE_ROLL_INSTRUCTION_STACK_H_FA033981
+#define EXPRESSION_TO_DICE_ROLL_INSTRUCTION_STACK_H_FA033981
+
+DiceRollInstructionStack *dice_roll_instruction_stack_from_expression(char *expression);
+
+#endif

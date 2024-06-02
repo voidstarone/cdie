@@ -15,9 +15,9 @@ void test_roll_returns_reasonable_result() {
 void test_die_saves_result() {
 	Die *d = die_create(6);
 	
-	int result = die_roll(d);
+	size_t result = die_roll(d);
 	
-	CU_ASSERT(result == die_last_result(d));
+	CU_ASSERT_EQUAL(result, die_last_result(d));
 }
 
 void test_die_roll_returns_random_results() {

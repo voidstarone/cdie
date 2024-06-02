@@ -16,9 +16,9 @@
 
 
 DiceRollInstructionResult * (*ops[7]) (DiceRollInstructionResultStack *);
-void setup_ops();
+void setup_ops(void);
 
-DiceRollInstruction *dice_roll_instruction_create() {
+DiceRollInstruction *dice_roll_instruction_create(void) {
     DiceRollInstruction *dri = malloc(sizeof(DiceRollInstruction));
     dri->value = NULL;
     return dri;
@@ -41,10 +41,12 @@ bool dice_roll_instruction_is_equal(DiceRollInstruction *dri1, DiceRollInstructi
 }
 
 void dice_roll_instruction_free(DiceRollInstruction *dri) {
+    if (dri == NULL) return;
     if (dri->value != NULL) {
         free(dri->value);
     }
     free(dri);
+    dri = NULL;
 }
 
 bool true_if_regex_match(char *regex_str, char *string_rep) {
@@ -135,6 +137,10 @@ void dice_roll_instruction_set_operation_type(DiceRollInstruction *dri, Operatio
 }
 
 double dice_roll_instruction_get_number(DiceRollInstruction *dri) {
+    if (dri == NULL) {
+        printf("NULL dri access in dice_roll_instruction_get_number");
+        return -1;
+    }
     if (dri->operation_type == op_type_number) {
         double *dbl_ptr = dri->value;
         return *dbl_ptr;
@@ -179,6 +185,7 @@ DiceRollInstruction *dice_roll_instruction_from_string(char *string_representati
         case op_type_dice_collection:
             dc = dice_collection_create_from_notation(string_representation);
             if (dc == NULL) {
+                dice_roll_instruction_free(dri);
                 return NULL;
             }
             dri->value = dc;
@@ -269,7 +276,7 @@ DiceRollInstructionResult *op_max(DiceRollInstructionResultStack *argv) {
     return result;
 }
 
-void setup_ops() {
+void setup_ops(void) {
     ops[(int) op_type_add] = op_add;
     ops[(int) op_type_subtract] = op_subtract;
     ops[(int) op_type_multiply] = op_multiply;

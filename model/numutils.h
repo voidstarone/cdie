@@ -2,6 +2,8 @@
 #define NUMUTIS_RATBUM
 
 
-int num_digits(int start);
+size_t num_digits(size_t start);
+
+int count_decimals(const double val);
 
 #endif

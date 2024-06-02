@@ -9,7 +9,7 @@ typedef struct {
 	DynArray *results;
 } DiceRollInstructionResultStack;
 
-DiceRollInstructionResultStack *dice_roll_instruction_result_stack_create();
+DiceRollInstructionResultStack *dice_roll_instruction_result_stack_create(size_t size);
 void dice_roll_instruction_result_stack_free(DiceRollInstructionResultStack *drirs);
 
 void dice_roll_instruction_result_stack_push(DiceRollInstructionResultStack *drirs, DiceRollInstructionResult *drir);

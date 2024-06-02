@@ -23,6 +23,7 @@ void test_die_factory_create_dice() {
 	{
 		die_free(dice[i]);
 	}
+	free(dice);
 }
 
 int test_suite_die_factory (int(*init_suite)(void), int(*clean_suite)(void) ) {
