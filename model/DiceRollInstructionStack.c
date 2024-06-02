@@ -10,14 +10,17 @@
 
 DiceRollInstructionStack *dice_roll_instruction_stack_create(size_t size) {
 	DiceRollInstructionStack *dris = malloc(sizeof(DiceRollInstructionStack));
-	dris->instructions = dyn_array_create(size);
+	dris->instructions = dyn_array_create(size == 0 ? 1 : size);
 	return dris;
 }
 
 void dice_roll_instruction_stack_free(DiceRollInstructionStack *dris) {
-	for (size_t i = dyn_array_count(dris->instructions) - 1; i > 0; --i) {
-		DiceRollInstruction *instruction = dyn_array_element_at_index(dris->instructions, i);
-		dice_roll_instruction_free(instruction);
+	size_t count = dyn_array_count(dris->instructions);
+	if (count > 0) {
+		for (size_t i = count - 1; i > 0; --i) {
+			DiceRollInstruction *instruction = dyn_array_element_at_index(dris->instructions, i);
+			dice_roll_instruction_free(instruction);
+		}
 	}
 	dyn_array_free(dris->instructions);
 	free(dris);
@@ -36,7 +39,7 @@ DiceRollInstruction * dice_roll_instruction_stack_pop(DiceRollInstructionStack *
 	return dyn_array_pop(dris->instructions);
 }
 
-DiceRollInstruction * dice_roll_instruction_stack_instruction_at(DiceRollInstructionStack *dris, int index) {
+DiceRollInstruction * dice_roll_instruction_stack_instruction_at(DiceRollInstructionStack *dris, size_t index) {
 	return dyn_array_element_at_index(dris->instructions, index);
 }
 

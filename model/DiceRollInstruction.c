@@ -16,9 +16,9 @@
 
 
 DiceRollInstructionResult * (*ops[7]) (DiceRollInstructionResultStack *);
-void setup_ops();
+void setup_ops(void);
 
-DiceRollInstruction *dice_roll_instruction_create() {
+DiceRollInstruction *dice_roll_instruction_create(void) {
     DiceRollInstruction *dri = malloc(sizeof(DiceRollInstruction));
     dri->value = NULL;
     return dri;
@@ -276,7 +276,7 @@ DiceRollInstructionResult *op_max(DiceRollInstructionResultStack *argv) {
     return result;
 }
 
-void setup_ops() {
+void setup_ops(void) {
     ops[(int) op_type_add] = op_add;
     ops[(int) op_type_subtract] = op_subtract;
     ops[(int) op_type_multiply] = op_multiply;

@@ -54,7 +54,7 @@ void free_operator_with_location(OperatorWithLocation *op) {
 	op = NULL;
 }
 
-Range *range_create() {
+Range *range_create(void) {
 	return malloc(sizeof(Range));
 }
 
@@ -83,7 +83,7 @@ typedef struct {
 	int priority;
 } RangeWithPriority;
 
-RangeWithPriority *range_with_priority_create() {
+RangeWithPriority *range_with_priority_create(void) {
 	RangeWithPriority *r = malloc(sizeof(RangeWithPriority));
 	r->range = range_create();
 	if (r->range == NULL) {
@@ -151,8 +151,7 @@ bool range_compare(void *r1, void *r2) {
 }
 
 void range_print(void *r) {
-	Range *range = r;
-	printf("Range{index:%zu, length:%zu}", range->index, range->length);
+	printf("Range{index:%zu, length:%zu}", range_get_index(r), range_get_length(r));
 }
 
 DynArray *split_string(char *str, const char *delimiter) {
@@ -454,14 +453,16 @@ void postfixify_part_expression_without_parens(
 		RangeWithPriority *operator = dyn_array_element_at_index(operators, i);
 		size_t operator_index = range_with_priority_get_index(operator);
 		printf("operator index: %zu\n", operator_index);
-		Range *range_left_operand = range_of_operand_moving_left(
-			expression, 
-			operator_index - 1, 
-			opening_index
-		);
-		if (range_left_operand != NULL) {
-			if (!dyn_array_contains(postfix_ranges, &range_compare, range_left_operand)) {
-				dyn_array_push(postfix_ranges, range_left_operand);
+		if (operator_index > 0) {
+			Range *range_left_operand = range_of_operand_moving_left(
+				expression, 
+				operator_index - 1, 
+				opening_index
+			);
+			if (range_left_operand != NULL) {
+				if (!dyn_array_contains(postfix_ranges, &range_compare, range_left_operand)) {
+					dyn_array_push(postfix_ranges, range_left_operand);
+				}
 			}
 		}
 		Range *range_right_operand = range_of_operand_moving_right(
@@ -525,12 +526,16 @@ DiceRollInstructionStack *dice_roll_instruction_stack_from_expression(char *expr
 	for (size_t i = 0; i < dyn_array_count(postfix_ranges); i++) {
 		Range *range = dyn_array_element_at_index(postfix_ranges, i);
 		size_t range_start = range_get_index(range);
+		printf("length: %zu\n", range_get_length(range));
 		size_t op_strlen = range_get_length(range) + 1;
 		if (op_strlen > max_op_length) {
 			op_as_string = realloc(op_as_string, sizeof(char) * op_strlen);
 			max_op_length = op_strlen;
 		}
+		printf("exp: %s\nrange_start: %zu\nop_strlen:%zu\n", expression, range_start, op_strlen);
+
 		copy_range_to_string(op_as_string, expression, range_start, op_strlen);
+
 		DiceRollInstruction *instrucion = dice_roll_instruction_from_string(op_as_string);
 		dice_roll_instruction_stack_push(instruction_stack, instrucion);
 	}

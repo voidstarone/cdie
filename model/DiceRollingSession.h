@@ -9,7 +9,7 @@ typedef struct {
 	// bool single_digit_d10s;
 } DiceRollingSession;
 
-DiceRollingSession * dice_rolling_session_init();
+DiceRollingSession * dice_rolling_session_init(void);
 
 char * dice_rolling_session_resolve_notation(DiceRollingSession *drs, 
 	char *notation);

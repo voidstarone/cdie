@@ -15,9 +15,12 @@ DiceRollInstructionResultStack *dice_roll_instruction_result_stack_create(size_t
 }
 
 void dice_roll_instruction_result_stack_free(DiceRollInstructionResultStack *dris) {
-	for (size_t i = dyn_array_count(dris->results) - 1; i > 0; --i) {
-		DiceRollInstructionResult *result = dyn_array_element_at_index(dris->results, i);
-		dice_roll_instruction_result_free(result);
+	size_t count = dyn_array_count(dris->results);
+	if (count > 0) {
+		for (size_t i = count - 1; i > 0; --i) {
+			DiceRollInstructionResult *result = dyn_array_element_at_index(dris->results, i);
+			dice_roll_instruction_result_free(result);
+		}
 	}
 	dyn_array_free(dris->results);
 	free(dris);

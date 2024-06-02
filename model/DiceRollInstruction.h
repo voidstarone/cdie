@@ -24,7 +24,7 @@ typedef struct _DieRollInstruction {
 	ResultType expected_result_type;
 } DiceRollInstruction;
 
-DiceRollInstruction *dice_roll_instruction_create();
+DiceRollInstruction *dice_roll_instruction_create(void);
 void dice_roll_instruction_free(DiceRollInstruction *dri);
 DiceRollInstruction *dice_roll_instruction_clone(DiceRollInstruction *original);
 bool dice_roll_instruction_is_equal(DiceRollInstruction *dri1, DiceRollInstruction *dri2);

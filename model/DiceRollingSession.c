@@ -5,7 +5,7 @@
 #include "DiceRollingSession.h"
 #include "DiceDoodads.h"
 
-DiceRollingSession * dice_rolling_session_init() {
+DiceRollingSession * dice_rolling_session_init(void) {
 	DiceRollingSession *drs = malloc(sizeof(DiceRollingSession));
 	// drs->single_digit_d10s = false;
 	return drs;

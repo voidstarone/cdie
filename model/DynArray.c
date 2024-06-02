@@ -45,6 +45,9 @@ DynArray *dyn_array_create(size_t initial_size) {
 	}
 	a->used = 0;
 	a->size = initial_size;
+	for (size_t i = 0; i < initial_size; i++) {
+		a->array[i] = NULL;
+	}
 	return a;
 }
 

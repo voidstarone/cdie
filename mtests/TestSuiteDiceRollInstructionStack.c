@@ -12,12 +12,16 @@
 
 
 void test_dice_roll_instruction_stack_create() {
-	DiceRollInstructionStack *dris = dice_roll_instruction_stack_create(0);
+	printf("test_dice_roll_instruction_stack_create\n");
+	DiceRollInstructionStack *dris = dice_roll_instruction_stack_create(1);
+
 	CU_ASSERT_PTR_NOT_NULL(dris);
 	dice_roll_instruction_stack_free(dris);
 }
 
 void test_dice_roll_instruction_stack_push() {
+	printf("test_dice_roll_instruction_stack_push\n");
+
 	DiceRollInstructionStack *dris = dice_roll_instruction_stack_create(1);
 	DiceRollInstruction *dri1 = dice_roll_instruction_from_string("max");
 	dice_roll_instruction_stack_push(dris, dri1);
@@ -29,6 +33,8 @@ void test_dice_roll_instruction_stack_push() {
 }
 
 void test_dice_roll_instruction_stack_pop() {
+	printf("test_dice_roll_instruction_stack_pop\n");
+
 	DiceRollInstructionStack *dris = dice_roll_instruction_stack_create(1);
 	DiceRollInstruction *dri1 = dice_roll_instruction_from_string("max");
 	dice_roll_instruction_stack_push(dris, dri1);
@@ -40,9 +46,10 @@ void test_dice_roll_instruction_stack_pop() {
 }
 
 void test_dice_roll_instruction_stack_evaluate_dice_collection() {
+	printf("test_dice_roll_instruction_stack_evaluate_dice_collection\n");
+	
 	DiceRollInstructionStack *dris = dice_roll_instruction_stack_create(1);
 	DiceRollInstruction *dri_dc = dice_roll_instruction_from_string("10d20");
-
 	dice_roll_instruction_stack_push(dris, dri_dc);
 
 	DiceRollInstructionResult *drir = dice_roll_instruction_stack_evaluate(dris);
@@ -50,10 +57,13 @@ void test_dice_roll_instruction_stack_evaluate_dice_collection() {
 	DiceCollection *real_result = dice_roll_instruction_result_get_dice_collection(drir);
 	CU_ASSERT_EQUAL(dice_collection_count(real_result), 10);
 	CU_ASSERT_EQUAL(dice_collection_faces(real_result), 20);
+
 	dice_roll_instruction_stack_free(dris);
 }
 
 void test_dice_roll_instruction_stack_evaluate_add_two_ints() {
+	printf("test_dice_roll_instruction_stack_evaluate_add_two_ints\n");
+
 	DiceRollInstructionStack *dris = dice_roll_instruction_stack_create(3);
 	DiceRollInstruction *dri_num1 = dice_roll_instruction_from_string("1");
 	DiceRollInstruction *dri_num2 = dice_roll_instruction_from_string("2");
@@ -71,6 +81,9 @@ void test_dice_roll_instruction_stack_evaluate_add_two_ints() {
 }
 
 void test_dice_roll_instruction_stack_evaluate_subtract_two_ints() {
+
+	printf("test_dice_roll_instruction_stack_evaluate_subtract_two_ints\n");
+
 	DiceRollInstructionStack *dris = dice_roll_instruction_stack_create(3);
 	DiceRollInstruction *dri_num1 = dice_roll_instruction_from_string("109");
 	DiceRollInstruction *dri_num2 = dice_roll_instruction_from_string("9");
@@ -88,6 +101,9 @@ void test_dice_roll_instruction_stack_evaluate_subtract_two_ints() {
 }
 
 void test_dice_roll_instruction_stack_evaluate_multiply_two_ints() {
+	printf("test_dice_roll_instruction_stack_evaluate_multiply_two_ints\n");
+
+
 	DiceRollInstructionStack *dris = dice_roll_instruction_stack_create(3);
 	DiceRollInstruction *dri_num1 = dice_roll_instruction_from_string("7");
 	DiceRollInstruction *dri_num2 = dice_roll_instruction_from_string("8");
@@ -105,6 +121,8 @@ void test_dice_roll_instruction_stack_evaluate_multiply_two_ints() {
 }
 
 void test_dice_roll_instruction_stack_evaluate_divide_two_ints() {
+	printf("test_dice_roll_instruction_stack_evaluate_divide_two_ints\n");
+
 	DiceRollInstructionStack *dris = dice_roll_instruction_stack_create(3);
 	DiceRollInstruction *dri_num1 = dice_roll_instruction_from_string("101");
 	DiceRollInstruction *dri_num2 = dice_roll_instruction_from_string("2");
@@ -122,6 +140,8 @@ void test_dice_roll_instruction_stack_evaluate_divide_two_ints() {
 }
 
 void test_dice_roll_instruction_stack_evaluate_max_dice_collection() {
+	printf("test_dice_roll_instruction_stack_evaluate_max_dice_collection\n");
+
 	DiceRollInstructionStack *dris = dice_roll_instruction_stack_create(1);
 	DiceRollInstruction *max = dice_roll_instruction_from_string("max");
 	DiceRollInstruction *dri_dc = dice_roll_instruction_from_string("4d6");
@@ -141,6 +161,8 @@ void test_dice_roll_instruction_stack_evaluate_max_dice_collection() {
 }
 
 void test_dice_roll_instruction_stack_evaluate_add_num_to_dc() {
+	printf("test_dice_roll_instruction_stack_evaluate_add_num_to_dc\n");
+
 	DiceRollInstructionStack *dris = dice_roll_instruction_stack_create(3);
 	DiceRollInstruction *add = dice_roll_instruction_from_string("+");
 	DiceRollInstruction *num10 = dice_roll_instruction_from_string("10");
@@ -160,6 +182,8 @@ void test_dice_roll_instruction_stack_evaluate_add_num_to_dc() {
 }
 
 void test_dice_roll_instruction_stack_evaluate_add_dc_to_dc() {
+	printf("test_dice_roll_instruction_stack_evaluate_add_dc_to_dc\n");
+
 	DiceRollInstructionStack *dris = dice_roll_instruction_stack_create(3);
 	DiceRollInstruction *add = dice_roll_instruction_from_string("+");
 	DiceRollInstruction *dri_dc1 = dice_roll_instruction_from_string("6d6");
@@ -182,6 +206,7 @@ void test_dice_roll_instruction_stack_evaluate_add_dc_to_dc() {
 
 
 void test_dice_roll_instruction_stack_evaluate_add_three_ints() {
+	printf("test_dice_roll_instruction_stack_evaluate_add_three_ints\n");
 	DiceRollInstructionStack *dris = dice_roll_instruction_stack_create(5);
 	DiceRollInstruction *dri_add1 = dice_roll_instruction_from_string("+");
 	DiceRollInstruction *dri_add2 = dice_roll_instruction_from_string("+");
@@ -205,21 +230,25 @@ void test_dice_roll_instruction_stack_evaluate_add_three_ints() {
 
 
 void test_dice_roll_instruction_stack_evaluate_multiply_then_add_three_ints() {
+	printf("new\n");
 	DiceRollInstructionStack *dris = dice_roll_instruction_stack_create(5);
+	printf("init\n");
 
 	DiceRollInstruction *dri_multiply = dice_roll_instruction_from_string("*");
 	DiceRollInstruction *dri_add = dice_roll_instruction_from_string("+");
 	DiceRollInstruction *dri_num9 = dice_roll_instruction_from_string("9");
 	DiceRollInstruction *dri_num10 = dice_roll_instruction_from_string("10");
 	DiceRollInstruction *dri_num1 = dice_roll_instruction_from_string("1");
+	printf("push\n");
 
 	dice_roll_instruction_stack_push(dris, dri_add);
 	dice_roll_instruction_stack_push(dris, dri_num1);
 	dice_roll_instruction_stack_push(dris, dri_multiply);
 	dice_roll_instruction_stack_push(dris, dri_num10);
 	dice_roll_instruction_stack_push(dris, dri_num9);
-
+	printf("evaluate\n");
 	DiceRollInstructionResult *drir = dice_roll_instruction_stack_evaluate(dris);
+	printf("done\n");
 
 	double real_result = dice_roll_instruction_result_get_number(drir);
 	CU_ASSERT_EQUAL(real_result, (double) 91);
@@ -234,6 +263,7 @@ int test_suite_dice_roll_instruction_stack(int(*init_suite)(void), int(*clean_su
 		return CU_get_error();
 	}
 	printf("%s\n", test_suite_name);
+
 
 	if (NULL == CU_add_test(pSuite, "dice_roll_instruction_stack_create",
 		test_dice_roll_instruction_stack_create)) {
@@ -282,6 +312,7 @@ int test_suite_dice_roll_instruction_stack(int(*init_suite)(void), int(*clean_su
 		CU_cleanup_registry();
 		return CU_get_error();
 	}
+		
 	if (NULL == CU_add_test(pSuite, "test_dice_roll_instruction_stack_evaluate_max_dice_collection",
 		test_dice_roll_instruction_stack_evaluate_max_dice_collection)) {
 		CU_cleanup_registry();

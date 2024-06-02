@@ -6,7 +6,7 @@
 #include "DiceCollection.h"
 #include "DiceRollInstructionResult.h"
 
-DiceRollInstructionResult *dice_roll_instruction_result_create() {
+DiceRollInstructionResult *dice_roll_instruction_result_create(void) {
     DiceRollInstructionResult *drir = malloc(sizeof(DiceRollInstructionResult));
     if (drir == NULL) {
         return NULL;
@@ -16,7 +16,7 @@ DiceRollInstructionResult *dice_roll_instruction_result_create() {
     return drir;
 }
 
-DiceRollInstructionResult *dice_roll_instruction_result_init() {
+DiceRollInstructionResult *dice_roll_instruction_result_init(void) {
     DiceRollInstructionResult *drir = malloc(sizeof(DiceRollInstructionResult));
     drir->result_value = NULL;
     drir->type = result_type_void;
