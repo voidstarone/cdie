@@ -130,7 +130,7 @@ void test_dice_roll_instruction_stack_evaluate_max_dice_collection() {
 	DiceRollInstruction *max = dice_roll_instruction_from_string("max");
 	DiceRollInstruction *dri_dc = dice_roll_instruction_from_string("4d6");
 
-	size_t *results = malloc(sizeof(size_t) * 4);
+	long long int *results = malloc(sizeof(size_t) * 4);
 	results[0] = 1; results[1] = 5; results[2] = 3; results[3] = 2;
 	dice_collection_set_results(dri_dc->value, results);
 
