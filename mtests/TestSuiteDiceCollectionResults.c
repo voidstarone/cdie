@@ -40,9 +40,7 @@ void test_dice_collection_results_get_array() {
 	
 	size_t results_array[10] = {0};
 	dice_collection_results_as_array(dcr, results_array);
-	
-	size_t count = dice_collection_results_count(dcr);
-	
+		
 	CU_ASSERT_EQUAL(results_array[0], 4);
 	CU_ASSERT_EQUAL(results_array[1], 10);
 	CU_ASSERT_EQUAL(results_array[2], 20);

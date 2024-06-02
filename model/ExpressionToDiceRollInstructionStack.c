@@ -356,7 +356,7 @@ Range *range_of_operand_moving_left(char *str, size_t start_index, size_t leftmo
     }
 	for (size_t i = start_index; i >= leftmost_bound; i--) {
 		
-		printf("i: %zu\n", i);
+		// printf("i: %zu\n", i);
 		if (!have_found_operand && !char_is_inline_whitespace(str[i])) {
 			right_index = i;
 			have_found_operand = true;
@@ -418,7 +418,7 @@ void postfixify_part_expression_without_parens(
 	// printf("opening_index: %ld, length: %ld\n", opening_index, length);
 	for (size_t i = opening_index; i < closing_index; i++) {
 		char c = expression[i];
-		printf("%c", c);
+		// printf("%c", c);
 		if (is_operator(c)) {
 			RangeWithPriority *r = range_with_priority_create();
 			range_with_priority_set_index(r, i);
@@ -427,6 +427,7 @@ void postfixify_part_expression_without_parens(
 			dyn_array_push(operators, r);
 		}
 	}
+	// printf("\n");
 	if (dyn_array_count(operators) == 0) {
 		Range *r = range_create();
 		r->index = opening_index;
@@ -435,24 +436,24 @@ void postfixify_part_expression_without_parens(
 		return;
 	}
 
-	printf("\n operators:\n");
-	dyn_array_print(operators, &range_with_priority_print);
-	dyn_array_sort_in_place(operators, &range_with_priority_compare_priority_desc);
+	// printf("\n operators:\n");
+	// dyn_array_print(operators, &range_with_priority_print);
+	// dyn_array_sort_in_place(operators, &range_with_priority_compare_priority_desc);
 
-	for (size_t i = 0; i < dyn_array_count(operators); i++) {
-		if (i != 0) {
-			printf(", ");
-		}
-		RangeWithPriority *r = dyn_array_element_at_index(operators, i);
-		int priority = range_with_priority_get_prioriy(r);
-		printf("%d", priority);
-	}
-	printf("\n");
+	// for (size_t i = 0; i < dyn_array_count(operators); i++) {
+	// 	if (i != 0) {
+	// 		printf(", ");
+	// 	}
+	// 	RangeWithPriority *r = dyn_array_element_at_index(operators, i);
+	// 	int priority = range_with_priority_get_prioriy(r);
+	// 	printf("%d", priority);
+	// }
+	// printf("\n");
 
 	for (size_t i = 0; i < dyn_array_count(operators); i++) {
 		RangeWithPriority *operator = dyn_array_element_at_index(operators, i);
 		size_t operator_index = range_with_priority_get_index(operator);
-		printf("operator index: %zu\n", operator_index);
+		// printf("operator index: %zu\n", operator_index);
 		if (operator_index > 0) {
 			Range *range_left_operand = range_of_operand_moving_left(
 				expression, 
@@ -508,32 +509,29 @@ DiceRollInstructionStack *dice_roll_instruction_stack_from_expression(char *expr
 		closing_index
 	);
 	
-	dyn_array_print(postfix_ranges, &range_print);
-	for (size_t i = 0; i < dyn_array_count(postfix_ranges); i++) {
-		if (i != 0) {
-			printf(", ");
-		}
-		Range *range = dyn_array_element_at_index(postfix_ranges, i);
-		size_t start_index = range_get_index(range);
-		for (size_t j = start_index; j < start_index + range_get_length(range); j++) {
-			printf("%c", expression[j]);
-		}
-	}
-	printf("\n");
+	// dyn_array_print(postfix_ranges, &range_print);
+	// for (size_t i = 0; i < dyn_array_count(postfix_ranges); i++) {
+	// 	if (i != 0) {
+	// 		printf(", ");
+	// 	}
+	// 	Range *range = dyn_array_element_at_index(postfix_ranges, i);
+	// 	size_t start_index = range_get_index(range);
+	// 	for (size_t j = start_index; j < start_index + range_get_length(range); j++) {
+	// 		printf("%c", expression[j]);
+	// 	}
+	// }
+	// printf("\n");
 	
 	size_t max_op_length = 8;
 	char *op_as_string = malloc(sizeof(char) * max_op_length);
 	for (size_t i = 0; i < dyn_array_count(postfix_ranges); i++) {
 		Range *range = dyn_array_element_at_index(postfix_ranges, i);
 		size_t range_start = range_get_index(range);
-		printf("length: %zu\n", range_get_length(range));
 		size_t op_strlen = range_get_length(range) + 1;
 		if (op_strlen > max_op_length) {
 			op_as_string = realloc(op_as_string, sizeof(char) * op_strlen);
 			max_op_length = op_strlen;
 		}
-		printf("exp: %s\nrange_start: %zu\nop_strlen:%zu\n", expression, range_start, op_strlen);
-
 		copy_range_to_string(op_as_string, expression, range_start, op_strlen);
 
 		DiceRollInstruction *instrucion = dice_roll_instruction_from_string(op_as_string);
@@ -541,6 +539,8 @@ DiceRollInstructionStack *dice_roll_instruction_stack_from_expression(char *expr
 	}
 	free(op_as_string);
 	op_as_string = NULL;
+
+	dyn_array_reverse_in_place(instruction_stack->instructions);
 
 	// DynArray *instructions = instruction_stack->instructions;
 	// for (size_t i = 0; i < dyn_array_count(instructions); i++) {

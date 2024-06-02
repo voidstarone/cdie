@@ -36,9 +36,9 @@ char *dice_rolling_session_resolve_notation(DiceRollingSession *drs, char *expre
 	char final_result_str_buffer[128];
 	double final_result_num = dice_roll_instruction_result_get_number(final_result);
 	if (count_decimals(final_result_num) == 0) {
-		snprintf(final_result_str_buffer, 128, "%.0lf\n", final_result_num);
+		snprintf(final_result_str_buffer, 128, "%.0lf", final_result_num);
 	} else {
-		snprintf(final_result_str_buffer, 128, "%.2lf\n", final_result_num);
+		snprintf(final_result_str_buffer, 128, "%.2lf", final_result_num);
 	}
 	strcat(retStr, final_result_str_buffer);																																																																																																																																												
 	return retStr;

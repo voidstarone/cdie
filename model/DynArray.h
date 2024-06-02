@@ -43,6 +43,7 @@ bool dyn_array_contains(
 	bool (*compare)(void *, void *),
   void *element
 );
+void dyn_array_reverse_in_place(DynArray *a);
 
 void dyn_array_print(DynArray *a, void (*print_element)(void *));
 

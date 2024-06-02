@@ -93,7 +93,7 @@ char * dice_collection_create_results_string(DiceCollectionResults *dcr) {
             snprintf(results_string + char_index, total_characters, " ");
             char_index++;
         }
-        snprintf(results_string+char_index, total_characters, "%d", dcr->results_array[i]);
+        snprintf(results_string+char_index, total_characters, "%zu", dcr->results_array[i]);
         char_index += num_digits(dcr->results_array[i]);
     }
     return results_string;

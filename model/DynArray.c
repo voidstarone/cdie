@@ -83,9 +83,7 @@ void *dyn_array_pop(DynArray *a) {
 	if (a->used == 0) {
 		return NULL;
 	}
-	void *element = a->array[--a->used];
-
-	return element;
+	return a->array[--a->used];;
 }
 
 void *dyn_array_element_at_index(DynArray *a, size_t index) {
@@ -165,6 +163,19 @@ bool dyn_array_contains(
 		}
 	}
 	return false;
+}
+
+void dyn_array_reverse_in_place(DynArray *a) {
+    void *tmp;
+	size_t forward_index = 0, backward_index = a->used - 1;
+	void **array = a->array;
+	while (forward_index < backward_index) {
+		tmp = array[forward_index];
+		array[forward_index] = array[backward_index];
+		array[backward_index] = tmp;
+		forward_index++;
+		backward_index--;
+	}
 }
 
 void dyn_array_print(DynArray *a, void (*print_element)(void *)) {
