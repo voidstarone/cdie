@@ -21,15 +21,29 @@ void dice_rolling_session_free(DiceRollingSession *drs) {
 	free(drs);
 }
 
+size_t expected_output_length_for_dice_collections(DynArray *dcs) {
+    size_t length = 64;
+    for (size_t i = 0; i < dyn_array_count(dcs); i++) {
+        DiceCollection *dc = dyn_array_element_at_index(dcs, i);
+        size_t max_digits = num_digits(dice_collection_faces(dc));
+        size_t num_dice = dice_collection_count(dc);
+        length += max_digits * num_dice + num_dice;
+    }
+    return length;
+}
+
 char *dice_rolling_session_resolve_notation(DiceRollingSession *drs, char *expression) {
-	char *retStr = malloc(sizeof(char) * 1000);
-	for (size_t i = 0; i < 1000; i++) {
-		retStr[i] = '\0';
-	}
-	
+
 	DiceRollInstructionStack *instructions = dice_roll_instruction_stack_from_expression(expression);
 	
 	drs->dice_collections = dice_roll_instruction_stack_get_dice_collections(instructions);
+
+    size_t expected_length = expected_output_length_for_dice_collections(drs->dice_collections);
+    char *retStr = malloc(sizeof(char) * expected_length);
+	for (size_t i = 0; i < expected_length; i++) {
+		retStr[i] = '\0';
+	}
+
 	for (size_t i = 0; i < dyn_array_count(drs->dice_collections); i++) {
 		DiceCollection *dc = dyn_array_element_at_index(drs->dice_collections, i);
 		DiceCollectionResults *dcr = dice_collection_last_results(dc);
