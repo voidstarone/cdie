@@ -2,14 +2,17 @@
 #define DIE_ROLLING_SESSION_H_FA033981
 #include <stdbool.h>
 
-#include "DiceRollingSession.h"
+#include "DynArray.h"
 
 typedef struct {
+	DynArray *dice_collections;
 	// various settings
+	long long int botch_upper_bound;
+	long long int success_lower_bound;
 	// bool single_digit_d10s;
 } DiceRollingSession;
 
-DiceRollingSession * dice_rolling_session_init(void);
+DiceRollingSession * dice_rolling_session_create(void);
 
 char * dice_rolling_session_resolve_notation(DiceRollingSession *drs, 
 	char *notation);

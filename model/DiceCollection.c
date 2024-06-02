@@ -55,7 +55,7 @@ void dice_collection_do_explodes(DiceCollection *dc, size_t start_index) {
     }
 }
 
-void dice_collection_set_results(DiceCollection *dc, size_t *results) {
+void dice_collection_set_results(DiceCollection *dc, long long int *results) {
     if (dc == NULL) {
         return;
     }
@@ -64,7 +64,7 @@ void dice_collection_set_results(DiceCollection *dc, size_t *results) {
     }
     DiceCollectionResults *dcr = dice_collection_results_create_for_dice_collection(dc);
     for (size_t i = 0, count = dice_collection_count(dc); i < count; i++) {
-        size_t result_value = results[i];
+        long long int result_value = results[i];
         dice_collection_results_add(dcr, result_value);
     }
     dc->last_results = dcr;
@@ -107,7 +107,7 @@ DiceCollectionResults * dice_collection_last_results(DiceCollection *dc) {
     return dc->last_results;
 }
 
-size_t dice_collection_total(DiceCollection *dc) {
+long long int dice_collection_total(DiceCollection *dc) {
     DiceCollectionResults *last_results = dice_collection_last_results(dc);
     size_t total = 0, count = dice_collection_results_count(last_results);
     for (size_t i = 0; i < count; i++) {
@@ -116,11 +116,11 @@ size_t dice_collection_total(DiceCollection *dc) {
     return total;
 }
 
-size_t dice_collection_get_explosion_lower_bound(DiceCollection *dc) {
+long long int dice_collection_get_explosion_lower_bound(DiceCollection *dc) {
     return dc->explosion_lower_bound;
 }
 
-void dice_collection_set_explosion_lower_bound(DiceCollection *dc, size_t lower_bound) {
+void dice_collection_set_explosion_lower_bound(DiceCollection *dc, long long int lower_bound) {
     dc->explosion_lower_bound = lower_bound;
 }
 
@@ -132,6 +132,31 @@ void dice_collection_set_stacking_explosions(DiceCollection *dc, bool do_explosi
     dc->do_explosions_stack = do_explosions_stack;
 }
 
+long long int dice_collection_count_results_above_or_matching_bound(
+    DiceCollection *dc, 
+    long long int bound
+) {
+    DiceCollectionResults *last_results = dice_collection_last_results(dc);
+    size_t total = 0, count = dice_collection_results_count(last_results);
+    for (size_t i = 0; i < count; i++) {
+        long long int result = dice_collection_results_result_at(last_results, i);
+        total += result >= bound ? 1 : 0;
+    }
+    return total;
+}
+
+long long int dice_collection_count_results_below_or_matching_bound(
+    DiceCollection *dc, 
+    long long int bound
+) {
+    DiceCollectionResults *last_results = dice_collection_last_results(dc);
+    size_t total = 0, count = dice_collection_results_count(last_results);
+    for (size_t i = 0; i < count; i++) {
+        long long int result = dice_collection_results_result_at(last_results, i);
+        total += result <= bound ? 1 : 0;
+    }
+    return total;
+}
 
 void dice_collection_free(DiceCollection *dc) {
     if (dc == NULL) { return; }
@@ -158,7 +183,7 @@ char * dice_collection_desc(DiceCollection *dc, char *final_str) {
     snprintf(final_str, 30, "DiceCollection(%zu, %zu){ ", die_faces, die_count);
     size_t die_index;
     Die *current_die;
-    size_t last_result;
+    long long int last_result;
     
     // string length
     size_t result_str_len_max = (die_count * 2) + 1;
@@ -175,9 +200,9 @@ char * dice_collection_desc(DiceCollection *dc, char *final_str) {
         
         size_t size = sizeof(final_str) + sizeof(result_str_index);
         if (die_index == (size_t) die_count-1) {
-            snprintf(final_str+result_str_index, size, "%zu }", last_result);
+            snprintf(final_str+result_str_index, size, "%lld }", last_result);
         } else {
-            snprintf(final_str+result_str_index, size, "%zu, ", last_result);
+            snprintf(final_str+result_str_index, size, "%lld, ", last_result);
         }
         
         result_str_index += (num_digits(last_result) + 2) * sizeof(char);

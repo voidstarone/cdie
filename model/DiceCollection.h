@@ -21,19 +21,29 @@ DiceCollection * dice_collection_create(size_t count, size_t faces);
 size_t dice_collection_count(DiceCollection *dc);
 size_t dice_collection_faces(DiceCollection *dc);
 
-void dice_collection_set_results(DiceCollection *dc, size_t *results);
+void dice_collection_set_results(DiceCollection *dc, long long int *results);
 
 Die * dice_collection_die_at(DiceCollection *dc, size_t index);
 
 void dice_collection_roll(DiceCollection *dc, DiceCollectionResults *dcr);
 void dice_collection_roll_silent(DiceCollection *dc);
-size_t dice_collection_total(DiceCollection *dc);
+long long int dice_collection_total(DiceCollection *dc);
 
 bool dice_collection_get_stacking_explosions(DiceCollection *dc);
 void dice_collection_set_stacking_explosions(DiceCollection *dc, bool do_explosions_stack);
 
-size_t dice_collection_get_explosion_lower_bound(DiceCollection *dc);
-void dice_collection_set_explosion_lower_bound(DiceCollection *dc, size_t lower_bound);
+long long int dice_collection_count_results_above_or_matching_bound(
+    DiceCollection *dc, 
+    long long int bound
+);
+
+long long int dice_collection_count_results_below_or_matching_bound(
+    DiceCollection *dc, 
+    long long int bound
+);
+
+long long int dice_collection_get_explosion_lower_bound(DiceCollection *dc);
+void dice_collection_set_explosion_lower_bound(DiceCollection *dc, long long int lower_bound);
 
 DiceCollectionResults * dice_collection_last_results(DiceCollection *dc);
 

@@ -52,6 +52,7 @@ DynArray *dyn_array_create(size_t initial_size) {
 }
 
 size_t dyn_array_count(DynArray *a) {
+	if (a == NULL) return 0;
 	return a->used;
 }
 

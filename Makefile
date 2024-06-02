@@ -117,9 +117,9 @@ $(ODIR)/numutils.o: $(MDIR)/numutils.c
 
 
 # CLI
-build: CCF+= -O
+build: CCF+= -O 
 build: $(MOFILES) $(CLIFILES) 
-	$(CCF) -o $(BDIR)/roll $(UDIR)/main.c $(MOFILES) $(CLIFILES) 
+	$(CCF) -largp -o $(BDIR)/roll $(UDIR)/main.c $(MOFILES) $(CLIFILES) 
 
 test: CCF+= -fsanitize=address -fno-omit-frame-pointer -fsanitize=undefined -W -Wall -g 
 test: $(BDIR)/testdie $(MOFILES) $(TOFILES)
@@ -127,9 +127,6 @@ test: $(BDIR)/testdie $(MOFILES) $(TOFILES)
 
 debugtest: $(BDIR)/testdie $(MOFILES) $(TOFILES)
 	lldb bin/testdie
-	
-# will need  -largp 
-
 
 clean:
 	rm -rf $(ODIR)/*;
