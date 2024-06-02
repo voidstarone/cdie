@@ -3,6 +3,7 @@
 #include <argp.h>
 #include <limits.h>
 #include <stdbool.h>
+#include <string.h>
 
 #include "DiceRollingSession.h"
 
@@ -18,6 +19,14 @@ static struct argp_option options[] = {
     {"successes", 's', "SUCCESSES", 0, "Lower bound for a success"},
     {0}
 };
+
+bool is_arg_operator(char *arg) {
+	bool is_plus = strcmp(arg, "+") == 0;
+	bool is_minus = strcmp(arg, "-") == 0;
+	bool is_star = strcmp(arg, "*") == 0;
+	bool is_slash = strcmp(arg, "/") == 0;
+	return is_plus || is_minus || is_star || is_slash;
+}
 
 // Function to parse a single option
 static error_t parse_opt(int key, char *arg, struct argp_state *state) {
@@ -51,7 +60,7 @@ int main (int argc, char **argv) {
 	arguments.botches_at = 0;
 	arguments.successes_at = __LONG_LONG_MAX__;
 	arguments.args = malloc(sizeof(char) * 16);
-	arguments.args = '\0';
+	arguments.args = NULL;
     arguments.arg_count = 0;
 	argp_parse(&argp, argc, argv, 0, 0, &arguments);
 
@@ -64,7 +73,33 @@ int main (int argc, char **argv) {
 		drs->botch_upper_bound = arguments.botches_at;
 	}
 
-	for(int i = 0; i < arguments.arg_count; ++i) {
+	bool is_unquoted_expression = false;
+	char *expression = NULL;
+	for(size_t i = 0; i < arguments.arg_count; ++i) {
+		if (is_arg_operator(arguments.args[i])) {
+			is_unquoted_expression = true;
+			break;
+		}
+	}
+
+	if (is_unquoted_expression) {
+		size_t length_required = 0;
+		for(size_t i = 0; i < arguments.arg_count; ++i) {
+			length_required = strlen(arguments.args[i]) + 1;
+		}
+		expression = malloc(length_required * sizeof(char));
+		for(size_t i = 0; i < arguments.arg_count; ++i) {
+			if (i != 0) {
+				strcat(expression, " ");
+			}
+			strcat(expression, arguments.args[i]);
+		}
+		strcat(expression, "\0");
+		arguments.arg_count = 1;
+		arguments.args[0] = expression;
+	}
+
+	for(size_t i = 0; i < arguments.arg_count; ++i) {
 		char *result = dice_rolling_session_resolve_notation(drs, arguments.args[i]);
 		if (result == NULL) {
 			printf("Invalid input");
