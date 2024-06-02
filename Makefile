@@ -4,8 +4,11 @@ BDIR=bin
 ODIR=obj
 MTDIR=mtests
 
+all: build
+
+CFLAGS=-I$(MDIR)/
+
 CC=clang
-CFLAGS=-fsanitize=address -fno-omit-frame-pointer -fsanitize=undefined -W -Wall -g -I$(MDIR)/
 CCF=$(CC) $(CFLAGS)
 
 CLIFILES= $(ODIR)/DiceRollingSession.o 
@@ -71,19 +74,6 @@ $(ODIR)/TestSuiteDie.o: $(ODIR)/Die.o
 $(ODIR)/TestSuiteDynArray.o: $(ODIR)/DynArray.o 
 	$(CCF) -c -o $(ODIR)/TestSuiteDynArray.o $(MTDIR)/TestSuiteDynArray.c
 
-
-# CLI
-build: $(MOFILES) $(CLIFILES) 
-	$(CCF) -o $(BDIR)/roll $(UDIR)/main.c $(MOFILES) $(CLIFILES) 
-
-test: $(BDIR)/testdie $(MOFILES) $(TOFILES)
-	bin/testdie
-
-debugtest: $(BDIR)/testdie $(MOFILES) $(TOFILES)
-	lldb bin/testdie
-	
-# will need  -largp 
-
 $(ODIR)/DiceRollingSession.o:
 	$(CCF) -c -o $(ODIR)/DiceRollingSession.o $(MDIR)/DiceRollingSession.c;
 
@@ -124,6 +114,21 @@ $(ODIR)/DynArray.o:
 
 $(ODIR)/numutils.o: $(MDIR)/numutils.c
 	$(CCF) -c -o $(ODIR)/numutils.o $(MDIR)/numutils.c;
+
+
+# CLI
+build: CCF+= -O
+build: $(MOFILES) $(CLIFILES) 
+	$(CCF) -o $(BDIR)/roll $(UDIR)/main.c $(MOFILES) $(CLIFILES) 
+
+test: CCF+= -fsanitize=address -fno-omit-frame-pointer -fsanitize=undefined -W -Wall -g 
+test: $(BDIR)/testdie $(MOFILES) $(TOFILES)
+	bin/testdie
+
+debugtest: $(BDIR)/testdie $(MOFILES) $(TOFILES)
+	lldb bin/testdie
+	
+# will need  -largp 
 
 
 clean:

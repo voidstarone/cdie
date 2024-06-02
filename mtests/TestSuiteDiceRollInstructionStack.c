@@ -145,8 +145,6 @@ void test_dice_roll_instruction_stack_evaluate_max_dice_collection() {
 }
 
 void test_dice_roll_instruction_stack_evaluate_add_num_to_dc() {
-	printf("test_dice_roll_instruction_stack_evaluate_add_num_to_dc\n");
-
 	DiceRollInstructionStack *dris = dice_roll_instruction_stack_create(3);
 	DiceRollInstruction *add = dice_roll_instruction_from_string("+");
 	DiceRollInstruction *num10 = dice_roll_instruction_from_string("10");
