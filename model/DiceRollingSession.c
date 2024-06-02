@@ -39,7 +39,6 @@ char *dice_rolling_session_resolve_notation(DiceRollingSession *drs, char *expre
 		strcat(retStr, "\n");
         if (drs->success_lower_bound < __LONG_LONG_MAX__) {
             char success_buffer[32];
-
             long long int botches = dice_collection_count_results_below_or_matching_bound(
                 dc,
                 drs->botch_upper_bound
@@ -48,7 +47,7 @@ char *dice_rolling_session_resolve_notation(DiceRollingSession *drs, char *expre
                 dc,
                 drs->success_lower_bound
             );
-            snprintf(success_buffer, 32, "successes: %.0lld\n", successes - botches);
+            snprintf(success_buffer, 32, "successes: %lld\n", successes - botches);
             strcat(retStr, success_buffer);
         }
 	}
