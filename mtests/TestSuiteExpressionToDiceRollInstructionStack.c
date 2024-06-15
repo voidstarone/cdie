@@ -11,7 +11,7 @@
 #include "TestSuiteDiceRollInstructionStack.h"
 
 
-void test_dice_roll_instruction_stack_from_expression_subtract() {
+void test_dice_roll_instruction_stack_from_expression_subtract(void) {
 	
 	char exp[] = "10 - 2";
 	
@@ -33,7 +33,7 @@ void test_dice_roll_instruction_stack_from_expression_subtract() {
 	dice_roll_instruction_stack_free(dris);
 }
 
-void test_dice_roll_instruction_stack_from_expression_divide() {
+void test_dice_roll_instruction_stack_from_expression_divide(void) {
 	
 	char exp[] = "10 / 2";
 	
@@ -55,7 +55,7 @@ void test_dice_roll_instruction_stack_from_expression_divide() {
 	dice_roll_instruction_stack_free(dris);
 }
 
-void test_dice_roll_instruction_stack_from_expression_add_multiply() {
+void test_dice_roll_instruction_stack_from_expression_add_multiply(void) {
 	
 	char exp[] = "10 + 2 * 8.2";
 	
@@ -75,10 +75,43 @@ void test_dice_roll_instruction_stack_from_expression_add_multiply() {
 	CU_ASSERT_EQUAL(dice_roll_instruction_get_number(instruction4), 10);
 	DiceRollInstruction *instruction5 = dyn_array_element_at_index(dris->instructions, 0);
 	CU_ASSERT_EQUAL(instruction5->operation_type, op_type_add);
+
+	DiceRollInstructionResult* result = dice_roll_instruction_stack_evaluate(dris);
+	double result_num = dice_roll_instruction_result_get_number(result);
+	CU_ASSERT_EQUAL(result_num, 26.4);
+
 	dice_roll_instruction_stack_free(dris);
 }
 
-void test_dice_roll_instruction_stack_from_expression_simple_dice() {
+void test_dice_roll_instruction_stack_from_expression_subtract_multiply(void) {
+	
+	char exp[] = "10 - 2 * 8";
+	
+	DiceRollInstructionStack *dris = dice_roll_instruction_stack_from_expression(exp);
+
+	CU_ASSERT_EQUAL(dyn_array_count(dris->instructions), 5);
+	DiceRollInstruction *instruction1 = dyn_array_element_at_index(dris->instructions, 4);
+	CU_ASSERT_EQUAL(instruction1->operation_type, op_type_number);
+	CU_ASSERT_EQUAL(dice_roll_instruction_get_number(instruction1), 2);
+	DiceRollInstruction *instruction2 = dyn_array_element_at_index(dris->instructions, 3);
+	CU_ASSERT_EQUAL(instruction2->operation_type, op_type_number);
+	CU_ASSERT_EQUAL(dice_roll_instruction_get_number(instruction2), 8);
+	DiceRollInstruction *instruction3 = dyn_array_element_at_index(dris->instructions, 2);
+	CU_ASSERT_EQUAL(instruction3->operation_type, op_type_multiply);
+	DiceRollInstruction *instruction4 = dyn_array_element_at_index(dris->instructions, 1);
+	CU_ASSERT_EQUAL(instruction4->operation_type, op_type_number);
+	CU_ASSERT_EQUAL(dice_roll_instruction_get_number(instruction4), 10);
+	DiceRollInstruction *instruction5 = dyn_array_element_at_index(dris->instructions, 0);
+	CU_ASSERT_EQUAL(instruction5->operation_type, op_type_subtract);
+
+	DiceRollInstructionResult* result = dice_roll_instruction_stack_evaluate(dris);
+	double result_num = dice_roll_instruction_result_get_number(result);
+	CU_ASSERT_EQUAL(result_num, -6);
+
+	dice_roll_instruction_stack_free(dris);
+}
+
+void test_dice_roll_instruction_stack_from_expression_simple_dice(void) {
 	
 	char exp[] = "2d6";
 	
@@ -91,7 +124,7 @@ void test_dice_roll_instruction_stack_from_expression_simple_dice() {
 	dice_roll_instruction_stack_free(dris);
 }
 
-void test_dice_roll_instruction_stack_from_expression_simple_dice_add_expression() {
+void test_dice_roll_instruction_stack_from_expression_simple_dice_add_expression(void) {
 	
 	char exp[] = "1d1 + 2";
 	
@@ -115,7 +148,7 @@ void test_dice_roll_instruction_stack_from_expression_simple_dice_add_expression
 	dice_roll_instruction_stack_free(dris);
 }
 
-void test_dice_roll_instruction_stack_from_expression_parens_maths() {
+void test_dice_roll_instruction_stack_from_expression_parens_maths(void) {
 	
 	char exp[] = "(1 + ((2d6) * ((10 + 1 * 80) + 1)))";
 	printf("\n%s\n", exp);
@@ -149,6 +182,12 @@ int test_suite_expression_to_dice_roll_instruction_stack(int(*init_suite)(void),
 
 	if (NULL == CU_add_test(pSuite, "test_dice_roll_instruction_stack_from_expression_add_multiply", 
         test_dice_roll_instruction_stack_from_expression_add_multiply)) {
+        CU_cleanup_registry();
+        return CU_get_error();
+    }
+
+	if (NULL == CU_add_test(pSuite, "test_dice_roll_instruction_stack_from_expression_subtract_multiply", 
+        test_dice_roll_instruction_stack_from_expression_subtract_multiply)) {
         CU_cleanup_registry();
         return CU_get_error();
     }

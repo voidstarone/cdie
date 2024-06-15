@@ -2,7 +2,7 @@
 #include "CUnit/Basic.h"
 #include "Die.h"
 
-void test_roll_returns_reasonable_result() {
+void test_roll_returns_reasonable_result(void) {
 	Die *d = die_create(6);
 	
 	long long int result = die_roll(d);
@@ -12,7 +12,7 @@ void test_roll_returns_reasonable_result() {
 	die_free(d);
 }
 
-void test_die_saves_result() {
+void test_die_saves_result(void) {
 	Die *d = die_create(6);
 	
 	long long int result = die_roll(d);
@@ -20,7 +20,7 @@ void test_die_saves_result() {
 	CU_ASSERT_EQUAL(result, die_last_result(d));
 }
 
-void test_die_roll_returns_random_results() {
+void test_die_roll_returns_random_results(void) {
 	size_t num_dice = 50;
 	int results[6] = { 0 };
 	bool have_rolled_every_number_at_least_once = true;

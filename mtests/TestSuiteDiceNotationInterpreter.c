@@ -9,22 +9,22 @@
 #include "TestSuiteDiceNotationInterpreter.h"
 
 
-void test_dice_collection_from_core_notation() {
+void test_dice_collection_from_core_notation(void) {
 	DiceCollection *dc = dice_collection_from_core_notation("2d6");
 
-	int count = dice_collection_count(dc);
-	int faces = dice_collection_faces(dc);
+	size_t count = dice_collection_count(dc);
+    size_t faces = dice_collection_faces(dc);
 	CU_ASSERT_EQUAL(faces, 6);
 	CU_ASSERT_EQUAL(count, 2);
 	
 	dice_collection_free(dc);
 }
 
-void test_dice_collection_from_simple_percentile_notation() {
+void test_dice_collection_from_simple_percentile_notation(void) {
 	DiceCollection *dc = dice_collection_from_percentile_notation("4%");
 
-	int count = dice_collection_count(dc);
-	int faces = dice_collection_faces(dc);
+    size_t count = dice_collection_count(dc);
+    size_t faces = dice_collection_faces(dc);
 	CU_ASSERT_EQUAL(faces, 100);
 	CU_ASSERT_EQUAL(count, 4);
 	
@@ -32,11 +32,11 @@ void test_dice_collection_from_simple_percentile_notation() {
 }
 
 
-void test_dice_collection_from_any_notation() {
+void test_dice_collection_from_any_notation(void) {
 	DiceCollection *dc = dice_collection_create_from_notation("2d6");
 
-	int count = dice_collection_count(dc);
-	int faces = dice_collection_faces(dc);
+    size_t count = dice_collection_count(dc);
+    size_t faces = dice_collection_faces(dc);
 	CU_ASSERT_EQUAL(faces, 6);
 	CU_ASSERT_EQUAL(count, 2);
 	
@@ -53,7 +53,7 @@ void test_dice_collection_from_any_notation() {
 
 	count = dice_collection_count(dc);
 	faces = dice_collection_faces(dc);
-	int explosion_lower = dice_collection_get_explosion_lower_bound(dc);
+    size_t explosion_lower = dice_collection_get_explosion_lower_bound(dc);
 	CU_ASSERT_EQUAL(faces, 6);
 	CU_ASSERT_EQUAL(count, 2);
 	CU_ASSERT_EQUAL(explosion_lower, 5);

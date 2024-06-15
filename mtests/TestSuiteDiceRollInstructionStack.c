@@ -11,14 +11,14 @@
 #include "TestSuiteDiceRollInstructionStack.h"
 
 
-void test_dice_roll_instruction_stack_create() {
+void test_dice_roll_instruction_stack_create(void) {
 	DiceRollInstructionStack *dris = dice_roll_instruction_stack_create(1);
 
 	CU_ASSERT_PTR_NOT_NULL(dris);
 	dice_roll_instruction_stack_free(dris);
 }
 
-void test_dice_roll_instruction_stack_push() {
+void test_dice_roll_instruction_stack_push(void) {
 
 	DiceRollInstructionStack *dris = dice_roll_instruction_stack_create(1);
 	DiceRollInstruction *dri1 = dice_roll_instruction_from_string("max");
@@ -30,7 +30,7 @@ void test_dice_roll_instruction_stack_push() {
 	dice_roll_instruction_stack_free(dris);
 }
 
-void test_dice_roll_instruction_stack_pop() {
+void test_dice_roll_instruction_stack_pop(void) {
 	printf("test_dice_roll_instruction_stack_pop\n");
 
 	DiceRollInstructionStack *dris = dice_roll_instruction_stack_create(1);
@@ -43,7 +43,7 @@ void test_dice_roll_instruction_stack_pop() {
 	dice_roll_instruction_stack_free(dris);
 }
 
-void test_dice_roll_instruction_stack_evaluate_dice_collection() {	
+void test_dice_roll_instruction_stack_evaluate_dice_collection(void) {	
 	DiceRollInstructionStack *dris = dice_roll_instruction_stack_create(1);
 	DiceRollInstruction *dri_dc = dice_roll_instruction_from_string("10d20");
 	dice_roll_instruction_stack_push(dris, dri_dc);
@@ -57,7 +57,7 @@ void test_dice_roll_instruction_stack_evaluate_dice_collection() {
 	dice_roll_instruction_stack_free(dris);
 }
 
-void test_dice_roll_instruction_stack_evaluate_add_two_ints() {
+void test_dice_roll_instruction_stack_evaluate_add_two_ints(void) {
 	DiceRollInstructionStack *dris = dice_roll_instruction_stack_create(3);
 	DiceRollInstruction *dri_num1 = dice_roll_instruction_from_string("1");
 	DiceRollInstruction *dri_num2 = dice_roll_instruction_from_string("2");
@@ -74,7 +74,7 @@ void test_dice_roll_instruction_stack_evaluate_add_two_ints() {
 	dice_roll_instruction_stack_free(dris);
 }
 
-void test_dice_roll_instruction_stack_evaluate_subtract_two_ints() {
+void test_dice_roll_instruction_stack_evaluate_subtract_two_ints(void) {
 	DiceRollInstructionStack *dris = dice_roll_instruction_stack_create(3);
 	DiceRollInstruction *dri_num1 = dice_roll_instruction_from_string("109");
 	DiceRollInstruction *dri_num2 = dice_roll_instruction_from_string("9");
@@ -91,7 +91,7 @@ void test_dice_roll_instruction_stack_evaluate_subtract_two_ints() {
 	dice_roll_instruction_stack_free(dris);
 }
 
-void test_dice_roll_instruction_stack_evaluate_multiply_two_ints() {
+void test_dice_roll_instruction_stack_evaluate_multiply_two_ints(void) {
 	DiceRollInstructionStack *dris = dice_roll_instruction_stack_create(3);
 	DiceRollInstruction *dri_num1 = dice_roll_instruction_from_string("7");
 	DiceRollInstruction *dri_num2 = dice_roll_instruction_from_string("8");
@@ -108,7 +108,7 @@ void test_dice_roll_instruction_stack_evaluate_multiply_two_ints() {
 	dice_roll_instruction_stack_free(dris);
 }
 
-void test_dice_roll_instruction_stack_evaluate_divide_two_ints() {
+void test_dice_roll_instruction_stack_evaluate_divide_two_ints(void) {
 	DiceRollInstructionStack *dris = dice_roll_instruction_stack_create(3);
 	DiceRollInstruction *dri_num1 = dice_roll_instruction_from_string("101");
 	DiceRollInstruction *dri_num2 = dice_roll_instruction_from_string("2");
@@ -125,7 +125,7 @@ void test_dice_roll_instruction_stack_evaluate_divide_two_ints() {
 	dice_roll_instruction_stack_free(dris);
 }
 
-void test_dice_roll_instruction_stack_evaluate_max_dice_collection() {
+void test_dice_roll_instruction_stack_evaluate_max_dice_collection(void) {
 	DiceRollInstructionStack *dris = dice_roll_instruction_stack_create(1);
 	DiceRollInstruction *max = dice_roll_instruction_from_string("max");
 	DiceRollInstruction *dri_dc = dice_roll_instruction_from_string("4d6");
@@ -144,7 +144,7 @@ void test_dice_roll_instruction_stack_evaluate_max_dice_collection() {
 	dice_roll_instruction_stack_free(dris);
 }
 
-void test_dice_roll_instruction_stack_evaluate_add_num_to_dc() {
+void test_dice_roll_instruction_stack_evaluate_add_num_to_dc(void) {
 	DiceRollInstructionStack *dris = dice_roll_instruction_stack_create(3);
 	DiceRollInstruction *add = dice_roll_instruction_from_string("+");
 	DiceRollInstruction *num10 = dice_roll_instruction_from_string("10");
@@ -163,7 +163,7 @@ void test_dice_roll_instruction_stack_evaluate_add_num_to_dc() {
 	dice_roll_instruction_stack_free(dris);
 }
 
-void test_dice_roll_instruction_stack_evaluate_add_num_to_dc2() {
+void test_dice_roll_instruction_stack_evaluate_add_num_to_dc2(void) {
 	DiceRollInstructionStack *dris = dice_roll_instruction_stack_create(3);
 	DiceRollInstruction *add = dice_roll_instruction_from_string("+");
 	DiceRollInstruction *num10 = dice_roll_instruction_from_string("10");
@@ -180,7 +180,7 @@ void test_dice_roll_instruction_stack_evaluate_add_num_to_dc2() {
 	dice_roll_instruction_stack_free(dris);
 }
 
-void test_dice_roll_instruction_stack_evaluate_add_dc_to_dc() {
+void test_dice_roll_instruction_stack_evaluate_add_dc_to_dc(void) {
 	DiceRollInstructionStack *dris = dice_roll_instruction_stack_create(3);
 	DiceRollInstruction *add = dice_roll_instruction_from_string("+");
 	DiceRollInstruction *dri_dc1 = dice_roll_instruction_from_string("6d6");
@@ -202,7 +202,7 @@ void test_dice_roll_instruction_stack_evaluate_add_dc_to_dc() {
 }
 
 
-void test_dice_roll_instruction_stack_evaluate_add_three_ints() {
+void test_dice_roll_instruction_stack_evaluate_add_three_ints(void) {
 	DiceRollInstructionStack *dris = dice_roll_instruction_stack_create(5);
 	DiceRollInstruction *dri_add1 = dice_roll_instruction_from_string("+");
 	DiceRollInstruction *dri_add2 = dice_roll_instruction_from_string("+");
@@ -225,7 +225,7 @@ void test_dice_roll_instruction_stack_evaluate_add_three_ints() {
 }
 
 
-void test_dice_roll_instruction_stack_evaluate_multiply_then_add_three_ints() {
+void test_dice_roll_instruction_stack_evaluate_multiply_then_add_three_ints(void) {
 	DiceRollInstructionStack *dris = dice_roll_instruction_stack_create(5);
 
 	DiceRollInstruction *dri_multiply = dice_roll_instruction_from_string("*");

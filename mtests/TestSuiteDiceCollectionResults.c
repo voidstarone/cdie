@@ -8,7 +8,7 @@
 #include "TestSuiteDiceCollectionResults.h"
 
 
-void test_dice_collection_results_init() {
+void test_dice_collection_results_init(void) {
 	DiceCollectionResults *dcr = dice_collection_results_create(10);
 	
 	size_t count = dice_collection_results_count(dcr);
@@ -19,7 +19,7 @@ void test_dice_collection_results_init() {
 }
 
 
-void test_dice_collection_results_add_count() {
+void test_dice_collection_results_add_count(void) {
 	DiceCollectionResults *dcr = dice_collection_results_create(10);
 	size_t count = dice_collection_results_count(dcr);
 	
@@ -32,7 +32,7 @@ void test_dice_collection_results_add_count() {
 	dice_collection_results_free(dcr);
 }
 
-void test_dice_collection_results_get_array() {
+void test_dice_collection_results_get_array(void) {
 	DiceCollectionResults *dcr = dice_collection_results_create(10);
 	dice_collection_results_add(dcr, 4);
 	dice_collection_results_add(dcr, 10);
@@ -48,7 +48,7 @@ void test_dice_collection_results_get_array() {
 	dice_collection_results_free(dcr);
 }
 
-void test_dice_collection_results_result_at() {
+void test_dice_collection_results_result_at(void) {
 	DiceCollectionResults *dcr = dice_collection_results_create(10);
 
 	dice_collection_results_add(dcr, 90);

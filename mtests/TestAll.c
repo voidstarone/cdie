@@ -16,7 +16,7 @@ int init_suite(void)  { return 0; }
 int clean_suite(void) { return 0; }
 
 
-int main (/*int argc, char const *argv[]*/) {
+int main (int argc, char const *argv[]) {
 	if (CUE_SUCCESS != CU_initialize_registry()) {
 		return CU_get_error();
 	}

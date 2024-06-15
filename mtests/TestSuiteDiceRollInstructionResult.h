@@ -5,6 +5,5 @@
 #include "DiceCollection.h"
 #include "DiceNotationInterpreter.h"
 
-void test_dice_roll_instruction_init();
 int test_suite_dice_roll_instruction_result(int(*init_suite)(void), int(*clean_suite)(void) );
 	

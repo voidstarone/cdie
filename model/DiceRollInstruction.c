@@ -16,9 +16,9 @@
 
 
 DiceRollInstructionResult * (*ops[7]) (DiceRollInstructionResultStack *);
-void setup_ops();
+void setup_ops(void);
 
-DiceRollInstruction *dice_roll_instruction_create() {
+DiceRollInstruction *dice_roll_instruction_create(void) {
     DiceRollInstruction *dri = malloc(sizeof(DiceRollInstruction));
     dri->value = NULL;
     return dri;

@@ -6,7 +6,7 @@
 #include "DieFactory.h"
 #include "TestSuiteDieFactory.h"
 
-void test_die_factory_create_dice() {
+void test_die_factory_create_dice(void) {
 	size_t num_dice = 50;
 	int result = 0;
 	int max_result = 0;
