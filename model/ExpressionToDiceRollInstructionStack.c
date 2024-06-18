@@ -430,7 +430,7 @@ void copy_range_to_string(char *buf, char *target, size_t start_index, size_t le
 
 void postfixify_expression(DynArray *postfix_ranges, char *expression) {
 	size_t length = strlen(expression) + 2;
-	char *working_expression;
+	char *working_expression = malloc(sizeof(char) * length + 1);
 	snprintf(working_expression, length, "(%s)", expression);
 	DynArray *working_stack = dyn_array_create(16);
 	for (size_t e_i = 0; e_i < length; e_i++) {
@@ -481,7 +481,7 @@ void postfixify_expression(DynArray *postfix_ranges, char *expression) {
 			}
 			Range *r = range_create_and_init(e_i, e_i - (index_after_operand - 1));
 			dyn_array_push(postfix_ranges, r);
-			e_i = index_after_operand;
+			e_i = index_after_operand - 1;
 		} else if (char_is_inline_whitespace(working_expression[e_i])) {
 			continue;
 		} else {

@@ -15,7 +15,7 @@
 #define NUM_OPERATIONS 8
 
 
-DiceRollInstructionResult * (*ops[7]) (DiceRollInstructionResultStack *);
+DiceRollInstructionResult * (*ops[7]) (DynArray *);
 void setup_ops(void);
 
 DiceRollInstruction *dice_roll_instruction_create(void) {
@@ -198,7 +198,7 @@ DiceRollInstruction *dice_roll_instruction_from_string(char *string_representati
 }
 
 static bool dri_should_setup_ops = true;
-DiceRollInstructionResult *dice_roll_instruction_do_op(DiceRollInstruction *dri, DiceRollInstructionResultStack *argv) {
+DiceRollInstructionResult *dice_roll_instruction_do_op(DiceRollInstruction *dri, DynArray *argv) {
     if (dri_should_setup_ops) {
         setup_ops();
         dri_should_setup_ops = false;
@@ -206,9 +206,9 @@ DiceRollInstructionResult *dice_roll_instruction_do_op(DiceRollInstruction *dri,
     return ops[dri->operation_type](argv);
 }
 
-DiceRollInstructionResult *op_add(DiceRollInstructionResultStack *argv) {
-    DiceRollInstructionResult *arg1 = dice_roll_instruction_result_stack_pop(argv);
-    DiceRollInstructionResult *arg2 = dice_roll_instruction_result_stack_pop(argv);
+DiceRollInstructionResult *op_add(DynArray *argv) {
+    DiceRollInstructionResult *arg1 = dyn_array_pop(argv);
+    DiceRollInstructionResult *arg2 = dyn_array_pop(argv);
     double num1, num2;
     num1 = dice_roll_instruction_result_get_number(arg1);
     num2 = dice_roll_instruction_result_get_number(arg2);
@@ -218,9 +218,9 @@ DiceRollInstructionResult *op_add(DiceRollInstructionResultStack *argv) {
     return result;
 }
 
-DiceRollInstructionResult *op_subtract(DiceRollInstructionResultStack *argv) {
-    DiceRollInstructionResult *arg1 = dice_roll_instruction_result_stack_pop(argv);
-    DiceRollInstructionResult *arg2 = dice_roll_instruction_result_stack_pop(argv);
+DiceRollInstructionResult *op_subtract(DynArray *argv) {
+    DiceRollInstructionResult *arg1 = dyn_array_pop(argv);
+    DiceRollInstructionResult *arg2 = dyn_array_pop(argv);
     double num1, num2;
     num1 = dice_roll_instruction_result_get_number(arg1);
     num2 = dice_roll_instruction_result_get_number(arg2);
@@ -230,9 +230,9 @@ DiceRollInstructionResult *op_subtract(DiceRollInstructionResultStack *argv) {
     return result;
 }
 
-DiceRollInstructionResult *op_multiply(DiceRollInstructionResultStack *argv) {
-    DiceRollInstructionResult *arg1 = dice_roll_instruction_result_stack_pop(argv);
-    DiceRollInstructionResult *arg2 = dice_roll_instruction_result_stack_pop(argv);
+DiceRollInstructionResult *op_multiply(DynArray *argv) {
+    DiceRollInstructionResult *arg1 = dyn_array_pop(argv);
+    DiceRollInstructionResult *arg2 = dyn_array_pop(argv);
     double num1, num2;
     num1 = dice_roll_instruction_result_get_number(arg1);
     num2 = dice_roll_instruction_result_get_number(arg2);
@@ -242,9 +242,9 @@ DiceRollInstructionResult *op_multiply(DiceRollInstructionResultStack *argv) {
     return result;
 }
 
-DiceRollInstructionResult *op_divide(DiceRollInstructionResultStack *argv) {
-    DiceRollInstructionResult *arg1 = dice_roll_instruction_result_stack_pop(argv);
-    DiceRollInstructionResult *arg2 = dice_roll_instruction_result_stack_pop(argv);
+DiceRollInstructionResult *op_divide(DynArray *argv) {
+    DiceRollInstructionResult *arg1 = dyn_array_pop(argv);
+    DiceRollInstructionResult *arg2 = dyn_array_pop(argv);
     double num1, num2;
     num1 = dice_roll_instruction_result_get_number(arg1);
     num2 = dice_roll_instruction_result_get_number(arg2);
@@ -254,7 +254,7 @@ DiceRollInstructionResult *op_divide(DiceRollInstructionResultStack *argv) {
     return result;
 }
 
-DiceRollInstructionResult *op_max(DiceRollInstructionResultStack *argv) {
+DiceRollInstructionResult *op_max(DynArray *argv) {
     DiceRollInstructionResult *arg1 = dice_roll_instruction_result_stack_pop(argv);
     if (arg1->type != result_type_dice_collection) {
         return NULL;
