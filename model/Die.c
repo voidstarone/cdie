@@ -16,7 +16,7 @@ Die * die_create(size_t numFaces) {
 }
 
 long long int die_roll(Die *d) {
-	d->last_result = (size_t) arc4random_uniform(d->num_faces) + 1;
+	d->last_result = (long long int) arc4random_uniform(d->num_faces) + 1;
 	return d->last_result;
 }
 

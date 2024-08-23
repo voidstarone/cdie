@@ -545,13 +545,13 @@ DiceRollInstructionStack *dice_roll_instruction_stack_from_expression(char *expr
 		}
 		copy_range_to_string(op_as_string, expression, range_start, op_strlen);
 
-		DiceRollInstruction *instrucion = dice_roll_instruction_from_string(op_as_string);
-		dice_roll_instruction_stack_push(instruction_stack, instrucion);
+		DiceRollInstruction *instruction = dice_roll_instruction_from_string(op_as_string);
+		dice_roll_instruction_stack_push(instruction_stack, instruction);
 	}
 	free(op_as_string);
 	op_as_string = NULL;
 
-	dyn_array_reverse_in_place(instruction_stack->instructions);
+//	dyn_array_reverse_in_place(instruction_stack->instructions);
 
 	// DynArray *instructions = instruction_stack->instructions;
 	// for (size_t i = 0; i < dyn_array_count(instructions); i++) {

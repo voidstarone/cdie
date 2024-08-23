@@ -53,7 +53,7 @@ void test_dice_collection_results_result_at(void) {
 
 	dice_collection_results_add(dcr, 90);
 
-	int value = dice_collection_results_result_at(dcr, 0);
+	long long int value = dice_collection_results_result_at(dcr, 0);
 
 	CU_ASSERT_EQUAL(value, 90);
 

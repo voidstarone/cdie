@@ -19,10 +19,14 @@ void test_dice_roll_instruction_stack_create(void) {
 }
 
 void test_dice_roll_instruction_stack_push(void) {
-
+	// given
 	DiceRollInstructionStack *dris = dice_roll_instruction_stack_create(1);
 	DiceRollInstruction *dri1 = dice_roll_instruction_from_string("max");
+
+	// when
 	dice_roll_instruction_stack_push(dris, dri1);
+
+	// then
 	DiceRollInstruction *dri2 = dice_roll_instruction_stack_peek(dris);
 	int args1 = dice_roll_instruction_get_num_args(dri1);
 	int args2 = dice_roll_instruction_get_num_args(dri2);
@@ -31,8 +35,6 @@ void test_dice_roll_instruction_stack_push(void) {
 }
 
 void test_dice_roll_instruction_stack_pop(void) {
-	printf("test_dice_roll_instruction_stack_pop\n");
-
 	DiceRollInstructionStack *dris = dice_roll_instruction_stack_create(1);
 	DiceRollInstruction *dri1 = dice_roll_instruction_from_string("max");
 	dice_roll_instruction_stack_push(dris, dri1);
@@ -49,7 +51,6 @@ void test_dice_roll_instruction_stack_evaluate_dice_collection(void) {
 	dice_roll_instruction_stack_push(dris, dri_dc);
 
 	DiceRollInstructionResult *drir = dice_roll_instruction_stack_evaluate(dris);
-
 	DiceCollection *real_result = dice_roll_instruction_result_get_dice_collection(drir);
 	CU_ASSERT_EQUAL(dice_collection_count(real_result), 10);
 	CU_ASSERT_EQUAL(dice_collection_faces(real_result), 20);
@@ -130,7 +131,7 @@ void test_dice_roll_instruction_stack_evaluate_max_dice_collection(void) {
 	DiceRollInstruction *max = dice_roll_instruction_from_string("max");
 	DiceRollInstruction *dri_dc = dice_roll_instruction_from_string("4d6");
 
-	long long int *results = malloc(sizeof(size_t) * 4);
+	long long int *results = malloc(sizeof(long long int) * 4);
 	results[0] = 1; results[1] = 5; results[2] = 3; results[3] = 2;
 	dice_collection_set_results(dri_dc->value, results);
 
@@ -220,7 +221,8 @@ void test_dice_roll_instruction_stack_evaluate_add_three_ints(void) {
 	DiceRollInstructionResult *drir = dice_roll_instruction_stack_evaluate(dris);
 
 	double real_result = dice_roll_instruction_result_get_number(drir);
-	CU_ASSERT_EQUAL(real_result, (double) 17);
+    printf("real_result=%lf;\n", real_result);
+	CU_ASSERT_EQUAL(real_result, (double) 2 + 5 + 10);
 	dice_roll_instruction_stack_free(dris);
 }
 
@@ -242,6 +244,7 @@ void test_dice_roll_instruction_stack_evaluate_multiply_then_add_three_ints(void
 	DiceRollInstructionResult *drir = dice_roll_instruction_stack_evaluate(dris);
 
 	double real_result = dice_roll_instruction_result_get_number(drir);
+	printf("%lf\n", real_result);
 	CU_ASSERT_EQUAL(real_result, (double) 91);
 	dice_roll_instruction_stack_free(dris);
 }

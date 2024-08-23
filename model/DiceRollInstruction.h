@@ -35,5 +35,6 @@ double dice_roll_instruction_get_number(DiceRollInstruction *dri);
 DiceCollection *dice_roll_instruction_get_dice_collection(DiceRollInstruction *dri);
 int dice_roll_instruction_get_num_args(DiceRollInstruction *dri);
 void dice_roll_instruction_set_expected_result_type(DiceRollInstruction *dri, ResultType result_type);
+void dice_roll_instruction_print(DiceRollInstruction *dri);
 
 #endif /*DIE_ROLL_INSTRUCTION_H_FA033981*/

@@ -59,38 +59,35 @@ DynArray *dice_roll_instruction_stack_get_dice_collections(DiceRollInstructionSt
 
 DiceRollInstructionResult *result_from_instruction(DiceRollInstruction *dri) {
 	OperationType op_type = dice_roll_instruction_get_operation_type(dri);
-	DiceRollInstructionResult *drir = NULL;
 	double d = -1;
 	DiceCollection *dc = NULL;
 	switch (op_type) {
 		case op_type_number:
 			d = dice_roll_instruction_get_number(dri);
-			drir = dice_roll_instruction_result_with_double(d);
-			break;
+			return dice_roll_instruction_result_with_double(d);
 		case op_type_dice_collection:
 			dc = dice_roll_instruction_get_dice_collection(dri);
-			drir = dice_roll_instruction_result_with_dice_collection(dc);
-			break;
+			return dice_roll_instruction_result_with_dice_collection(dc);
 		default:
-			break;
+            return NULL;
 	}
-	return dri;
 }
 
 DiceRollInstructionResult *dice_roll_instruction_stack_evaluate(DiceRollInstructionStack *dris) {
 	DiceRollInstruction *dri = NULL;
 	DiceRollInstructionResult *drir = NULL;
 	if (dyn_array_count(dris->instructions) == 1) {
-		drir = result_from_instruction(dice_roll_instruction_stack_pop(dris));
-		dice_roll_instruction_stack_free(dris);
+		dri = dice_roll_instruction_stack_pop(dris);
+		drir = result_from_instruction(dri);
 		return drir;
 	}
 	DynArray *working_stack = dyn_array_create(16);
 	DiceRollInstructionResultStack *drirs = dice_roll_instruction_result_stack_create(8);
 
-
+    printf("Start evaluating:\n");
 	while (dice_roll_instruction_stack_peek(dris)) {
 		dri = dice_roll_instruction_stack_pop(dris);
+        dice_roll_instruction_print(dri);
 		OperationType op_type = dice_roll_instruction_get_operation_type(dri);
 		if (op_type == op_type_unknown) {
 			dice_roll_instruction_result_stack_free(drirs);
@@ -107,6 +104,8 @@ DiceRollInstructionResult *dice_roll_instruction_stack_evaluate(DiceRollInstruct
 		drir = dice_roll_instruction_do_op(dri, working_stack);
 		dice_roll_instruction_result_stack_push(drirs, drir);
 	}
+    printf("End evaluating\n");
+
 	drir = dice_roll_instruction_result_stack_pop(drirs);
 	dice_roll_instruction_result_stack_free(drirs);
 	return drir;
