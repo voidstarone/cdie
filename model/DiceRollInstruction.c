@@ -15,12 +15,21 @@
 #define NUM_OPERATIONS 8
 
 
-DiceRollInstructionResult * (*ops[7]) (DynArray *);
+DiceRollInstruction * (*ops[7]) (DynArray *);
 void setup_ops(void);
 
 DiceRollInstruction *dice_roll_instruction_create(void) {
     DiceRollInstruction *dri = malloc(sizeof(DiceRollInstruction));
     dri->value = NULL;
+    return dri;
+}
+
+DiceRollInstruction *dice_roll_instruction_create_number(double num) {
+    DiceRollInstruction *dri = dice_roll_instruction_create();
+    dri->operation_type = op_type_number;
+    dri->value = malloc(sizeof(double));
+    memcpy(dri->value, &num, sizeof(double));
+    dice_roll_instruction_set_expected_result_type(dri, result_type_double);
     return dri;
 }
 
@@ -213,7 +222,15 @@ DiceRollInstruction *dice_roll_instruction_from_string(char *string_representati
 }
 
 static bool dri_should_setup_ops = true;
-DiceRollInstructionResult *dice_roll_instruction_do_op(DiceRollInstruction *dri, DynArray *argv) {
+//DiceRollInstructionResult *dice_roll_instruction_do_op(DiceRollInstruction *dri, DynArray *argv) {
+//    if (dri_should_setup_ops) {
+//        setup_ops();
+//        dri_should_setup_ops = false;
+//    }
+//    return ops[dri->operation_type](argv);
+//}
+
+DiceRollInstruction *dice_roll_instruction_do_op(DiceRollInstruction *dri, DynArray *argv) {
     if (dri_should_setup_ops) {
         setup_ops();
         dri_should_setup_ops = false;
@@ -221,63 +238,136 @@ DiceRollInstructionResult *dice_roll_instruction_do_op(DiceRollInstruction *dri,
     return ops[dri->operation_type](argv);
 }
 
-DiceRollInstructionResult *op_add(DynArray *argv) {
-    DiceRollInstructionResult *arg1 = dyn_array_pop(argv);
-    DiceRollInstructionResult *arg2 = dyn_array_pop(argv);
+//DiceRollInstructionResult *op_add(DynArray *argv) {
+//    DiceRollInstructionResult *arg1 = dyn_array_pop(argv);
+//    DiceRollInstructionResult *arg2 = dyn_array_pop(argv);
+//    double num1, num2;
+//    num1 = dice_roll_instruction_result_get_number(arg1);
+//    num2 = dice_roll_instruction_result_get_number(arg2);
+//    DiceRollInstructionResult *result = dice_roll_instruction_result_with_double(num1 + num2);
+//    dice_roll_instruction_result_free(arg1);
+//    dice_roll_instruction_result_free(arg2);
+//    return result;
+//}
+//
+//DiceRollInstructionResult *op_subtract(DynArray *argv) {
+//    DiceRollInstructionResult *arg1 = dyn_array_pop(argv);
+//    DiceRollInstructionResult *arg2 = dyn_array_pop(argv);
+//    double num1, num2;
+//    num1 = dice_roll_instruction_result_get_number(arg1);
+//    num2 = dice_roll_instruction_result_get_number(arg2);
+//    DiceRollInstructionResult *result = dice_roll_instruction_result_with_double(num2 - num1);
+//    dice_roll_instruction_result_free(arg1);
+//    dice_roll_instruction_result_free(arg2);
+//    return result;
+//}
+//
+//DiceRollInstructionResult *op_multiply(DynArray *argv) {
+//    DiceRollInstructionResult *arg1 = dyn_array_pop(argv);
+//    DiceRollInstructionResult *arg2 = dyn_array_pop(argv);
+//    double num1, num2;
+//    num1 = dice_roll_instruction_result_get_number(arg1);
+//    num2 = dice_roll_instruction_result_get_number(arg2);
+//    DiceRollInstructionResult *result = dice_roll_instruction_result_with_double(num1 * num2);
+//    dice_roll_instruction_result_free(arg1);
+//    dice_roll_instruction_result_free(arg2);
+//    return result;
+//}
+//
+//DiceRollInstructionResult *op_divide(DynArray *argv) {
+//    DiceRollInstructionResult *arg1 = dyn_array_pop(argv);
+//    DiceRollInstructionResult *arg2 = dyn_array_pop(argv);
+//    double num1, num2;
+//    num1 = dice_roll_instruction_result_get_number(arg1);
+//    num2 = dice_roll_instruction_result_get_number(arg2);
+//    DiceRollInstructionResult *result = dice_roll_instruction_result_with_double(num2 / num1);
+//    dice_roll_instruction_result_free(arg1);
+//    dice_roll_instruction_result_free(arg2);
+//    return result;
+//}
+//
+//DiceRollInstructionResult *op_max(DynArray *argv) {
+//    DiceRollInstructionResult *arg1 = dyn_array_pop(argv);
+//    if (arg1->type != result_type_dice_collection) {
+//        return NULL;
+//    }
+//    DiceCollection *dc = arg1->result_value;
+//    double maximum = DBL_MIN;
+//    DiceCollectionResults *dcr = dice_collection_last_results(dc);
+//
+//
+//    for (size_t i = dice_collection_results_count(dcr) - 1; i > 0; --i) {
+//        double current_val = dice_collection_results_result_at(dcr, i);
+//        if (current_val > maximum) {
+//            maximum = current_val;
+//        }
+//    }
+//
+//    DiceRollInstructionResult *result = dice_roll_instruction_result_with_double(maximum);
+//    dice_roll_instruction_result_free(arg1);
+//    return result;
+//}
+
+DiceRollInstruction *op_add(DynArray *argv) {
+    DiceRollInstruction *arg1 = dyn_array_pop(argv);
+    DiceRollInstruction *arg2 = dyn_array_pop(argv);
     double num1, num2;
-    num1 = dice_roll_instruction_result_get_number(arg1);
-    num2 = dice_roll_instruction_result_get_number(arg2);
-    DiceRollInstructionResult *result = dice_roll_instruction_result_with_double(num1 + num2);
-    dice_roll_instruction_result_free(arg1);
-    dice_roll_instruction_result_free(arg2);
-    return result;
+    num1 = dice_roll_instruction_get_number(arg1);
+    num2 = dice_roll_instruction_get_number(arg2);
+    
+    DiceRollInstruction *new_instruction = dice_roll_instruction_create_number(num1 + num2);
+    dice_roll_instruction_free(arg1);
+    dice_roll_instruction_free(arg2);
+    return new_instruction;
 }
 
-DiceRollInstructionResult *op_subtract(DynArray *argv) {
-    DiceRollInstructionResult *arg1 = dyn_array_pop(argv);
-    DiceRollInstructionResult *arg2 = dyn_array_pop(argv);
+DiceRollInstruction *op_subtract(DynArray *argv) {
+    DiceRollInstruction *arg1 = dyn_array_pop(argv);
+    DiceRollInstruction *arg2 = dyn_array_pop(argv);
     double num1, num2;
-    num1 = dice_roll_instruction_result_get_number(arg1);
-    num2 = dice_roll_instruction_result_get_number(arg2);
-    DiceRollInstructionResult *result = dice_roll_instruction_result_with_double(num2 - num1);
-    dice_roll_instruction_result_free(arg1);
-    dice_roll_instruction_result_free(arg2);
-    return result;
+    num1 = dice_roll_instruction_get_number(arg1);
+    num2 = dice_roll_instruction_get_number(arg2);
+    
+    DiceRollInstruction *new_instruction = dice_roll_instruction_create_number(num2 - num1);
+    dice_roll_instruction_free(arg1);
+    dice_roll_instruction_free(arg2);
+    return new_instruction;
 }
 
-DiceRollInstructionResult *op_multiply(DynArray *argv) {
-    DiceRollInstructionResult *arg1 = dyn_array_pop(argv);
-    DiceRollInstructionResult *arg2 = dyn_array_pop(argv);
+DiceRollInstruction *op_multiply(DynArray *argv) {
+    DiceRollInstruction *arg1 = dyn_array_pop(argv);
+    DiceRollInstruction *arg2 = dyn_array_pop(argv);
     double num1, num2;
-    num1 = dice_roll_instruction_result_get_number(arg1);
-    num2 = dice_roll_instruction_result_get_number(arg2);
-    DiceRollInstructionResult *result = dice_roll_instruction_result_with_double(num1 * num2);
-    dice_roll_instruction_result_free(arg1);
-    dice_roll_instruction_result_free(arg2);
-    return result;
+    num1 = dice_roll_instruction_get_number(arg1);
+    num2 = dice_roll_instruction_get_number(arg2);
+    
+    DiceRollInstruction *new_instruction = dice_roll_instruction_create_number(num1 * num2);
+    dice_roll_instruction_free(arg1);
+    dice_roll_instruction_free(arg2);
+    return new_instruction;
 }
 
-DiceRollInstructionResult *op_divide(DynArray *argv) {
-    DiceRollInstructionResult *arg1 = dyn_array_pop(argv);
-    DiceRollInstructionResult *arg2 = dyn_array_pop(argv);
+DiceRollInstruction *op_divide(DynArray *argv) {
+    DiceRollInstruction *arg1 = dyn_array_pop(argv);
+    DiceRollInstruction *arg2 = dyn_array_pop(argv);
     double num1, num2;
-    num1 = dice_roll_instruction_result_get_number(arg1);
-    num2 = dice_roll_instruction_result_get_number(arg2);
-    DiceRollInstructionResult *result = dice_roll_instruction_result_with_double(num2 / num1);
-    dice_roll_instruction_result_free(arg1);
-    dice_roll_instruction_result_free(arg2);
-    return result;
+    num1 = dice_roll_instruction_get_number(arg1);
+    num2 = dice_roll_instruction_get_number(arg2);
+   
+    DiceRollInstruction *new_instruction = dice_roll_instruction_create_number(num2 / num1);
+    dice_roll_instruction_free(arg1);
+    dice_roll_instruction_free(arg2);
+    return new_instruction;
 }
 
-DiceRollInstructionResult *op_max(DynArray *argv) {
-    DiceRollInstructionResult *arg1 = dyn_array_pop(argv);
-    if (arg1->type != result_type_dice_collection) {
+DiceRollInstruction *op_max(DynArray *argv) {
+    DiceRollInstruction *arg1 = dyn_array_pop(argv);
+    if (arg1->operation_type != op_type_dice_collection) {
         return NULL;
     }
-    DiceCollection *dc = arg1->result_value;
+    DiceCollection *dc = dice_roll_instruction_get_dice_collection(arg1);
     double maximum = DBL_MIN;
     DiceCollectionResults *dcr = dice_collection_last_results(dc);
-
 
     for (size_t i = dice_collection_results_count(dcr) - 1; i > 0; --i) {
         double current_val = dice_collection_results_result_at(dcr, i);
@@ -286,9 +376,9 @@ DiceRollInstructionResult *op_max(DynArray *argv) {
         }
     }
 
-    DiceRollInstructionResult *result = dice_roll_instruction_result_with_double(maximum);
-    dice_roll_instruction_result_free(arg1);
-    return result;
+    DiceRollInstruction *new_instruction = dice_roll_instruction_create_number(maximum);
+    dice_roll_instruction_free(arg1);
+    return new_instruction;
 }
 
 void dice_roll_instruction_print(DiceRollInstruction *dri) {
@@ -297,36 +387,36 @@ void dice_roll_instruction_print(DiceRollInstruction *dri) {
     DiceCollection *dc;
     switch (op_type) {
         case op_type_add:
-            printf("+\n");
+            printf("+");
             break;
         case op_type_subtract:
-            printf("-\n");
+            printf("-");
             break;
         case op_type_multiply:
-            printf("*\n");
+            printf("*");
             break;
         case op_type_divide:
-            printf("/\n");
+            printf("/");
             break;
         case op_type_sum:
-            printf("sum\n");
+            printf("sum");
             break;
         case 5:
-            printf("mean\n");
+            printf("mean");
             break;
         case op_type_max:
-            printf("max\n");
+            printf("max");
             break;
         case op_type_number:
             num = dice_roll_instruction_get_number(dri);
-            printf("%lf\n", num);
+            printf("%lf", num);
             break;
         case op_type_dice_collection:
             dc = dice_roll_instruction_get_dice_collection(dri);
-            printf("%zud%zu\n", dc->_size, dc->num_faces);
+            printf("%zud%zu", dc->_size, dc->num_faces);
             break;
         default:
-            printf("Bad Op!\n");
+            printf("Bad Op!");
     }
 }
 

@@ -16,7 +16,8 @@ void dice_roll_instruction_result_stack_push(DiceRollInstructionResultStack *dri
 DiceRollInstructionResult * dice_roll_instruction_result_stack_peek(DiceRollInstructionResultStack *drirs);
 DiceRollInstructionResult * dice_roll_instruction_result_stack_pop(DiceRollInstructionResultStack *drirs);
 
-DiceRollInstructionResult * dice_roll_instruction_do_op(DiceRollInstruction *dri, DynArray *argv);
+//DiceRollInstructionResult * dice_roll_instruction_do_op(DiceRollInstruction *dri, DynArray *argv);
+DiceRollInstruction * dice_roll_instruction_do_op(DiceRollInstruction *dri, DynArray *argv);
 
 
 #endif /*DIE_ROLL_INSTRUCTION_RESULT_STACK_H_FA033981*/

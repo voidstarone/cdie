@@ -43,7 +43,9 @@ DiceRollInstructionResult *dice_roll_instruction_result_with_dice_collection(Dic
 }
 
 double dice_roll_instruction_result_get_number(DiceRollInstructionResult *drir) {
-    if (drir == NULL) { return -1; }
+    if (drir == NULL) {
+        return -1;
+    }
     if (drir->type == result_type_double) {
         return dice_roll_instruction_result_value_as_double(drir);
     }
@@ -71,3 +73,20 @@ void dice_roll_instruction_result_free(DiceRollInstructionResult *drir) {
     drir = NULL;
 }
 
+void dice_roll_instruction_result_print(DiceRollInstructionResult *drir) {
+    ResultType r_type = drir->type;
+    double num;
+    DiceCollection *dc;
+    switch (r_type) {
+        case result_type_double:
+            num = dice_roll_instruction_result_get_number(drir);
+            printf("%lf,", num);
+            break;
+        case result_type_dice_collection:
+            dc = dice_roll_instruction_result_get_dice_collection(drir);
+            printf("%zud%zu,", dc->_size, dc->num_faces);
+            break;
+        default:
+            printf("Bad Op!,");
+    }
+}

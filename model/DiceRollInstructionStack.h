@@ -18,5 +18,5 @@ DiceRollInstruction * dice_roll_instruction_stack_pop(DiceRollInstructionStack *
 
 DynArray *dice_roll_instruction_stack_get_dice_collections(DiceRollInstructionStack *dris);
 
-DiceRollInstructionResult *dice_roll_instruction_stack_evaluate(DiceRollInstructionStack *dris);
+DiceRollInstruction *dice_roll_instruction_stack_evaluate(DiceRollInstructionStack *dris);
 #endif /*DICE_ROLL_INSTRUCTION_STACK_H_FA033981*/

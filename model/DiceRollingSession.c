@@ -65,9 +65,9 @@ char *dice_rolling_session_resolve_notation(DiceRollingSession *drs, char *expre
             strcat(retStr, success_buffer);
         }
 	}
-	DiceRollInstructionResult *final_result = dice_roll_instruction_stack_evaluate(instructions);
+	DiceRollInstruction *final_result = dice_roll_instruction_stack_evaluate(instructions);
 	char final_result_str_buffer[128];
-	double final_result_num = dice_roll_instruction_result_get_number(final_result);
+	double final_result_num = dice_roll_instruction_get_number(final_result);
 	if (count_decimals(final_result_num) == 0) {
 		snprintf(final_result_str_buffer, 128, "%.0lf", final_result_num);
 	} else {

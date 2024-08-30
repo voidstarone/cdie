@@ -23,4 +23,5 @@ double dice_roll_instruction_result_value_as_double(DiceRollInstructionResult *d
 DiceRollInstructionResult *dice_roll_instruction_result_with_dice_collection(DiceCollection *dc);
 double dice_roll_instruction_result_get_number(DiceRollInstructionResult *drir);
 DiceCollection *dice_roll_instruction_result_get_dice_collection(DiceRollInstructionResult *drir);
+void dice_roll_instruction_result_print(DiceRollInstructionResult *drir);
 #endif /*DIE_ROLL_INSTRUCTION_RESULT_H_FA033981*/

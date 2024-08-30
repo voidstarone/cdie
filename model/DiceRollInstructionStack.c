@@ -73,40 +73,41 @@ DiceRollInstructionResult *result_from_instruction(DiceRollInstruction *dri) {
 	}
 }
 
-DiceRollInstructionResult *dice_roll_instruction_stack_evaluate(DiceRollInstructionStack *dris) {
+void print_element_drir(void *element) {
+    DiceRollInstructionResult *value = element;
+    dice_roll_instruction_result_print(value);
+}
+
+void print_element_dri(void *element) {
+    DiceRollInstruction *value = element;
+    dice_roll_instruction_print(value);
+}
+
+DiceRollInstruction *dice_roll_instruction_stack_evaluate(DiceRollInstructionStack *dris) {
 	DiceRollInstruction *dri = NULL;
-	DiceRollInstructionResult *drir = NULL;
 	if (dyn_array_count(dris->instructions) == 1) {
 		dri = dice_roll_instruction_stack_pop(dris);
-		drir = result_from_instruction(dri);
-		return drir;
+		return dri;
 	}
 	DynArray *working_stack = dyn_array_create(16);
-	DiceRollInstructionResultStack *drirs = dice_roll_instruction_result_stack_create(8);
 
-    printf("Start evaluating:\n");
 	while (dice_roll_instruction_stack_peek(dris)) {
 		dri = dice_roll_instruction_stack_pop(dris);
-        dice_roll_instruction_print(dri);
 		OperationType op_type = dice_roll_instruction_get_operation_type(dri);
+        // Bad value
 		if (op_type == op_type_unknown) {
-			dice_roll_instruction_result_stack_free(drirs);
 			dyn_array_free(working_stack);
 			return NULL;
 		}
 		// Operands
 		if (op_type <= op_type_number) {
-			drir = result_from_instruction(dri);
-			dyn_array_push(working_stack, drir);
+			dyn_array_push(working_stack, dri);
 			continue;
 		}
 		// Operations
-		drir = dice_roll_instruction_do_op(dri, working_stack);
-		dice_roll_instruction_result_stack_push(drirs, drir);
+		dri = dice_roll_instruction_do_op(dri, working_stack);
+        dyn_array_push(working_stack, dri);
 	}
-    printf("End evaluating\n");
-
-	drir = dice_roll_instruction_result_stack_pop(drirs);
-	dice_roll_instruction_result_stack_free(drirs);
-	return drir;
+    dri = dyn_array_pop(working_stack);
+	return dri;
 }

@@ -429,75 +429,105 @@ void copy_range_to_string(char *buf, char *target, size_t start_index, size_t le
 }
 
 void postfixify_expression(DynArray *postfix_ranges, char *expression) {
-	size_t length = strlen(expression) + 2;
-	char *working_expression = malloc(sizeof(char) * length + 1);
-	snprintf(working_expression, length, "(%s)", expression);
-	DynArray *working_stack = dyn_array_create(16);
-	for (size_t e_i = 0; e_i < length; e_i++) {
-		char c = working_expression[e_i];
-		if (working_expression[e_i] == '(') {
-			dyn_array_push(working_stack, range_create_and_init(e_i, 1));
-		} else if (working_expression[e_i] == ')') {
-			// Repeatedly pop from stack and add it to the postfix expression until a "(" is encountered.
-			// Discard the "(". That is, remove the "(" from stack and do not add it to the postfix expression
-			while (!dyn_array_is_empty(working_stack)) {
-				Range *r = dyn_array_peek(working_stack);
-				if (expression[range_get_index(r)] == '(') {
-					break;
-				}
-				r = dyn_array_pop(working_stack);
-				dyn_array_push(postfix_ranges, r);
-			}
-		} else if (is_operator(c)) {
-			// IF an operator O is encountered, then
-			//   Repeatedly pop from stack and add each operator popped from the stack to the
-			//       postfix expression which has equal or higher precedence than O
-			//   Push the operator O to the stack.
-			int precedence = precedence_for_operator(c);
-			while (!dyn_array_is_empty(working_stack)) {
-				Range *r = dyn_array_peek(working_stack);
-				size_t o_i = range_get_index(r);
-				if (precedence_for_operator(expression[o_i]) >= precedence) {
-					r = dyn_array_pop(working_stack);
-					dyn_array_push(postfix_ranges, r);
-				}
-			}
-			dyn_array_push(working_stack, range_create_and_init(e_i, 1));
-		} else if (is_digit(c) || c == '.' || (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') ) {
-			// push operand to postfix
-			// add the whole operand
-			// jump i ahead
-
-			// go through the chars until we reach either and operator or a paren
-			size_t index_after_operand = -1;
-			for (size_t o_i = e_i; o_i < length; ++o_i) {
-				if (expression[o_i] == ')' || char_is_inline_whitespace(expression[o_i])) {
-					index_after_operand = o_i;
-				}
-			}
-			if (index_after_operand == (size_t) -1) {
-				// something went wrong
-				continue;
-			}
-			Range *r = range_create_and_init(e_i, e_i - (index_after_operand - 1));
-			dyn_array_push(postfix_ranges, r);
-			e_i = index_after_operand - 1;
-		} else if (char_is_inline_whitespace(working_expression[e_i])) {
-			continue;
-		} else {
+    size_t length = strlen(expression);
+    printf("%s\n", expression);
+	DynArray *operator_stack = dyn_array_create(16);
+    for (size_t e_i = 0; e_i < length; ++e_i) {
+        char c = expression[e_i];
+        printf("%zu:%c\n", e_i, c);
+        if (c == '(') {
+            dyn_array_push(operator_stack, range_create_and_init(e_i, 1));
+        } else if (c == ')') {
+            // Repeatedly pop from stack and add it to the postfix expression until a "(" is encountered.
+            // Discard the "(". That is, remove the "(" from stack and do not add it to the postfix expression
+            while (!dyn_array_is_empty(operator_stack)) {
+                Range *r = dyn_array_pop(operator_stack);
+                if (expression[range_get_index(r)] == '(') {
+                    break;
+                }
+                char operator = expression[r->index];
+                printf("\n )popped: %c\n", operator);
+                dyn_array_push(postfix_ranges, r);
+            }
+        } else if (is_operator(c)) {
+            // IF an operator O is encountered, then
+            //   Repeatedly pop from stack and add each operator popped from the stack to the
+            //       postfix expression which has equal or higher precedence than O
+            //   Push the operator O to the stack.
+            int precedence = precedence_for_operator(c);
+            
+//            for (size_t i = 0; i < dyn_array_count(operator_stack); ++i) {
+//                Range *r = dyn_array_element_at_index(operator_stack, i);
+//                printf("operator %zu\n", i);
+//                for (size_t j = r->index; j < r->index + r->length; ++j) {
+//                    printf("%c", expression[j]);
+//                }
+//                printf("\n");
+//            }
+            Range *r = dyn_array_peek(operator_stack);
+            char operator = expression[range_get_index(r)];
+            while (!dyn_array_is_empty(operator_stack) && precedence_for_operator(operator) >= precedence) {
+                Range *r = dyn_array_pop(operator_stack);
+                size_t o_i = range_get_index(r);
+                char operator = expression[o_i]; // assue operator is 1 char
+//                printf("%c", operator);
+                printf("\n op popped: %c\n", operator);
+                dyn_array_push(postfix_ranges, r);
+                r = dyn_array_peek(operator_stack);
+                operator = expression[range_get_index(r)];
+            }
+            dyn_array_push(operator_stack, range_create_and_init(e_i, 1));
+        } else if (is_digit(c) || c == '.' || (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') ) {
+            // push operand to postfix
+            // add the whole operand
+            // jump i ahead
+            
+            // go through the chars until we reach either and operator or a paren
+            size_t index_after_operand = -1;
+            char tmp_c;
+            for (size_t o_i = e_i; o_i < length; ++o_i) {
+                tmp_c = expression[o_i];
+                if (tmp_c == ')' || char_is_inline_whitespace(tmp_c) || tmp_c == '\0') {
+                    index_after_operand = o_i;
+                    break;
+                }
+            }
+            if (index_after_operand == (size_t) -1) {
+                // something went wrong
+                printf("SHIT!\n");
+                continue;
+            }
+            size_t length = index_after_operand - e_i;
+            Range *r = range_create_and_init(e_i, length);
+            dyn_array_push(postfix_ranges, r);
+            e_i = index_after_operand - 1;
+        } else if (char_is_inline_whitespace(expression[e_i])) {
+            continue;
+        } else if (c == '\0') {
+            break;
+        } else{
 			goto cleanup;
 		}
 	}
 
-	while (!dyn_array_is_empty(working_stack)) {
-		Range *r = dyn_array_pop(working_stack);
+	while (!dyn_array_is_empty(operator_stack)) {
+		Range *r = dyn_array_pop(operator_stack);
 		dyn_array_push(postfix_ranges, r);
 	}
+    dyn_array_reverse_in_place(postfix_ranges);
 
+    printf("final (%zu):", dyn_array_count(postfix_ranges));
+    for (size_t i = 0; i < dyn_array_count(postfix_ranges); ++i) {
+        Range *r = dyn_array_element_at_index(postfix_ranges, i);
+        for (size_t j = r->index; j < r->index + r->length; ++j) {
+            printf("%c", expression[j]);
+        }
+        printf(" ");
+    }
+    printf("\n");
+    
 	cleanup:
-	free(working_expression);
-	dyn_array_free(working_stack);
-	
+	dyn_array_free(operator_stack);
 }
 
 DiceRollInstructionStack *dice_roll_instruction_stack_from_expression(char *expression) {
@@ -507,31 +537,30 @@ DiceRollInstructionStack *dice_roll_instruction_stack_from_expression(char *expr
 	size_t closing_index;
 	if (opening_index == SIZE_MAX) { // No parens
 		opening_index = 0;
-		closing_index = strlen(expression);
+		closing_index = strlen(expression) - 1;
 	} else {
 		opening_index++;
 		closing_index = index_of_next_closing_param(expression, opening_index);
 	}
+    
+    size_t length = strlen(expression) + 3;
+    char *working_expression = malloc(sizeof(char) * length);
+    snprintf(working_expression, length, "(%s)", expression);
+    printf("%s\n", working_expression);
+    postfixify_expression(postfix_ranges, working_expression);
 	
-	size_t length = closing_index - opening_index;
-
-	postfixify_expression(
-		postfix_ranges,
-		expression
-	);
-	
-	// dyn_array_print(postfix_ranges, &range_print);
-	// for (size_t i = 0; i < dyn_array_count(postfix_ranges); i++) {
-	// 	if (i != 0) {
-	// 		printf(", ");
-	// 	}
-	// 	Range *range = dyn_array_element_at_index(postfix_ranges, i);
-	// 	size_t start_index = range_get_index(range);
-	// 	for (size_t j = start_index; j < start_index + range_get_length(range); j++) {
-	// 		printf("%c", expression[j]);
-	// 	}
-	// }
-	// printf("\n");
+	 dyn_array_print(postfix_ranges, &range_print);
+	 for (size_t i = 0; i < dyn_array_count(postfix_ranges); i++) {
+	 	if (i != 0) {
+	 		printf(", ");
+	 	}
+	 	Range *range = dyn_array_element_at_index(postfix_ranges, i);
+	 	size_t start_index = range_get_index(range);
+	 	for (size_t j = start_index; j < start_index + range_get_length(range); j++) {
+	 		printf("%c", working_expression[j]);
+	 	}
+	 }
+	 printf("\n");
 	
 	size_t max_op_length = 8;
 	char *op_as_string = malloc(sizeof(char) * max_op_length);
@@ -543,7 +572,7 @@ DiceRollInstructionStack *dice_roll_instruction_stack_from_expression(char *expr
 			op_as_string = realloc(op_as_string, sizeof(char) * op_strlen);
 			max_op_length = op_strlen;
 		}
-		copy_range_to_string(op_as_string, expression, range_start, op_strlen);
+		copy_range_to_string(op_as_string, working_expression, range_start, op_strlen);
 
 		DiceRollInstruction *instruction = dice_roll_instruction_from_string(op_as_string);
 		dice_roll_instruction_stack_push(instruction_stack, instruction);
@@ -551,7 +580,7 @@ DiceRollInstructionStack *dice_roll_instruction_stack_from_expression(char *expr
 	free(op_as_string);
 	op_as_string = NULL;
 
-//	dyn_array_reverse_in_place(instruction_stack->instructions);
+    //	dyn_array_reverse_in_place(instruction_stack->instructions);
 
 	// DynArray *instructions = instruction_stack->instructions;
 	// for (size_t i = 0; i < dyn_array_count(instructions); i++) {
