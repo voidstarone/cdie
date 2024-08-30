@@ -221,6 +221,13 @@ int test_suite_expression_to_dice_roll_instruction_stack(int(*init_suite)(void),
         return CU_get_error();
     }
 
+    
+    if (NULL == CU_add_test(pSuite, "test_dice_roll_instruction_stack_from_expression_parens_maths",
+                            test_dice_roll_instruction_stack_from_expression_parens_maths)) {
+        CU_cleanup_registry();
+        return CU_get_error();
+    }
+    
 	// Run the tests and show the run summary
 	CU_basic_run_tests();
 	return CU_get_error();
