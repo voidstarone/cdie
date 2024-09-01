@@ -5,10 +5,10 @@
 #include <float.h>
 #include <regex.h>        
 
+#include "DynArray.h"
 #include "DiceCollection.h"
 #include "DiceNotationInterpreter.h"
 #include "DiceRollInstruction.h"
-#include "DiceRollInstructionResultStack.h"
 #include "Die.h"
 
 #define DRI_DATA_OP_TYPE -1

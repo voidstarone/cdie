@@ -33,7 +33,6 @@ size_t expected_output_length_for_dice_collections(DynArray *dcs) {
 }
 
 char *dice_rolling_session_resolve_notation(DiceRollingSession *drs, char *expression) {
-
 	DiceRollInstructionStack *instructions = dice_roll_instruction_stack_from_expression(expression);
 	
 	drs->dice_collections = dice_roll_instruction_stack_get_dice_collections(instructions);

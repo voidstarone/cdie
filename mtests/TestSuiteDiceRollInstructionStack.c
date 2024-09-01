@@ -6,7 +6,6 @@
 #include "DiceCollection.h"
 #include "DiceRollInstruction.h"
 #include "DiceRollInstructionStack.h"
-#include "DiceRollInstructionResultStack.h"
 
 #include "TestSuiteDiceRollInstructionStack.h"
 
@@ -221,7 +220,6 @@ void test_dice_roll_instruction_stack_evaluate_add_three_ints(void) {
 	DiceRollInstruction *dri = dice_roll_instruction_stack_evaluate(dris);
 
 	double real_result = dice_roll_instruction_get_number(dri);
-    printf("real_result=%lf;\n", real_result);
 	CU_ASSERT_EQUAL(real_result, (double) 2 + 5 + 10);
 	dice_roll_instruction_stack_free(dris);
 }

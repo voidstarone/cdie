@@ -1,6 +1,5 @@
 #include "DynArray.h"
 #include "DiceRollInstruction.h"
-#include "DiceRollInstructionResultStack.h"
 
 #ifndef DICE_ROLL_INSTRUCTION_STACK_H_FA033981
 #define DICE_ROLL_INSTRUCTION_STACK_H_FA033981

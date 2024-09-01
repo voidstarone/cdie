@@ -3,7 +3,6 @@
 #ifndef DIE_ROLL_INSTRUCTION_RESULT_H_FA033981
 #define DIE_ROLL_INSTRUCTION_RESULT_H_FA033981
 
-
 typedef enum {
 	result_type_void,
 	result_type_double,

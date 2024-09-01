@@ -20,7 +20,6 @@ MOFILES= $(ODIR)/DynArray.o \
 	$(ODIR)/DiceNotationInterpreter.o \
 	$(ODIR)/DiceRollInstructionResult.o \
 	$(ODIR)/DiceRollInstruction.o \
-	$(ODIR)/DiceRollInstructionResultStack.o \
 	$(ODIR)/DiceRollInstructionStack.o \
 	$(ODIR)/ExpressionToDiceRollInstructionStack.o \
 	$(ODIR)/DiceRollingSession.o
@@ -88,9 +87,6 @@ $(ODIR)/ExpressionToDiceRollInstructionStack.o: $(MDIR)/ExpressionToDiceRollInst
 	
 $(ODIR)/DiceRollInstructionStack.o: $(MDIR)/DiceRollInstructionStack.c
 	$(CCF) -c -o $(ODIR)/DiceRollInstructionStack.o $(MDIR)/DiceRollInstructionStack.c;
-
-$(ODIR)/DiceRollInstructionResultStack.o: $(MDIR)/DiceRollInstructionResultStack.c
-	$(CCF) -c -o $(ODIR)/DiceRollInstructionResultStack.o $(MDIR)/DiceRollInstructionResultStack.c;
 
 $(ODIR)/DiceRollInstruction.o: $(MDIR)/DiceRollInstruction.c
 	$(CCF) -c -o $(ODIR)/DiceRollInstruction.o $(MDIR)/DiceRollInstruction.c;

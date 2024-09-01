@@ -6,7 +6,6 @@
 #include "DynArray.h"
 #include "DiceRollInstruction.h"
 #include "DiceRollInstructionStack.h"
-#include "DiceRollInstructionResultStack.h"
 
 DiceRollInstructionStack *dice_roll_instruction_stack_create(size_t size) {
 	DiceRollInstructionStack *dris = malloc(sizeof(DiceRollInstructionStack));
