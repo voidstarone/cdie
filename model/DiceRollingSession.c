@@ -77,6 +77,7 @@ char *dice_rolling_session_resolve_notation(DiceRollingSession *drs, char *expre
 
 	if (drs->success_lower_bound < __LONG_LONG_MAX__) {
 		snprintf(final_result_str_buffer, 128, "%.0lf", final_result_num);
-	}																																																																																																																																											
+	}
+    
 	return retStr;
 }
