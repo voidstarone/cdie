@@ -44,7 +44,7 @@ size_t extract_num_sides(size_t *num_sides, char *notation, size_t start_index) 
     return start_index+num_digits;
 }
 
-size_t does_dc_explode(bool *does_explode, char *notation, int start_index) {
+size_t does_dc_explode(bool *does_explode, char *notation, size_t start_index) {
     *does_explode = notation[start_index] == '!';
     return start_index+1;
 }

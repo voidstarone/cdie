@@ -5,7 +5,7 @@
 
 #include "TestSuiteDiceCollection.h"
 
-void test_dice_collection_init_faces() {
+void test_dice_collection_init_faces(void) {
 	DiceCollection *dc = dice_collection_create(10, 20);
 	
 	CU_ASSERT_EQUAL(dice_collection_faces(dc), 20);
@@ -13,14 +13,14 @@ void test_dice_collection_init_faces() {
 	dice_collection_free(dc);
 }
 
-void test_dice_collection_init_count() {
+void test_dice_collection_init_count(void) {
 	DiceCollection *dc = dice_collection_create(20, 7);
 
 	CU_ASSERT_EQUAL(dice_collection_count(dc), 20);
 	dice_collection_free(dc);
 }
 
-void test_dice_collection_die_at() {
+void test_dice_collection_die_at(void) {
 	DiceCollection *dc = dice_collection_create(20, 7);
 
 	Die *d = dice_collection_die_at(dc, 2);
@@ -29,7 +29,7 @@ void test_dice_collection_die_at() {
 	dice_collection_free(dc);
 }
 
-void test_dice_collection_roll() {
+void test_dice_collection_roll(void) {
 	DiceCollection *dc = dice_collection_create(50, 6);
 	DiceCollectionResults *dcr = dice_collection_results_create(50);
 	size_t rolls[50] = { 0 } ;
@@ -53,7 +53,7 @@ void test_dice_collection_roll() {
 	dice_collection_free(dc);
 }
 
-void test_dice_collection_roll_explode() {
+void test_dice_collection_roll_explode(void) {
 	DiceCollection *dc = dice_collection_create(50, 6);
 	 
 	dice_collection_set_explosion_lower_bound(dc, 6);

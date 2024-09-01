@@ -56,8 +56,6 @@ int main (int argc, char **argv) {
 	roll_arguments arguments;
 	arguments.botches_at = 0;
 	arguments.successes_at = __LONG_LONG_MAX__;
-	arguments.args = malloc(sizeof(char) * 16);
-	arguments.args = NULL;
     arguments.arg_count = 0;
 	argp_parse(&argp, argc, argv, 0, 0, &arguments);
 
@@ -104,7 +102,7 @@ int main (int argc, char **argv) {
 		}
 		printf("%s ", result);
 		fflush(stdin);
-		// free(result);
+		free(result);
 	}
 	printf("\n");
 

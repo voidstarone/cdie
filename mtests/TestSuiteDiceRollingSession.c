@@ -2,7 +2,7 @@
 #include "CUnit/Basic.h"
 #include "DiceRollingSession.h"
 
-void test_dice_rolling_session_resolve_notation_simple_dice() {
+void test_dice_rolling_session_resolve_notation_simple_dice(void) {
     DiceRollingSession *drs = dice_rolling_session_create();
 
     dice_rolling_session_free(drs);

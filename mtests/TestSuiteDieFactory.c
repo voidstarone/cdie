@@ -6,10 +6,10 @@
 #include "DieFactory.h"
 #include "TestSuiteDieFactory.h"
 
-void test_die_factory_create_dice() {
+void test_die_factory_create_dice(void) {
 	size_t num_dice = 50;
-	int result = 0;
-	int max_result = 0;
+	long long int result = 0;
+    long long int max_result = 0;
 	int die_sides = 6;
 	Die **dice = diefactory_make_die_array(die_sides, num_dice);
 	

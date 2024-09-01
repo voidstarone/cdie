@@ -33,7 +33,6 @@ size_t expected_output_length_for_dice_collections(DynArray *dcs) {
 }
 
 char *dice_rolling_session_resolve_notation(DiceRollingSession *drs, char *expression) {
-
 	DiceRollInstructionStack *instructions = dice_roll_instruction_stack_from_expression(expression);
 	
 	drs->dice_collections = dice_roll_instruction_stack_get_dice_collections(instructions);
@@ -65,9 +64,9 @@ char *dice_rolling_session_resolve_notation(DiceRollingSession *drs, char *expre
             strcat(retStr, success_buffer);
         }
 	}
-	DiceRollInstructionResult *final_result = dice_roll_instruction_stack_evaluate(instructions);
+	DiceRollInstruction *final_result = dice_roll_instruction_stack_evaluate(instructions);
 	char final_result_str_buffer[128];
-	double final_result_num = dice_roll_instruction_result_get_number(final_result);
+	double final_result_num = dice_roll_instruction_get_number(final_result);
 	if (count_decimals(final_result_num) == 0) {
 		snprintf(final_result_str_buffer, 128, "%.0lf", final_result_num);
 	} else {
@@ -77,6 +76,7 @@ char *dice_rolling_session_resolve_notation(DiceRollingSession *drs, char *expre
 
 	if (drs->success_lower_bound < __LONG_LONG_MAX__) {
 		snprintf(final_result_str_buffer, 128, "%.0lf", final_result_num);
-	}																																																																																																																																											
+	}
+    
 	return retStr;
 }

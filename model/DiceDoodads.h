@@ -10,7 +10,6 @@
 #include "DiceNotationInterpreter.h"
 #include "DiceRollInstruction.h"
 #include "DiceRollInstructionStack.h"
-#include "DiceRollInstructionResultStack.h"
 #include "ExpressionToDiceRollInstructionStack.h"
 
 #endif

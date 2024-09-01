@@ -6,7 +6,6 @@
 #include "DynArray.h"
 #include "DiceRollInstruction.h"
 #include "DiceRollInstructionStack.h"
-#include "DiceRollInstructionResultStack.h"
 
 DiceRollInstructionStack *dice_roll_instruction_stack_create(size_t size) {
 	DiceRollInstructionStack *dris = malloc(sizeof(DiceRollInstructionStack));
@@ -57,43 +56,57 @@ DynArray *dice_roll_instruction_stack_get_dice_collections(DiceRollInstructionSt
 	return dice_collections;
 }
 
-DiceRollInstructionResult *dice_roll_instruction_stack_evaluate(DiceRollInstructionStack *dris) {
-	DiceRollInstruction *dri = NULL;
-	DiceCollection *dc = NULL;
+DiceRollInstructionResult *result_from_instruction(DiceRollInstruction *dri) {
+	OperationType op_type = dice_roll_instruction_get_operation_type(dri);
 	double d = -1;
-	DiceRollInstructionResult *drir = NULL;
-	DiceRollInstructionResultStack *drirs = dice_roll_instruction_result_stack_create(8);
+	DiceCollection *dc = NULL;
+	switch (op_type) {
+		case op_type_number:
+			d = dice_roll_instruction_get_number(dri);
+			return dice_roll_instruction_result_with_double(d);
+		case op_type_dice_collection:
+			dc = dice_roll_instruction_get_dice_collection(dri);
+			return dice_roll_instruction_result_with_dice_collection(dc);
+		default:
+            return NULL;
+	}
+}
+
+void print_element_drir(void *element) {
+    DiceRollInstructionResult *value = element;
+    dice_roll_instruction_result_print(value);
+}
+
+void print_element_dri(void *element) {
+    DiceRollInstruction *value = element;
+    dice_roll_instruction_print(value);
+}
+
+DiceRollInstruction *dice_roll_instruction_stack_evaluate(DiceRollInstructionStack *dris) {
+	DiceRollInstruction *dri = NULL;
+	if (dyn_array_count(dris->instructions) == 1) {
+		dri = dice_roll_instruction_stack_pop(dris);
+		return dri;
+	}
+	DynArray *working_stack = dyn_array_create(16);
 
 	while (dice_roll_instruction_stack_peek(dris)) {
 		dri = dice_roll_instruction_stack_pop(dris);
 		OperationType op_type = dice_roll_instruction_get_operation_type(dri);
+        // Bad value
 		if (op_type == op_type_unknown) {
-			dice_roll_instruction_result_stack_free(drirs);
+			dyn_array_free(working_stack);
 			return NULL;
 		}
 		// Operands
 		if (op_type <= op_type_number) {
-			switch (op_type) {
-				case op_type_number:
-					d = dice_roll_instruction_get_number(dri);
-					drir = dice_roll_instruction_result_with_double(d);
-					break;
-				case op_type_dice_collection:
-					dc = dice_roll_instruction_get_dice_collection(dri);
-					drir = dice_roll_instruction_result_with_dice_collection(dc);
-					break;
-				default:
-					break;
-			}
-			dice_roll_instruction_result_stack_push(drirs, drir);
+			dyn_array_push(working_stack, dri);
 			continue;
 		}
-
 		// Operations
-		drir = dice_roll_instruction_do_op(dri, drirs);
-		dice_roll_instruction_result_stack_push(drirs, drir);
+		dri = dice_roll_instruction_do_op(dri, working_stack);
+        dyn_array_push(working_stack, dri);
 	}
-	drir = dice_roll_instruction_result_stack_pop(drirs);
-	dice_roll_instruction_result_stack_free(drirs);
-	return drir;
+    dri = dyn_array_pop(working_stack);
+	return dri;
 }

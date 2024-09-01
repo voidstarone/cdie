@@ -1,3 +1,4 @@
+#include "DynArray.h"
 #include "DiceRollInstructionResult.h"
 
 #ifndef DIE_ROLL_INSTRUCTION_H_FA033981
@@ -25,6 +26,7 @@ typedef struct _DieRollInstruction {
 } DiceRollInstruction;
 
 DiceRollInstruction *dice_roll_instruction_create(void);
+DiceRollInstruction *dice_roll_instruction_create_number(double num);
 void dice_roll_instruction_free(DiceRollInstruction *dri);
 DiceRollInstruction *dice_roll_instruction_clone(DiceRollInstruction *original);
 bool dice_roll_instruction_is_equal(DiceRollInstruction *dri1, DiceRollInstruction *dri2);
@@ -35,5 +37,7 @@ double dice_roll_instruction_get_number(DiceRollInstruction *dri);
 DiceCollection *dice_roll_instruction_get_dice_collection(DiceRollInstruction *dri);
 int dice_roll_instruction_get_num_args(DiceRollInstruction *dri);
 void dice_roll_instruction_set_expected_result_type(DiceRollInstruction *dri, ResultType result_type);
+DiceRollInstruction *dice_roll_instruction_do_op(DiceRollInstruction *dri, DynArray *argv);
+void dice_roll_instruction_print(DiceRollInstruction *dri);
 
 #endif /*DIE_ROLL_INSTRUCTION_H_FA033981*/

@@ -9,13 +9,13 @@
 #include "TestSuiteDiceRollInstructionResult.h"
 
 
-void test_dice_roll_instruction_result_init() {
+void test_dice_roll_instruction_result_init(void) {
 	DiceRollInstructionResult *drir = dice_roll_instruction_result_create();
 	CU_ASSERT_PTR_NOT_NULL(drir);
 	dice_roll_instruction_result_free(drir);
 }
 
-void test_dice_roll_instruction_result_with_double() {
+void test_dice_roll_instruction_result_with_double(void) {
 	double intended_result_number = 9.0;
 	DiceRollInstructionResult *drir = dice_roll_instruction_result_with_double(intended_result_number);
 	CU_ASSERT_PTR_NOT_NULL(drir);
