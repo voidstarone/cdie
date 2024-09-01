@@ -57,6 +57,7 @@ int main (int argc, char **argv) {
 	arguments.botches_at = 0;
 	arguments.successes_at = __LONG_LONG_MAX__;
     arguments.arg_count = 0;
+    arguments.args = malloc(sizeof(char) * 16);
 	argp_parse(&argp, argc, argv, 0, 0, &arguments);
 
 	DiceRollingSession *drs = dice_rolling_session_create();
