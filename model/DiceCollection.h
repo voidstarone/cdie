@@ -12,6 +12,7 @@ typedef struct {
 	DiceCollectionResults *last_results;
 	size_t explosion_lower_bound;
 	bool do_explosions_stack;
+    size_t found_index;
 } DiceCollection;
 
 DiceCollectionResults * dice_collection_results_create_for_dice_collection(DiceCollection *dc);

@@ -575,6 +575,10 @@ DiceRollInstructionStack *dice_roll_instruction_stack_from_expression(char *expr
 		copy_range_to_string(op_as_string, working_expression, range_start, op_strlen);
 
 		DiceRollInstruction *instruction = dice_roll_instruction_from_string(op_as_string);
+        if (instruction->operation_type == op_type_dice_collection) {
+            DiceCollection *dc = dice_roll_instruction_get_dice_collection(instruction);
+            dc->found_index = range_start;
+        }
 		dice_roll_instruction_stack_push(instruction_stack, instruction);
 	}
 	free(op_as_string);
