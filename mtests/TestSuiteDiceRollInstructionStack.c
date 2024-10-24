@@ -224,7 +224,6 @@ void test_dice_roll_instruction_stack_evaluate_add_three_ints(void) {
 	dice_roll_instruction_stack_free(dris);
 }
 
-
 void test_dice_roll_instruction_stack_evaluate_multiply_then_add_three_ints(void) {
 	DiceRollInstructionStack *dris = dice_roll_instruction_stack_create(5);
 

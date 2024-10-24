@@ -141,7 +141,7 @@ void test_dice_roll_instruction_stack_from_expression_simple_dice_add_expression
     DiceRollInstruction *instruction3 = dyn_array_element_at_index(dris->instructions, 0);
     CU_ASSERT_EQUAL(instruction3->operation_type, op_type_add);
 
-    DiceRollInstruction* result = dice_roll_instruction_stack_evaluate(dris);
+    DiceRollInstruction *result = dice_roll_instruction_stack_evaluate(dris);
 
     CU_ASSERT_EQUAL(dice_roll_instruction_get_number(result), 3.0);
 
@@ -158,6 +158,35 @@ void test_dice_roll_instruction_stack_from_expression_parens_maths(void) {
     dice_roll_instruction_stack_free(dris);
 }
 
+void test_dice_roll_instruction_stack_from_expression_simple_expression_no_spaces(void) {
+    
+    char exp[] = "26*2+10d1";
+    
+    DiceRollInstructionStack *dris = dice_roll_instruction_stack_from_expression(exp);
+
+    CU_ASSERT_EQUAL(dyn_array_count(dris->instructions), 5);
+    
+    DiceRollInstruction *result = dice_roll_instruction_stack_evaluate(dris);
+    
+    CU_ASSERT_EQUAL(dice_roll_instruction_get_number(result), 62);
+    dice_roll_instruction_stack_free(dris);
+}
+
+void test_dice_roll_instruction_stack_from_expression_parens_expression_no_spaces(void) {
+    
+    char exp[] = "26*2+10d1*(4+6)";
+    
+    DiceRollInstructionStack *dris = dice_roll_instruction_stack_from_expression(exp);
+
+    CU_ASSERT_EQUAL(dyn_array_count(dris->instructions), 9);
+    
+    DiceRollInstruction *result = dice_roll_instruction_stack_evaluate(dris);
+    
+    printf("result: %lf\n", dice_roll_instruction_get_number(result));
+    CU_ASSERT_EQUAL(dice_roll_instruction_get_number(result), 152);
+    dice_roll_instruction_stack_free(dris);
+}
+
 int test_suite_expression_to_dice_roll_instruction_stack(int(*init_suite)(void), int(*clean_suite)(void) ) {
     const char *test_suite_name = "test_suite_expression_to_dice_roll_instruction_stack";
     CU_pSuite pSuite = CU_add_suite(test_suite_name, init_suite, clean_suite);
@@ -167,61 +196,73 @@ int test_suite_expression_to_dice_roll_instruction_stack(int(*init_suite)(void),
     }
     printf("%s\n", test_suite_name);
 
-    if (NULL == CU_add_test(pSuite, "test_dice_roll_instruction_stack_from_expression_subtract",
-        test_dice_roll_instruction_stack_from_expression_subtract)) {
+   if (NULL == CU_add_test(pSuite, "test_dice_roll_instruction_stack_from_expression_subtract",
+       test_dice_roll_instruction_stack_from_expression_subtract)) {
+       CU_cleanup_registry();
+       return CU_get_error();
+   }
+
+   if (NULL == CU_add_test(pSuite, "test_dice_roll_instruction_stack_from_expression_divide",
+       test_dice_roll_instruction_stack_from_expression_divide)) {
+       CU_cleanup_registry();
+       return CU_get_error();
+   }
+
+   if (NULL == CU_add_test(pSuite, "test_dice_roll_instruction_stack_from_expression_add_multiply",
+       test_dice_roll_instruction_stack_from_expression_add_multiply)) {
+       CU_cleanup_registry();
+       return CU_get_error();
+   }
+
+   if (NULL == CU_add_test(pSuite, "test_dice_roll_instruction_stack_from_expression_subtract_multiply",
+       test_dice_roll_instruction_stack_from_expression_subtract_multiply)) {
+       CU_cleanup_registry();
+       return CU_get_error();
+   }
+
+   if (NULL == CU_add_test(pSuite, "test_dice_roll_instruction_stack_from_expression_simple_dice",
+       test_dice_roll_instruction_stack_from_expression_simple_dice)) {
+       CU_cleanup_registry();
+       return CU_get_error();
+   }
+
+   if (NULL == CU_add_test(pSuite, "test_dice_roll_instruction_stack_from_expression_simple_dice_add_expression",
+       test_dice_roll_instruction_stack_from_expression_simple_dice_add_expression)) {
+       CU_cleanup_registry();
+       return CU_get_error();
+   }   if (NULL == CU_add_test(pSuite, "test_dice_roll_instruction_stack_from_expression_subtract_multiply",
+       test_dice_roll_instruction_stack_from_expression_subtract_multiply)) {
+       CU_cleanup_registry();
+       return CU_get_error();
+   }
+
+   if (NULL == CU_add_test(pSuite, "test_dice_roll_instruction_stack_from_expression_simple_dice",
+       test_dice_roll_instruction_stack_from_expression_simple_dice)) {
+       CU_cleanup_registry();
+       return CU_get_error();
+   }
+
+   if (NULL == CU_add_test(pSuite, "test_dice_roll_instruction_stack_from_expression_simple_dice_add_expression",
+       test_dice_roll_instruction_stack_from_expression_simple_dice_add_expression)) {
+       CU_cleanup_registry();
+       return CU_get_error();
+   }
+
+   
+   if (NULL == CU_add_test(pSuite, "test_dice_roll_instruction_stack_from_expression_parens_maths",
+                           test_dice_roll_instruction_stack_from_expression_parens_maths)) {
+       CU_cleanup_registry();
+       return CU_get_error();
+   }
+   
+    if (NULL == CU_add_test(pSuite, "test_dice_roll_instruction_stack_from_expression_simple_expression_no_spaces",
+                            test_dice_roll_instruction_stack_from_expression_simple_expression_no_spaces)) {
         CU_cleanup_registry();
         return CU_get_error();
     }
-
-    if (NULL == CU_add_test(pSuite, "test_dice_roll_instruction_stack_from_expression_divide",
-        test_dice_roll_instruction_stack_from_expression_divide)) {
-        CU_cleanup_registry();
-        return CU_get_error();
-    }
-
-    if (NULL == CU_add_test(pSuite, "test_dice_roll_instruction_stack_from_expression_add_multiply",
-        test_dice_roll_instruction_stack_from_expression_add_multiply)) {
-        CU_cleanup_registry();
-        return CU_get_error();
-    }
-
-    if (NULL == CU_add_test(pSuite, "test_dice_roll_instruction_stack_from_expression_subtract_multiply",
-        test_dice_roll_instruction_stack_from_expression_subtract_multiply)) {
-        CU_cleanup_registry();
-        return CU_get_error();
-    }
-
-    if (NULL == CU_add_test(pSuite, "test_dice_roll_instruction_stack_from_expression_simple_dice",
-        test_dice_roll_instruction_stack_from_expression_simple_dice)) {
-        CU_cleanup_registry();
-        return CU_get_error();
-    }
-
-    if (NULL == CU_add_test(pSuite, "test_dice_roll_instruction_stack_from_expression_simple_dice_add_expression",
-        test_dice_roll_instruction_stack_from_expression_simple_dice_add_expression)) {
-        CU_cleanup_registry();
-        return CU_get_error();
-    }   if (NULL == CU_add_test(pSuite, "test_dice_roll_instruction_stack_from_expression_subtract_multiply",
-        test_dice_roll_instruction_stack_from_expression_subtract_multiply)) {
-        CU_cleanup_registry();
-        return CU_get_error();
-    }
-
-    if (NULL == CU_add_test(pSuite, "test_dice_roll_instruction_stack_from_expression_simple_dice",
-        test_dice_roll_instruction_stack_from_expression_simple_dice)) {
-        CU_cleanup_registry();
-        return CU_get_error();
-    }
-
-    if (NULL == CU_add_test(pSuite, "test_dice_roll_instruction_stack_from_expression_simple_dice_add_expression",
-        test_dice_roll_instruction_stack_from_expression_simple_dice_add_expression)) {
-        CU_cleanup_registry();
-        return CU_get_error();
-    }
-
     
-    if (NULL == CU_add_test(pSuite, "test_dice_roll_instruction_stack_from_expression_parens_maths",
-                            test_dice_roll_instruction_stack_from_expression_parens_maths)) {
+    if (NULL == CU_add_test(pSuite, "test_dice_roll_instruction_stack_from_expression_parens_expression_no_spaces",
+                            test_dice_roll_instruction_stack_from_expression_parens_expression_no_spaces)) {
         CU_cleanup_registry();
         return CU_get_error();
     }

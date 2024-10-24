@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include "Die.h"
 
-long long int die_last_result(Die *d) {
+unsigned int die_last_result(Die *d) {
 	return d->last_result;
 }
 
@@ -15,8 +15,8 @@ Die * die_create(size_t numFaces) {
 	return d;
 }
 
-long long int die_roll(Die *d) {
-	d->last_result = (long long int) arc4random_uniform(d->num_faces) + 1;
+unsigned int die_roll(Die *d) {
+	d->last_result = arc4random_uniform((unsigned int) d->num_faces) + 1;
 	return d->last_result;
 }
 

@@ -3,16 +3,16 @@
 
 typedef struct {
 	size_t num_faces;
-	long long int last_result;
+	unsigned int last_result;
 } Die;
 
 Die * die_create(size_t faces);
 
 void die_free(Die *d);
 
-long long int die_roll(Die *d);
+unsigned int die_roll(Die *d);
 
-long long int die_last_result(Die *d);
+unsigned int die_last_result(Die *d);
 size_t die_faces(Die *d);
 
 
