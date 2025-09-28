@@ -2,7 +2,7 @@ Requires: argp, cunit
 
 ```
 brew install cunit
-brew install argp
+brew install argp-standalone
 mkdir bin
 mkdir obj
 make clean
