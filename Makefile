@@ -108,10 +108,10 @@ $(ODIR)/DieFactory.o: $(ODIR)/Die.o $(MDIR)/DieFactory.c
 
 $(ODIR)/Die.o: $(MDIR)/Die.c
 	$(CCF) -c -o $(ODIR)/Die.o $(MDIR)/Die.c;
-	
-$(ODIR)/DynArray.o: $(MDIR)/DynArray.c
-	$(CCF) -c -o $(ODIR)/DynArray.o $(MDIR)/DynArray.c
 
+$(ODIR)/DynArray.o: $(MDIR)/DynArray.c
+	$(CCF) -c -o $(ODIR)/DynArray.o $(MDIR)/DynArray.c;
+	
 $(ODIR)/numutils.o: $(MDIR)/numutils.c
 	$(CCF) -c -o $(ODIR)/numutils.o $(MDIR)/numutils.c;
 
@@ -119,7 +119,7 @@ $(ODIR)/numutils.o: $(MDIR)/numutils.c
 # CLI
 build: CCF+= -O 
 build: $(MOFILES)
-	$(CCF) -largp -o $(BDIR)/roll $(UDIR)/main.c $(MOFILES)
+	$(CCF) -largp -o $(BDIR)/roll $(UDIR)/main.c $(MOFILES)  -L /opt/homebrew/Cellar/argp-standalone/1.5.0/lib/  -I /opt/homebrew/Cellar/argp-standalone/1.5.0/include/
 
 test: CCF+= -fsanitize=address -fno-omit-frame-pointer -fsanitize=undefined -W -Wall -g 
 test: $(BDIR)/testdie $(MOFILES) $(TOFILES)
